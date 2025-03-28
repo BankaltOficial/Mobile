@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/WelcomeScreen2.dart';
+import 'package:flutter_application_1/WelcomeScreen.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Welcomescreen2()),
+        MaterialPageRoute(builder: (context) => Welcomescreen()),
       );
     });
   }
@@ -36,11 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("BankAlt", style: TextStyle(fontFamily: 'Poppins', color: Colors.white),),
-        backgroundColor: colorBlue,
-      ),
-
       body: Center(
         child: AnimatedOpacity(
           duration: Duration(seconds: 2),

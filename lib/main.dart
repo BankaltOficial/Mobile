@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
-import 'package:flutter_application_1/WelcomeScreen2.dart';
+import 'package:flutter_application_1/WelcomeScreen.dart';
 
 
 void main() {

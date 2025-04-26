@@ -1,3 +1,6 @@
+// ignore: file_name
+// ignore_for_file: use_key_in_widget_constructors, file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
@@ -5,11 +8,11 @@ import 'package:flutter_application_1/WelcomeScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-Color colorBlue = Color(0xFF353DAB);
-Color colorWhite = Color(0xFFF0EFF4); 
+Color colorBlue = const Color(0xFF353DAB);
+Color colorWhite = const  Color(0xFFF0EFF4); 
 
 class _SplashScreenState extends State<SplashScreen> {
   
@@ -19,16 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _opacity = 1.0;
       });
     });
 
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Welcomescreen()),
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     });
   }
@@ -38,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: AnimatedOpacity(
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
           opacity: _opacity,
         child: Image.asset("assets/images/LogoBANKALTsemfundo1.png", width: 1000),
       ),

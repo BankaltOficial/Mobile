@@ -65,6 +65,7 @@ flutter:
     - assets/images/LogoBANKALTsemfundo1.png
     - assets/images/LogoTitulo.png
     - assets/images/IgorSuracci.png
+    - assets/icons/Pix.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

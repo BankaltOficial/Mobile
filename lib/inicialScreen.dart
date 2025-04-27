@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/PersonalizedScreen.dart';
+import 'package:flutter_application_1/PixScreen.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -12,6 +14,9 @@ class InicialScreen extends StatefulWidget {
 Color mainBlue= const Color(0xFF353DAB);
 Color mainBlueWeak = const Color.fromARGB(51, 53, 61, 171);
 Color mainWhite = const Color(0xFFFFFFFF);
+Color gray = const Color(0xFF828282);
+Color mainYellow = const Color(0xFFFFC700);
+Color mainLightPurple = const Color(0xFFCBCBE5);
 
 class _InicialScreenState extends State<InicialScreen> {
   @override
@@ -19,7 +24,7 @@ class _InicialScreenState extends State<InicialScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('bankalt', style: TextStyle(color: mainWhite),),
+        title: Text('bankalt', style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),),
         backgroundColor: mainBlue,
         centerTitle: true,
       ),
@@ -54,35 +59,151 @@ class _InicialScreenState extends State<InicialScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {}, // Adicione a funcionalidade aqui
+              onPressed: () {},
               child: Text('Ver extrato >'),
             ),
             SizedBox(height: 16),
-            // Adicione os outros botões aqui usando Row ou GridView
-            // Exemplo:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildButton('PIX', Icons.swap_horiz),
-                _buildButton('Cartões', Icons.credit_card),
-                _buildButton('Boleto', Icons.receipt),
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX", style: TextStyle(color: mainWhite)),
+                ],
+                )),
+
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                  )
+                ),
+                child: Column( children: [
+                  Icon(Icons.add_card, size: 40, color: mainWhite,),
+                  Text("Cartões", style: TextStyle(color: mainWhite),),
+                ],
+                )),
+
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX", style: TextStyle(color: mainWhite)),
+                ],
+                )),
               ],
             ),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildButton('Investimento', Icons.bar_chart),
-                _buildButton('Transferência', Icons.compare_arrows),
-                _buildButton('Empréstimo', Icons.monetization_on),
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX"),
+                ],
+                )),
+
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX"),
+                ],
+                )),
+
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX"),
+                ],
+                ))
               ],
             ),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildButton('Educação', Icons.school),
-                _buildButton('Personalizar', Icons.settings),
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PixScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("PIX"),
+                ],
+                )),
+                ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PersonalizedScreen())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainBlue,
+
+                ),
+                child: Column( children: [
+                  Image.asset("assets/icons/Pix.png", width: 40, height: 40),
+                  Text("Personalizar", style: TextStyle(color: mainWhite)),
+                ],
+                ))
               ],
             ),
           ],

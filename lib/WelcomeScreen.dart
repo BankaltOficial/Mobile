@@ -2,6 +2,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/TermsScreen.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -70,7 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: '532.708.750-61',
+                  hintText: '123.456.789-01',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -145,7 +146,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Align(
               alignment: Alignment.centerLeft,
               child: Row(children: [ Icon(Icons.refresh, color: mainBlue),
-              TextButton(onPressed: () {  
+              TextButton(onPressed: () { 
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TermsScreen())
+                  );
               }, child: Text("Trocar de conta", style: TextStyle(color: mainBlue, fontWeight: FontWeight.bold),))]),
               ),
               Align(

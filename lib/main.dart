@@ -1,8 +1,11 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/FormScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
+import 'package:flutter_application_1/TermsScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
+import 'package:flutter_application_1/inicialScreen.dart';
 
 
 void main() {
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: InicialScreen(),
     );
   }
 }

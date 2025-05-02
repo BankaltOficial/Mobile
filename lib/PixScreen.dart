@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/inicialScreen.dart';
 
 class PixScreen extends StatefulWidget {
   const PixScreen({super.key});
@@ -10,8 +11,8 @@ class PixScreen extends StatefulWidget {
 }
 
 class _PixScreenState extends State<PixScreen> {
-  Color mainBlue = const Color(0xFF353DAB);
-  Color mainBlueWeak = const Color.fromARGB(51, 53, 61, 171);
+  Color mainPurple = const Color(0xFF353DAB);
+  Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
   Color mainWhite = const Color(0xFFFFFFFF);
 
   @override
@@ -23,7 +24,7 @@ class _PixScreenState extends State<PixScreen> {
             style: TextStyle(color: mainWhite),
           ),
           centerTitle: true,
-          backgroundColor: mainBlue,
+          backgroundColor: mainPurple,
         ),
         body: Container(
           padding: EdgeInsets.all(40),
@@ -35,17 +36,18 @@ class _PixScreenState extends State<PixScreen> {
                   child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          side: BorderSide(color: mainBlue, width: 2),
+                          side: BorderSide(color: mainPurple, width: 2),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(Icons.account_balance_wallet_outlined,
-                              size: 60, color: mainBlue),
+                              size: 60, color: mainPurple),
                           SizedBox(height: 10),
                           Text("Pagar",
-                              style: TextStyle(fontSize: 20, color: mainBlue)),
+                              style:
+                                  TextStyle(fontSize: 20, color: mainPurple)),
                         ],
                       )),
                 ),
@@ -55,17 +57,17 @@ class _PixScreenState extends State<PixScreen> {
                     child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            side: BorderSide(color: mainBlue, width: 2),
+                            side: BorderSide(color: mainPurple, width: 2),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.qr_code, size: 60, color: mainBlue),
+                            Icon(Icons.qr_code, size: 60, color: mainPurple),
                             SizedBox(height: 10),
                             Text("Receber",
                                 style:
-                                    TextStyle(fontSize: 20, color: mainBlue)),
+                                    TextStyle(fontSize: 20, color: mainPurple)),
                           ],
                         )))
               ]),
@@ -73,15 +75,15 @@ class _PixScreenState extends State<PixScreen> {
               ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      side: BorderSide(color: mainBlue, width: 2),
+                      side: BorderSide(color: mainPurple, width: 2),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Minhas chaves",
-                          style: TextStyle(fontSize: 20, color: mainBlue)),
-                      Icon(Icons.key_rounded, size: 60, color: mainBlue),
+                          style: TextStyle(fontSize: 20, color: mainPurple)),
+                      Icon(Icons.key_rounded, size: 60, color: mainPurple),
                     ],
                   )),
               SizedBox(
@@ -92,13 +94,37 @@ class _PixScreenState extends State<PixScreen> {
               Text("Não tem uma chave ainda?"),
               Text("Cadastre agora!"),
               SizedBox(height: 30),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(backgroundColor: mainBlue),
-                  child: Text(
-                    "Cadastrar",
-                    style: TextStyle(color: mainWhite),
-                  ))
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                ElevatedButton(
+                    onPressed: () {},
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: mainPurple),
+                    child: Text(
+                      "Cadastrar",
+                      style: TextStyle(color: mainWhite),
+                    )),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const InicialScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 32),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ])
             ],
           ),
         ));

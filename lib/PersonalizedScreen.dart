@@ -19,7 +19,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
           'bankalt',
           style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: mainBlue,
+        backgroundColor: mainPurple,
         centerTitle: true,
       ),
       body: Container(
@@ -42,16 +42,61 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
+                          width: 150,
                           decoration: BoxDecoration(
                             border: Border.all(color: grayBlue, width: 2),
                             borderRadius:
-                                BorderRadius.circular(12), // Rounded corners
+                                BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("Cor do botão",
+                              Text("Principal",
+                                  style:
+                                      TextStyle(color: grayBlue, fontSize: 18)),
+                              const SizedBox(height: 10),
+                              Text("#234765",
+                                  style: TextStyle(
+                                      color: mainPurple,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 50),
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: mainPurple,
+                        borderRadius:
+                            BorderRadius.circular(12), // Rounded corners
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: grayBlue, width: 2),
+                            borderRadius:
+                                BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Secundária",
                                   style:
                                       TextStyle(color: grayBlue, fontSize: 18)),
                               const SizedBox(height: 10),
@@ -72,6 +117,50 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                       decoration: BoxDecoration(
                         color: mainBlue,
                         borderRadius:
+                            BorderRadius.circular(12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: grayBlue, width: 2),
+                            borderRadius:
+                                BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Terciária",
+                                  style:
+                                      TextStyle(color: grayBlue, fontSize: 18)),
+                              const SizedBox(height: 10),
+                              Text("#234765",
+                                  style: TextStyle(
+                                      color: mainGreen,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 50),
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: mainGreen,
+                        borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
                     ),
@@ -84,7 +173,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: mainBlue,
+                        backgroundColor: mainPurple,
                         padding: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 32),
                         textStyle: const TextStyle(fontSize: 20),

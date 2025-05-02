@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class FormScreen extends StatefulWidget {
@@ -11,8 +10,8 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
   final _formKey = GlobalKey<FormState>();
-  Color mainBlue = const Color(0xFF353DAB);
-  Color mainBlueWeak = const Color.fromARGB(51, 53, 61, 171);
+  Color mainPurple = const Color(0xFF353DAB);
+  Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
   Color mainLightPurple = const Color(0xFFCBCBE5);
   Color gray = const Color(0xFF828282);
 
@@ -42,7 +41,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -51,7 +50,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -74,7 +73,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -97,7 +96,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -122,7 +121,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -147,7 +146,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -172,7 +171,7 @@ class _FormScreenState extends State<FormScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: mainBlue,
+                      color: mainPurple,
                     ),
                   ),
                   TextFormField(
@@ -202,7 +201,7 @@ class _FormScreenState extends State<FormScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: mainBlue,
+                      backgroundColor: mainPurple,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       textStyle: const TextStyle(fontSize: 20),
                     ),

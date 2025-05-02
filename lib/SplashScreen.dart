@@ -11,8 +11,10 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-Color colorBlue = const Color(0xFF353DAB);
-Color colorWhite = const  Color(0xFFF0EFF4); 
+Color colorWhite = const  Color(0xFFF0EFF4);
+Color lightPurple = const Color(0xFFCBCBE5);
+Color colorPurple = const Color(0xFF353DAB);
+Color colorBlue = const Color(0xFF027BD4);
 
 class _SplashScreenState extends State<SplashScreen> {
   

@@ -9,8 +9,6 @@ class PersonalizedScreen extends StatefulWidget {
 }
 
 class _PersonalizedScreenState extends State<PersonalizedScreen> {
-
-
   Color grayBlue = const Color(0xFF495057);
 
   @override
@@ -39,31 +37,32 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                  children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                      Container(
-                        decoration: BoxDecoration(
-                        border: Border.all(color: grayBlue, width: 2),
-                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: grayBlue, width: 2),
+                            borderRadius:
+                                BorderRadius.circular(12), // Rounded corners
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Cor do botão",
+                                  style:
+                                      TextStyle(color: grayBlue, fontSize: 18)),
+                              const SizedBox(height: 10),
+                              Text("#234765",
+                                  style: TextStyle(
+                                      color: mainBlue,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ),
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Cor do botão",
-                            style:
-                              TextStyle(color: grayBlue, fontSize: 18)),
-                          const SizedBox(height: 10),
-                          Text("#234765",
-                            style: TextStyle(
-                              color: mainBlue,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
-                        ],
-                        ),
-                      ),
                       ],
                     ),
                     const SizedBox(width: 50),
@@ -71,30 +70,58 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                       height: 80,
                       width: 80,
                       decoration: BoxDecoration(
-                      color: mainBlue,
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                        color: mainBlue,
+                        borderRadius:
+                            BorderRadius.circular(12), // Rounded corners
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                    onPressed: () {
-                      
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: mainBlue,
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    child: const Text(
-                      "Continuar",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: mainBlue,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 32),
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      child: const Text(
+                        "Continuar",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const InicialScreen()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 32),
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      child: const Text(
+                        "Cancelar",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

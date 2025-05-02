@@ -149,7 +149,7 @@ class _TermsScreenState extends State<TermsScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                "Você deve ler os documentos antes de continuar.",
+                                "Você deve concordar com os documentos antes de continuar.",
                                 style: TextStyle(color: mainWhite),
                               ),
                               backgroundColor: mainBlue1,

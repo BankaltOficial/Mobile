@@ -39,7 +39,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Column(
         children: [
           Container(
-          height: 370,
           color: mainBlueWeak,
           padding: EdgeInsets.all(15),
           child: Form(
@@ -116,7 +115,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   contentPadding: EdgeInsets.all(8)
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               ElevatedButton(
               onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -141,6 +140,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 child: const Text('ENTRAR'),
               ),
+              SizedBox(height: 25),
               Row(
               children: [
               Align(

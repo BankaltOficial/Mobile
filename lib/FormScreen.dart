@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/TermsScreen.dart';
+import 'package:flutter_application_1/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class FormScreen extends StatefulWidget {
@@ -10,19 +12,38 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
   final _formKey = GlobalKey<FormState>();
-  Color mainPurple = const Color(0xFF353DAB);
-  Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-  Color mainLightPurple = const Color(0xFFCBCBE5);
-  Color gray = const Color(0xFF828282);
 
-  var celularMask = MaskTextInputFormatter(mask: '(##) #####-####', filter: { "#": RegExp(r'[0-9]') });
-  var dataNascimentoMask = MaskTextInputFormatter(mask: '##/##/####', filter: { "#": RegExp(r'[0-9]') });
-  var cpfMask = MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
-  var rgMask = MaskTextInputFormatter(mask: '##.###.###-#', filter: { "#": RegExp(r'[0-9]') });
-  
+  var celularMask = MaskTextInputFormatter(
+      mask: '(##) #####-####', filter: {"#": RegExp(r'[0-9]')});
+  var dataNascimentoMask = MaskTextInputFormatter(
+      mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
+  var cpfMask = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
+  var rgMask = MaskTextInputFormatter(
+      mask: '##.###.###-#', filter: {"#": RegExp(r'[0-9]')});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: mainWhite),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TermsScreen(),
+              ),
+            );
+          },
+        ),
+        title: Text(
+          'bankalt',
+          style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: mainPurple,
+        centerTitle: true,
+      ),
       body: Container(
         color: mainLightPurple,
         padding: const EdgeInsets.all(40),

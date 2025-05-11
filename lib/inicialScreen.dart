@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/CardsScreen.dart';
+import 'package:flutter_application_1/EducationScreen.dart';
 import 'package:flutter_application_1/PersonalizedScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
@@ -16,6 +18,7 @@ Color mainPurple = const Color(0xFF353DAB);
 Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
 Color mainWhite = const Color(0xFFFFFFFF);
 Color gray = const Color(0xFF828282);
+Color grayBlue = const Color(0xFF495057);
 Color mainBlue = const Color(0xFF027BD4);
 Color mainYellow = const Color(0xFFFFC700);
 Color mainLightPurple = const Color(0xFFCBCBE5);
@@ -31,6 +34,12 @@ class _InicialScreenState extends State<InicialScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: mainWhite),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           'bankalt',
           style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
@@ -45,10 +54,12 @@ class _InicialScreenState extends State<InicialScreen> {
           children: <Widget>[
             SizedBox(height: 25),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
                 Text('Olá, $nome', style: TextStyle(fontSize: 27)),
+                SizedBox(width: 15),
                 CircleAvatar(
+                  radius: 40,
                   backgroundImage: AssetImage('assets/images/IgorSuracci.png'),
                 ),
               ],
@@ -168,7 +179,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const PixScreen()));
+                                            const CardsScreen()));
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainPurple,
@@ -332,7 +343,7 @@ class _InicialScreenState extends State<InicialScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const PixScreen()));
+                                    builder: (context) => const EducationScreen()));
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: mainPurple,

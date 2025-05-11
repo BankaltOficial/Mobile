@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/FormScreen.dart';
+import 'package:flutter_application_1/WelcomeScreen.dart';
+import 'package:flutter_application_1/inicialScreen.dart';
 
 class TermsScreen extends StatefulWidget {
   const TermsScreen({super.key});
@@ -21,6 +23,25 @@ class _TermsScreenState extends State<TermsScreen> {
   Widget build(BuildContext context) {
     var mainYellow = const Color(0xFFFFC700);
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: mainWhite),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const WelcomeScreen(),
+              ),
+            );
+          },
+        ),
+        title: Text(
+          'bankalt',
+          style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: mainPurple,
+        centerTitle: true,
+      ),
       body: Container(
         color: mainBlue,
         child: SizedBox.expand(

@@ -9,7 +9,6 @@ class PersonalizedScreen extends StatefulWidget {
 }
 
 class _PersonalizedScreenState extends State<PersonalizedScreen> {
-  Color grayBlue = const Color(0xFF495057);
 
   @override
   Widget build(BuildContext context) {

@@ -47,7 +47,10 @@ class _InicialScreenState extends State<InicialScreen> {
         backgroundColor: mainPurple,
         centerTitle: true,
       ),
-      body: Padding(
+      body: 
+      ListView(
+        children: [
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -399,6 +402,8 @@ class _InicialScreenState extends State<InicialScreen> {
           ],
         ),
       ),
+        ]
+      )
     );
   }
 }

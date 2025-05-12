@@ -44,7 +44,10 @@ class _FormScreenState extends State<FormScreen> {
         backgroundColor: mainPurple,
         centerTitle: true,
       ),
-      body: Container(
+      body: 
+      SingleChildScrollView(
+        child: 
+      Container(
         color: mainLightPurple,
         padding: const EdgeInsets.all(40),
         child: Column(
@@ -240,6 +243,7 @@ class _FormScreenState extends State<FormScreen> {
           ],
         ),
       ),
+      )
     );
   }
 }

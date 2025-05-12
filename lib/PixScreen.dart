@@ -26,7 +26,10 @@ class _PixScreenState extends State<PixScreen> {
           centerTitle: true,
           backgroundColor: mainPurple,
         ),
-        body: Container(
+        body: 
+        ListView(
+          children: [
+        Container(
           padding: EdgeInsets.all(40),
           child: Column(
             children: [
@@ -127,6 +130,8 @@ class _PixScreenState extends State<PixScreen> {
               ])
             ],
           ),
+        )
+          ],
         ));
   }
 }

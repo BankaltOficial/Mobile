@@ -11,9 +11,6 @@ class PixScreen extends StatefulWidget {
 }
 
 class _PixScreenState extends State<PixScreen> {
-  Color mainPurple = const Color(0xFF353DAB);
-  Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-  Color mainWhite = const Color(0xFFFFFFFF);
 
   @override
   Widget build(BuildContext context) {

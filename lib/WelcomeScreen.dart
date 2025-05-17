@@ -15,10 +15,6 @@ class WelcomeScreen extends StatefulWidget {
 
 TextEditingController cpfController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
-Color mainBlue= const Color(0xFF353DAB);
-Color mainBlueWeak = const Color.fromARGB(51, 53, 61, 171);
-Color mainWhite = const Color(0xFFFFFFFF);
-Color gray = const Color(0xFF828282);
 bool _senhaVisivel = false;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
@@ -32,25 +28,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     return Scaffold(appBar: AppBar(
       toolbarHeight: 200,
-        backgroundColor: mainBlue,
-        title: Image.asset('assets/images/LogoTitulo.png', height: 200, width: 200,),
+        backgroundColor: mainPurple,
+        title: Image.asset('assets/images/LogoTitulo.png', height: 200, width: 200),
         centerTitle: true,
 ),
       body: Column(
         children: [
           Container(
-          color: mainBlueWeak,
+          color: mainPurpleWeak,
           padding: EdgeInsets.all(15),
           child: Form(
             key: _formKey,
             child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text("Acesse sua conta", textAlign: TextAlign.center, style: TextStyle(color: mainBlue, fontWeight: FontWeight.bold, fontSize: 17)),
+              Text("Acesse sua conta", textAlign: TextAlign.center, style: TextStyle(color: mainPurple, fontWeight: FontWeight.bold, fontSize: 17)),
               SizedBox(height: 20),
               Align(
               alignment: Alignment.centerLeft,
-              child: Text("CPF", textAlign: TextAlign.left, style: TextStyle(color: mainBlue, fontWeight: FontWeight.bold)),
+              child: Text("CPF", textAlign: TextAlign.left, style: TextStyle(color: mainPurple, fontWeight: FontWeight.bold)),
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -81,7 +77,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               SizedBox(height: 15),
               Align(
               alignment: Alignment.centerLeft,
-              child: Text("Senha", textAlign: TextAlign.left, style: TextStyle(color: mainBlue, fontWeight: FontWeight.bold)),
+              child: Text("Senha", textAlign: TextAlign.left, style: TextStyle(color: mainPurple, fontWeight: FontWeight.bold)),
               ),
               SizedBox(height: 15),
               TextFormField(
@@ -129,7 +125,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: mainBlue,
+                  backgroundColor: mainPurple,
                   foregroundColor: Colors.white,
                   elevation: 4,                         
                   shape: RoundedRectangleBorder(
@@ -145,13 +141,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
               Align(
               alignment: Alignment.centerLeft,
-              child: Row(children: [ Icon(Icons.refresh, color: mainBlue),
+              child: Row(children: [ Icon(Icons.refresh, color: mainPurple),
               TextButton(onPressed: () { 
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const TermsScreen())
                   );
-              }, child: Text("Trocar de conta", style: TextStyle(color: mainBlue, fontWeight: FontWeight.bold),))]),
+              }, child: Text("Trocar de conta", style: TextStyle(color: mainPurple, fontWeight: FontWeight.bold),))]),
               ),
               Align(
                 alignment: Alignment.centerRight,

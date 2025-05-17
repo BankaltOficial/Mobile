@@ -11,17 +11,12 @@ class TermsScreen extends StatefulWidget {
 }
 
 class _TermsScreenState extends State<TermsScreen> {
-  Color mainBlue = const Color(0xFF353DAB);
-  Color mainBlue1 = const Color(0xFF027BD4);
-  Color mainBlueWeak = const Color.fromARGB(51, 53, 61, 171);
-  Color mainWhite = const Color(0xFFFFFFFF);
 
   bool isChecked = false;
   Icon icon = const Icon(Icons.check_circle, color: Colors.white);
 
   @override
   Widget build(BuildContext context) {
-    var mainYellow = const Color(0xFFFFC700);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -43,7 +38,7 @@ class _TermsScreenState extends State<TermsScreen> {
         centerTitle: true,
       ),
       body: Container(
-        color: mainBlue,
+        color: mainPurple,
         child: SizedBox.expand(
           child: Center(
             child: Padding(
@@ -108,7 +103,7 @@ class _TermsScreenState extends State<TermsScreen> {
                                   "Você deve ler os documentos antes de continuar.",
                                   style: TextStyle(color: mainWhite),
                                 ),
-                                backgroundColor: mainBlue1,
+                                backgroundColor: mainPurple,
                               );
                               isChecked = !isChecked;
                             });
@@ -149,13 +144,17 @@ class _TermsScreenState extends State<TermsScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
+                    TextButton(
+                      onPressed: () {
+                        
+                      },
+                      child: Text(
                       "Baixe aqui!",
                       style: TextStyle(
                         fontSize: 15,
                         color: mainWhite,
                       ),
-                    ),
+                    ),),
                     const SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
@@ -173,13 +172,13 @@ class _TermsScreenState extends State<TermsScreen> {
                                 "Você deve concordar com os documentos antes de continuar.",
                                 style: TextStyle(color: mainWhite),
                               ),
-                              backgroundColor: mainBlue1,
+                              backgroundColor: mainPurple,
                             ),
                           );
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: mainBlue1,
+                        backgroundColor: mainBlue,
                         padding: const EdgeInsets.symmetric(
                           vertical: 16,
                           horizontal: 32,

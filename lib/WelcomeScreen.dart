@@ -32,7 +32,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         title: Image.asset('assets/images/LogoTitulo.png', height: 200, width: 200),
         centerTitle: true,
 ),
-      body: Column(
+      body: ListView(
+        children: [
+         Column(
         children: [
           Container(
           color: mainPurpleWeak,
@@ -189,6 +191,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ],
           ),
         )
+      ]
+      )
       ]
       )
     );

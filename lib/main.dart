@@ -7,7 +7,6 @@ import 'package:flutter_application_1/TermsScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }

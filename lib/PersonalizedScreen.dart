@@ -9,7 +9,6 @@ class PersonalizedScreen extends StatefulWidget {
 }
 
 class _PersonalizedScreenState extends State<PersonalizedScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +36,15 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: mainPurple,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    const SizedBox(width: 50),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -44,8 +52,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                           width: 150,
                           decoration: BoxDecoration(
                             border: Border.all(color: grayBlue, width: 2),
-                            borderRadius:
-                                BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Column(
@@ -65,22 +72,21 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(width: 50),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: mainPurple,
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded corners
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: mainBlue,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    const SizedBox(width: 50),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -88,8 +94,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                           width: 150,
                           decoration: BoxDecoration(
                             border: Border.all(color: grayBlue, width: 2),
-                            borderRadius:
-                                BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Column(
@@ -109,22 +114,21 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(width: 50),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: mainBlue,
-                        borderRadius:
-                            BorderRadius.circular(12),
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: mainGreen,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    const SizedBox(width: 50),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -132,8 +136,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                           width: 150,
                           decoration: BoxDecoration(
                             border: Border.all(color: grayBlue, width: 2),
-                            borderRadius:
-                                BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(10),
                           child: Column(
@@ -152,16 +155,6 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(width: 50),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: mainGreen,
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded corners
-                      ),
                     ),
                   ],
                 ),
@@ -191,8 +184,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const InicialScreen()));
+                                builder: (context) => const InicialScreen()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
@@ -217,8 +209,4 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
       ),
     );
   }
-
-  ColorPicker(
-      {required Color pickerColor,
-      required Null Function(dynamic color) onColorChanged}) {}
 }

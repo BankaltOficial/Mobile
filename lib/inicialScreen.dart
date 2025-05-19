@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/CardsScreen.dart';
 import 'package:flutter_application_1/EducationScreen.dart';
+import 'package:flutter_application_1/InvestimentoScreen.dart';
 import 'package:flutter_application_1/PersonalizedScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
@@ -280,7 +281,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const PixScreen()));
+                                            const InvestimentoScreen()));
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainPurple,

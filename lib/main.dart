@@ -1,30 +1,32 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/FormScreen.dart';
-import 'package:flutter_application_1/SplashScreen.dart';
-import 'package:flutter_application_1/TermsScreen.dart';
-import 'package:flutter_application_1/WelcomeScreen.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/splashScreen.dart';
+import 'package:flutter_application_1/colors.dart';
+import 'package:flutter_application_1/colors_service.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ColorService.loadColors(); // Para carregar as cores personalizadas
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BankAlt',
       debugShowCheckedModeBanner: false,
+      title: 'Bankalt',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        scaffoldBackgroundColor: AppColors.mainWhite,
+        primaryColor: AppColors.main,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: AppColors.main,
+          secondary: AppColors.secondary,
+        ),
       ),
-      home: SplashScreen(),
+      home: InicialScreen(),
     );
   }
 }

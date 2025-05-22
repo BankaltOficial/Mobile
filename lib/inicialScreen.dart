@@ -8,6 +8,8 @@ import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_service.dart';
+import 'package:flutter_application_1/colors_provider.dart';
+import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -15,25 +17,27 @@ class InicialScreen extends StatefulWidget {
   @override
   State<InicialScreen> createState() => _InicialScreenState();
 }
-
-Color mainPurple = AppColors.main;
-Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-Color mainWhite = const Color(0xFFFFFFFF);
-Color gray = const Color(0xFF828282);
-Color grayBlue = const Color(0xFF495057);
-Color mainBlue = AppColors.defaultSecondary;
-Color mainYellow = const Color(0xFFFFC700);
-Color mainLightPurple = const Color(0xFFCBCBE5);
-Color mainGreen = const Color(0xFF04A95C);
-double saldo = 28567.90;
-String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-String nome = "Igor Suracci";
-String cpf = "123.456.789-00";
-Icon iconVisibility = Icon(Icons.visibility);
+    Color mainPurple = AppColors.main;
+    Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
+    Color mainWhite = const Color(0xFFFFFFFF);
+    Color gray = const Color(0xFF828282);
+    Color grayBlue = const Color(0xFF495057);
+    Color mainBlue = AppColors.defaultSecondary;
+    Color mainYellow = const Color(0xFFFFC700);
+    Color mainLightPurple = const Color(0xFFCBCBE5);
+    Color mainGreen = const Color(0xFF04A95C);
+    double saldo = 28567.90;
+    String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
+    String nome = "Igor Suracci";
+    String cpf = "123.456.789-00";
+    Icon iconVisibility = Icon(Icons.visibility);
 
 class _InicialScreenState extends State<InicialScreen> {
   @override
   Widget build(BuildContext context) {
+
+    final colors = Provider.of<ColorProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -46,7 +50,7 @@ class _InicialScreenState extends State<InicialScreen> {
             'bankalt',
             style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
           ),
-          backgroundColor: mainPurple,
+          backgroundColor: colors.main,
           centerTitle: true,
         ),
         body: ListView(children: [
@@ -116,7 +120,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                       });
                                     },
                                     icon: Icon(iconVisibility.icon,
-                                        color: mainPurple, size: 25)),
+                                        color: colors.main, size: 25)),
                               ],
                             ),
                             Text('R\$ $txtSaldo',
@@ -158,7 +162,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -189,7 +193,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const CardsScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -220,7 +224,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -257,7 +261,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -290,7 +294,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -323,7 +327,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -361,7 +365,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                             const EducationScreen()));
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: mainPurple,
+                                  backgroundColor: colors.main,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               child: Image.asset("assets/icons/Estudos.png",
@@ -393,7 +397,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PersonalizedScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainPurple,
+                                      backgroundColor: colors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),

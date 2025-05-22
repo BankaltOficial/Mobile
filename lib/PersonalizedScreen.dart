@@ -118,13 +118,13 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    Provider.of<ColorProvider>(context, listen: false)
-                        .setColors(
-                      mainColor,
-                      secondaryColor,
-                      tertiaryColor,
-                    );
+                  onPressed: () async {
+                    final provider =
+                        Provider.of<ColorProvider>(context, listen: false);
+                    provider.setColors(
+                        mainColor, secondaryColor, tertiaryColor);
+                    await ColorService.saveColors(
+                        mainColor, secondaryColor, tertiaryColor);
 
                     Navigator.pushReplacement(
                       context,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/colors.dart';
+import 'package:flutter_application_1/colors_service.dart';
 
 class ColorProvider with ChangeNotifier {
-  Color _main = const Color(0xFF353DAB);
+  Color _main = AppColors.main;
   Color _secondary = const Color(0xFF027BD4);
   Color _tertiary = const Color(0xFF04A95C);
 

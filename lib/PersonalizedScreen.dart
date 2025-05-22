@@ -3,6 +3,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_service.dart';
+import 'package:flutter_application_1/colors_provider.dart';
+import 'package:provider/provider.dart';
 
 class PersonalizedScreen extends StatefulWidget {
   const PersonalizedScreen({super.key});
@@ -12,9 +14,9 @@ class PersonalizedScreen extends StatefulWidget {
 }
 
 class _PersonalizedScreenState extends State<PersonalizedScreen> {
-  Color mainColor = AppColors.defaultMain;
-  Color secondaryColor = AppColors.defaultSecondary;
-  Color tertiaryColor = AppColors.defaultTertiary;
+  Color mainColor = AppColors.main;
+  Color secondaryColor = AppColors.secondary;
+  Color tertiaryColor = AppColors.tertiary;
 
   void pickColor(Color currentColor, ValueChanged<Color> onColorChanged) {
     showDialog(
@@ -117,6 +119,13 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
+                    Provider.of<ColorProvider>(context, listen: false)
+                        .setColors(
+                      mainColor,
+                      secondaryColor,
+                      tertiaryColor,
+                    );
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const InicialScreen()),

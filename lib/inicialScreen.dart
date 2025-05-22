@@ -249,7 +249,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const PixScreen()));
+                                            const InvestimentoScreen()));
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: mainPurple,

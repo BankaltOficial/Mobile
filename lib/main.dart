@@ -1,7 +1,8 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/FormScreen.dart';
+import 'package:flutter_application_1/InvestimentoScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
 import 'package:flutter_application_1/TermsScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
@@ -21,10 +22,11 @@ class MyApp extends StatelessWidget {
       title: 'BankAlt',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Poppins',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:SplashScreen(),
+      home:InvestimentoScreen(),
     );
   }
 }

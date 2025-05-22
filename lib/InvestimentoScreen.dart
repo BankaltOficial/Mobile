@@ -15,31 +15,89 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: mainWhite),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Investimento',
-          style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
-        ),
+        toolbarHeight: 100,
         backgroundColor: mainPurple,
-        centerTitle: true,
-      ),
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            
-          ],
-          )
-          )
+        elevation: 0,
+        title:Column(children: [ 
+          Row(  
+          children: [
+          IconButton(onPressed: () {
+            Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => const InicialScreen(),));
+          }, icon: Icon(
+            Icons.menu,
+            color: mainWhite,
+            )
+          ),
+            Expanded(child: Center(child:
+            Text(
+            'bankalt',
+            style: TextStyle(
+            color: mainWhite,
+            fontWeight: FontWeight.bold
+          ),
+        ),),),
         ],
+        ),
+        SizedBox(height:15),
+        Row(children: [ 
+          IconButton(onPressed: () {
+            Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => const InicialScreen(),));
+          }, icon: Icon(
+            Icons.arrow_back,
+            color: mainWhite,
+            )
+          ),
+          Expanded(child: Center(child:
+          Text(
+          'Investimentos',
+          style: TextStyle(color: mainWhite),
+        ),),),
+         ],)
+        ]
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: mainPurpleWeak,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Total investido',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'R\$ 350,90',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
       )
     );
   }

@@ -79,7 +79,6 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                       'Total investido',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black54,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -88,14 +87,37 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                       'R\$ 350,90',
                       style: TextStyle(
                         fontSize: 24,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+            SizedBox(height: 30),
+            InkWell(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                  CircleAvatar(
+                    backgroundColor: mainPurple,
+                    radius: 40,
+                    child: Icon(
+                      Icons.hide_image,
+                      color: mainWhite,
+                      size: 40,
+                      ),
+                  ),
+                  Column(children: [
+                    Text("Investir", style: TextStyle(fontWeight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    Text("")
+                    ]
+                    ,)
+                ],),
+              ),
+            )
         ],
       ),
       )

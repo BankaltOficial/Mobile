@@ -7,6 +7,7 @@ import 'package:flutter_application_1/InvestimentoScreen.dart';
 import 'package:flutter_application_1/PersonalizedScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
+import 'WelcomeScreen.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -38,7 +39,9 @@ class _InicialScreenState extends State<InicialScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: mainWhite),
           onPressed: () {
-            Navigator.pop(context);
+             Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => const WelcomeScreen(),));
           },
         ),
         title: Text(

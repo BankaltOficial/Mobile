@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/CardsScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
 import 'inicialScreen.dart';
@@ -106,7 +107,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               },
             ),
             ListTile(
-              leading: Image.asset("assets/icons/Pix.png", width: 20, height: 20),
+              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
               title: Text('PIX'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -116,9 +117,34 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               },
             ),
             ListTile(
-              title: Text('Item 3'),
+              leading:Icon(Icons.bar_chart),
+              title: Text('Investimentos'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading:Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
+              title: Text('Cartões'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
+                );
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading:Icon(Icons.settings),
+              title: Text('Configurações'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
+                );
               },
             ),
           ],
@@ -174,11 +200,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                     CircleAvatar(
                       backgroundColor: mainPurple,
                       radius: 45,
-                      child: Icon(
-                        Icons.attach_money,
-                        color: mainWhite,
-                        size: 45,
-                      ),
+                      child: Image.asset("assets/icons/Investir.png", height: 50, width: 50)
                     ),
                     SizedBox(width: 20),
                     Column(
@@ -259,11 +281,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                     CircleAvatar(
                       backgroundColor: mainPurple,
                       radius: 45,
-                      child: Icon(
-                        Icons.hide_image,
-                        color: mainWhite,
-                        size: 45,
-                      ),
+                      child: Image.asset("assets/icons/Resgate.png", height: 50, width: 50)
                     ),
                     SizedBox(width: 20),
                     Column(

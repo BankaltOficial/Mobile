@@ -74,6 +74,10 @@ flutter:
     - assets/icons/Cartoes.png
     - assets/icons/Emprestimo.png
     - assets/icons/Transferencia.png
+    - assets/icons/pixColorido.png
+    - assets/icons/cartoesColorido.png
+    - assets/icons/Investir.png
+    - assets/icons/Resgate.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

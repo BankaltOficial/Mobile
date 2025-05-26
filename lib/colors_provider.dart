@@ -4,8 +4,8 @@ import 'package:flutter_application_1/colors_service.dart';
 
 class ColorProvider with ChangeNotifier {
   Color _main = AppColors.main;
-  Color _secondary = const Color(0xFF027BD4);
-  Color _tertiary = const Color(0xFF04A95C);
+  Color _secondary = AppColors.secondary;
+  Color _tertiary = AppColors.tertiary;
 
   Color get main => _main;
   Color get secondary => _secondary;
@@ -15,6 +15,6 @@ class ColorProvider with ChangeNotifier {
     _main = main;
     _secondary = secondary;
     _tertiary = tertiary;
-    notifyListeners(); // Notifica para reconstruir as telas
+    notifyListeners();
   }
 }

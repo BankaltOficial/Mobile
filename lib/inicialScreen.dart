@@ -19,13 +19,13 @@ class InicialScreen extends StatefulWidget {
 }
     Color mainPurple = AppColors.main;
     Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-    Color mainWhite = const Color(0xFFFFFFFF);
+    Color mainWhite = AppColors.mainWhite;
     Color gray = const Color(0xFF828282);
     Color grayBlue = const Color(0xFF495057);
-    Color mainBlue = AppColors.defaultSecondary;
+    Color mainBlue = AppColors.secondary;
     Color mainYellow = const Color(0xFFFFC700);
     Color mainLightPurple = const Color(0xFFCBCBE5);
-    Color mainGreen = const Color(0xFF04A95C);
+    Color mainGreen = AppColors.tertiary;
     double saldo = 28567.90;
     String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
     String nome = "Igor Suracci";
@@ -141,7 +141,7 @@ class _InicialScreenState extends State<InicialScreen> {
                     },
                     child: Text("Ver extrato >",
                         style: TextStyle(
-                            color: colorBlue, fontWeight: FontWeight.bold))),
+                            color: mainBlue, fontWeight: FontWeight.bold))),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

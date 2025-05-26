@@ -93,16 +93,17 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
+                    final provider =
+                        Provider.of<ColorProvider>(context, listen: false);
+                    provider.setColors(
+                        mainColor, secondaryColor, tertiaryColor);
                     await ColorService.saveColors(
                         mainColor, secondaryColor, tertiaryColor);
-
-                    // Atualiza as cores ativas
                     setState(() {
                       AppColors.main = mainColor;
                       AppColors.secondary = secondaryColor;
                       AppColors.tertiary = tertiaryColor;
                     });
-
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const InicialScreen()),
@@ -118,14 +119,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: () async {
-                    final provider =
-                        Provider.of<ColorProvider>(context, listen: false);
-                    provider.setColors(
-                        mainColor, secondaryColor, tertiaryColor);
-                    await ColorService.saveColors(
-                        mainColor, secondaryColor, tertiaryColor);
-
+                  onPressed: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const InicialScreen()),

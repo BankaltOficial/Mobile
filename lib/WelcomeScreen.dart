@@ -26,7 +26,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     var cpfMask = MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
 
-    return Scaffold(appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
       toolbarHeight: 200,
         backgroundColor: mainPurple,
         title: Image.asset('assets/images/LogoTitulo.png', height: 200, width: 200),

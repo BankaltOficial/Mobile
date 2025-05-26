@@ -168,7 +168,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Renda fixa',
+                      'Poupança',
                       style: TextStyle(
                         color: mainWhite,
                         fontWeight: FontWeight.bold,
@@ -261,19 +261,14 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FilterButton(
-                  text: 'CDB',
-                  isSelected: selectedFilter == 'CDB',
-                  onTap: () => setState(() => selectedFilter = 'CDB'),
+                  text: 'TRADICIONAL',
+                  isSelected: selectedFilter == 'TRADICIONAL',
+                  onTap: () => setState(() => selectedFilter = 'TRADICIONAL'),
                 ),
                 FilterButton(
-                  text: 'LCA/LCI',
-                  isSelected: selectedFilter == 'LCA/LCI',
-                  onTap: () => setState(() => selectedFilter = 'LCA/LCI'),
-                ),
-                FilterButton(
-                  text: 'TD',
-                  isSelected: selectedFilter == 'TD',
-                  onTap: () => setState(() => selectedFilter = 'TD'),
+                  text: 'DIGITAL',
+                  isSelected: selectedFilter == 'DIGITAL',
+                  onTap: () => setState(() => selectedFilter = 'DIGITAL'),
                 ),
               ],
             ),

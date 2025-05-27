@@ -10,26 +10,76 @@ import 'package:flutter_application_1/SubFilterButton.dart';
 import 'InvestCard.dart';
 import 'inicialScreen.dart';
 
-class PoupancaScreen extends StatefulWidget {
-  const PoupancaScreen({super.key});
+class RendavariavelScreen extends StatefulWidget {
+  const RendavariavelScreen({super.key});
 
   @override
-  State<PoupancaScreen> createState() => _PoupancaScreenState();
+  State<RendavariavelScreen> createState() => _RendavariavelScreenState();
 }
 
-class _PoupancaScreenState extends State<PoupancaScreen> {
-  String selectedFilter = 'Comum';
+class _RendavariavelScreenState extends State<RendavariavelScreen> {
+  String selectedFilter = 'Ações';
   String selectedSubFilter = 'Todos';
 
   List<Map<String, String>> allItems = [
   {
-    'tipo': 'Comum',
-    'title': 'Poupança',
-    'invMin': 'R\$ 1,00',
-    'resgate': 'Imediato',
-    'ir': 'Progressivo',
+    'tipo': 'Ações',
+    'title': 'Ação PETR4',
+    'invMin': 'R\$ 35,00',
+    'resgate': 'D+2',
+    'ir': 'Isento (até 20 mil)',
+  },
+  {
+    'tipo': 'Ações',
+    'title': 'Ação ITUB4',
+    'invMin': 'R\$ 30,00',
+    'resgate': 'D+2',
+    'ir': 'Isento (até 20 mil)',
+  },
+  {
+    'tipo': 'FII',
+    'title': 'FII HGLG11',
+    'invMin': 'R\$ 120,00',
+    'resgate': 'D+2',
+    'ir': 'Isento',
+  },
+  {
+    'tipo': 'FII',
+    'title': 'FII KNRI11',
+    'invMin': 'R\$ 140,00',
+    'resgate': 'D+2',
+    'ir': 'Isento',
+  },
+  {
+    'tipo': 'ETF',
+    'title': 'ETF BOVA11',
+    'invMin': 'R\$ 110,00',
+    'resgate': 'D+2',
+    'ir': '15% sobre lucro',
+  },
+  {
+    'tipo': 'ETF',
+    'title': 'ETF IVVB11',
+    'invMin': 'R\$ 130,00',
+    'resgate': 'D+2',
+    'ir': '15% sobre lucro',
+  },
+  {
+    'tipo': 'BDR',
+    'title': 'BDR AAPL34',
+    'invMin': 'R\$ 50,00',
+    'resgate': 'D+2',
+    'ir': '15% sobre lucro',
+  },
+  {
+    'tipo': 'BDR',
+    'title': 'BDR TSLA34',
+    'invMin': 'R\$ 60,00',
+    'resgate': 'D+2',
+    'ir': '15% sobre lucro',
   },
 ];
+
 
 
   bool isResgateRapido(String resgate) {
@@ -105,7 +155,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Poupança',
+                      'Renda variável',
                       style: TextStyle(
                         color: mainWhite,
                         fontWeight: FontWeight.bold,
@@ -198,9 +248,24 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FilterButton(
-                  text: 'Comum',
-                  isSelected: selectedFilter == 'Comum',
-                  onTap: () => setState(() => selectedFilter = 'Comum'),
+                  text: 'Ações',
+                  isSelected: selectedFilter == 'Ações',
+                  onTap: () => setState(() => selectedFilter = 'Ações'),
+                ),
+                FilterButton(
+                  text: 'ETF',
+                  isSelected: selectedFilter == 'ETF',
+                  onTap: () => setState(() => selectedFilter = 'ETF'),
+                ),
+                FilterButton(
+                  text: 'BDR',
+                  isSelected: selectedFilter == 'BDR',
+                  onTap: () => setState(() => selectedFilter = 'BDR'),
+                ),
+                FilterButton(
+                  text: 'FII',
+                  isSelected: selectedFilter == 'FII',
+                  onTap: () => setState(() => selectedFilter = 'FII'),
                 ),
               ],
             ),

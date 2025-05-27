@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/CardsScreen.dart';
+import 'package:flutter_application_1/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
 import 'inicialScreen.dart';
@@ -271,7 +272,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen()),
+                      builder: (context) => const PerfilInvestidorScreen()),
                 );
               },
               child: Container(

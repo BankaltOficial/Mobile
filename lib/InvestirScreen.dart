@@ -6,6 +6,7 @@ import 'package:flutter_application_1/InvestimentoScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/PoupancaScreen.dart';
 import 'package:flutter_application_1/RendafixaScreen.dart';
+import 'package:flutter_application_1/RendavariavelScreen.dart';
 import 'inicialScreen.dart';
 
 class InvestirScreen extends StatefulWidget {
@@ -225,7 +226,10 @@ class _InvestirScreenState extends State<InvestirScreen> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () {
-                  
+                  Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RendavariavelScreen()),
+                );
                 },
                 child:
                 Container(

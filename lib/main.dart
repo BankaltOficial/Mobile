@@ -1,5 +1,5 @@
-// ignore_for_file: unused_import, prefer_const_constructors
 
+// ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/FormScreen.dart';
 import 'package:flutter_application_1/InvestimentoScreen.dart';
@@ -10,11 +10,23 @@ import 'package:flutter_application_1/RendavariavelScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
 import 'package:flutter_application_1/TermsScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
+import 'package:flutter_application_1/colors.dart';
+import 'package:flutter_application_1/colors_provider.dart';
+import 'package:flutter_application_1/colors_service.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/splashScreen.dart';
+import 'package:provider/provider.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ColorService.loadColors();
 
-void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ColorProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,15 +34,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BankAlt',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home:RendavariavelScreen(),
+
+    return Consumer<ColorProvider>(
+      builder: (context, colors, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Bankalt',
+          theme: ThemeData(
+            fontFamily: 'Poppins',
+            scaffoldBackgroundColor: AppColors.mainWhite,
+            primaryColor: colors.main,
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: colors.main,
+              secondary: colors.secondary,
+            ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: colors.main,
+              foregroundColor: Colors.white,
+            ),
+          ),
+          home: FormScreen(),
+        );
+      },
     );
   }
 }
+

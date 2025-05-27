@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/colors.dart';
+import 'package:flutter_application_1/colors_service.dart';
+import 'package:flutter_application_1/colors_provider.dart';
+import 'package:provider/provider.dart';
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -13,6 +17,8 @@ class CardsScreen extends StatefulWidget {
 class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<ColorProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,7 +36,7 @@ class _CardsScreenState extends State<CardsScreen> {
           'bankalt',
           style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: mainPurple,
+        backgroundColor: colors.main,
         centerTitle: true,
       ),
       body: Container(
@@ -106,10 +112,10 @@ class _CardsScreenState extends State<CardsScreen> {
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(Icons.delete,
-                                      color: mainPurple, size: 50)),
+                                      color: colors.main, size: 50)),
                               Text("Apagar",
                                   style: TextStyle(
-                                      color: mainPurple,
+                                      color: colors.main,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 10),
@@ -132,10 +138,10 @@ class _CardsScreenState extends State<CardsScreen> {
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(Icons.lock,
-                                      color: mainPurple, size: 50)),
+                                      color: colors.main, size: 50)),
                               Text("Bloquear",
                                   style: TextStyle(
-                                      color: mainPurple,
+                                      color: colors.main,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 10),

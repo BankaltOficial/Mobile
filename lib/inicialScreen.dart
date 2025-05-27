@@ -3,15 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/CardsScreen.dart';
 import 'package:flutter_application_1/EducationScreen.dart';
+import 'package:flutter_application_1/InvestimentoScreen.dart';
 import 'package:flutter_application_1/PersonalizedScreen.dart';
 import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/SplashScreen.dart';
+import 'WelcomeScreen.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_service.dart';
 import 'package:flutter_application_1/colors_provider.dart';
 import 'package:flutter_application_1/Usuario.dart';
 import 'package:flutter_application_1/Sessao.dart';
 import 'package:provider/provider.dart';
+
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -42,13 +45,14 @@ class _InicialScreenState extends State<InicialScreen> {
     final colors = Provider.of<ColorProvider>(context);
 
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: mainWhite),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: mainWhite),
+          onPressed: () {
+             Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => const WelcomeScreen(),));
+          },
           title: Text(
             'bankalt',
             style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
@@ -252,33 +256,32 @@ class _InicialScreenState extends State<InicialScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                                height: 75,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const PixScreen()));
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                  child: Image.asset(
-                                      "assets/icons/Investimento.png",
-                                      width: 50,
-                                      height: 50),
-                                ))),
-                        SizedBox(height: 5),
-                        Text("Investimentos",
-                            style: TextStyle(
-                                color: gray,
-                                fontSize: 16.5,
-                                fontWeight: FontWeight.bold)),
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                            height: 75,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const InvestimentoScreen()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: mainPurple,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10))),
+                              child: Image.asset(
+                                  "assets/icons/Investimento.png",
+                                  width: 50,
+                                  height: 50),
+                            ))),
+                    SizedBox(height: 5),
+                    Text("Investimentos",
+                        style: TextStyle(
+                            color: gray,
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Column(

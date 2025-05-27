@@ -1,5 +1,5 @@
 // ignore: file_names
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/TermsScreen.dart';
@@ -29,13 +29,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     var cpfMask = MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
     
 
-    return Scaffold(appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
       toolbarHeight: 200,
         backgroundColor: mainPurple,
         title: Image.asset('assets/images/LogoTitulo.png', height: 200, width: 200),
         centerTitle: true,
 ),
-      body: Column(
+      body: ListView(
+        children: [
+         Column(
         children: [
           Container(
           color: mainPurpleWeak,
@@ -203,6 +206,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ],
           ),
         )
+      ]
+      )
       ]
       )
     );

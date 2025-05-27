@@ -3,6 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/TermsScreen.dart';
+import 'package:flutter_application_1/Usuario.dart';
+import 'package:flutter_application_1/Sessao.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -25,6 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
 
     var cpfMask = MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
+    
 
     return Scaffold(appBar: AppBar(
       toolbarHeight: 200,
@@ -66,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: '123.456.789-01',
+                  hintText: '000.000.000-00',
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -115,13 +118,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ElevatedButton(
               onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Carregando...')),
-                    );
-                    Navigator.push(
+                    String cpf = cpfController.text;
+                    String senha = passwordController.text;
+                    Usuario? usuario = buscarUsuarioPorCpf(cpf);
+                    if (usuario != null && usuario.senha == senha) {
+                      Sessao.salvarUsuario(usuario);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Login Feito com Sucesso')),
+                      );
+                      Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => InicialScreen())
                     );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('CPF ou senha incorretos')),
+                      );
+                      return;
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

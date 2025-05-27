@@ -9,6 +9,8 @@ import 'package:flutter_application_1/SplashScreen.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_service.dart';
 import 'package:flutter_application_1/colors_provider.dart';
+import 'package:flutter_application_1/Usuario.dart';
+import 'package:flutter_application_1/Sessao.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -28,8 +30,9 @@ class InicialScreen extends StatefulWidget {
     Color mainGreen = AppColors.tertiary;
     double saldo = 28567.90;
     String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-    String nome = "Igor Suracci";
-    String cpf = "123.456.789-00";
+    Usuario? usuario = Sessao.getUsuario() ?? null;
+    String nome = usuario?.nome;
+    String cpf = usuario?.cpf;
     Icon iconVisibility = Icon(Icons.visibility);
 
 class _InicialScreenState extends State<InicialScreen> {

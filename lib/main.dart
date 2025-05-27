@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/FormScreen.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_provider.dart';
 import 'package:flutter_application_1/colors_service.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: SplashScreen(),
+          home: FormScreen(),
         );
       },
     );

@@ -47,7 +47,7 @@ List<Usuario> usuarios = [
       '12.345.678-9',
       formatarData(DateTime(1995, 4, 10)),
       '(11) 91234-5678',
-      'senhaSegura123',
+      '123',
     ),
     Usuario(
       'Bruno Silva',

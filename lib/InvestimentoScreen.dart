@@ -7,6 +7,9 @@ import 'package:flutter_application_1/PixScreen.dart';
 import 'package:flutter_application_1/WelcomeScreen.dart';
 import 'inicialScreen.dart';
 import 'InvestirScreen.dart';
+import 'package:flutter_application_1/colors.dart';
+import 'package:flutter_application_1/colors_provider.dart';
+import 'package:provider/provider.dart';
 
 class InvestimentoScreen extends StatefulWidget {
   const InvestimentoScreen({super.key});
@@ -16,10 +19,13 @@ class InvestimentoScreen extends StatefulWidget {
 }
 
 class _InvestimentoScreenState extends State<InvestimentoScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final colors = Provider.of<ColorProvider>(context);
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -87,7 +93,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: mainPurple,
+                color: colors.main,
               ),
               child: Text(
                 'Menu',
@@ -137,7 +143,11 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 );
               },
             ),
-            Divider(),
+            Divider(
+              color: Colors.grey,
+              height: 1,
+              thickness: 1,
+            ),
             ListTile(
               leading:Icon(Icons.settings),
               title: Text('Configurações'),

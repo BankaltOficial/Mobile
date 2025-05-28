@@ -14,7 +14,6 @@ import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/colors_provider.dart';
 import 'package:flutter_application_1/colors_service.dart';
 import 'package:flutter_application_1/inicialScreen.dart';
-import 'package:flutter_application_1/splashScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: FormScreen(),
+          home: InicialScreen(),
         );
       },
     );

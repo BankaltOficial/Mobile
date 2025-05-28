@@ -260,9 +260,9 @@ class _FormScreenState extends State<FormScreen> {
                             Usuario u = Usuario(
                               nomeController.text,
                               emailController.text,
-                              celularController.text,
-                              dataController.text,
                               cpfController.text,
+                              dataController.text,
+                              celularController.text,
                               rgController.text,
                               senhaController.text,
                             );

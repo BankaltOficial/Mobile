@@ -229,7 +229,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen()),
+                      builder: (context) => const PerfilInvestidorScreen()),
                 );
               },
               child: Container(

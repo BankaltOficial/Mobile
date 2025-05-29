@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
@@ -355,7 +356,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const PixScreen()));
+                                                const BoletoScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: colors.main,

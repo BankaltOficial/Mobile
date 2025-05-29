@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/pages/inicialScreen.dart';
 
 class EducationScreen extends StatefulWidget {
   const EducationScreen({super.key});

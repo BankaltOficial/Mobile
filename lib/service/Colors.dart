@@ -11,14 +11,6 @@ class AppColors {
   static const Color mainYellow = Color(0xFFFFC700);
   static const Color mainLightPurple = Color(0xFFCBCBE5);
   static const Color mainGreen = Color(0xFF04A95C);
-  /* Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-    Color mainWhite = const Color(0xFFFFFFFF);
-    Color gray = const Color(0xFF828282);
-    Color grayBlue = const Color(0xFF495057);
-    Color mainBlue = AppColors.defaultSecondary;
-    Color mainYellow = const Color(0xFFFFC700);
-    Color mainLightPurple = const Color(0xFFCBCBE5);
-    Color mainGreen = const Color(0xFF04A95C); */
 
   // Cores personalizáveis (inicialmente padrão)
   static Color main = defaultMain;

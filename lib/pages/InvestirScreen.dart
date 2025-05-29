@@ -1,13 +1,13 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CardsScreen.dart';
-import 'package:flutter_application_1/InvestimentoScreen.dart';
-import 'package:flutter_application_1/PixScreen.dart';
-import 'package:flutter_application_1/PoupancaScreen.dart';
-import 'package:flutter_application_1/RendafixaScreen.dart';
-import 'package:flutter_application_1/RendavariavelScreen.dart';
-import 'inicialScreen.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/pages/PoupancaScreen.dart';
+import 'package:flutter_application_1/pages/RendafixaScreen.dart';
+import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
+import 'InicialScreen.dart';
 
 class InvestirScreen extends StatefulWidget {
   const InvestirScreen({super.key});
@@ -18,7 +18,7 @@ class InvestirScreen extends StatefulWidget {
 
 class _InvestirScreenState extends State<InvestirScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +60,8 @@ class _InvestirScreenState extends State<InvestirScreen> {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const InvestimentoScreen()),
                     );
                   },
                 ),
@@ -104,12 +105,14 @@ class _InvestirScreenState extends State<InvestirScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InicialScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
+              leading: Image.asset("assets/icons/pixColorido.png",
+                  width: 20, height: 20),
               title: Text('PIX'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -119,17 +122,19 @@ class _InvestirScreenState extends State<InvestirScreen> {
               },
             ),
             ListTile(
-              leading:Icon(Icons.bar_chart),
+              leading: Icon(Icons.bar_chart),
               title: Text('Investimentos'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InvestimentoScreen()),
                 );
               },
             ),
             ListTile(
-              leading:Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
+              leading: Image.asset("assets/icons/cartoesColorido.png",
+                  height: 30, width: 30),
               title: Text('Cartões'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -140,7 +145,7 @@ class _InvestirScreenState extends State<InvestirScreen> {
             ),
             Divider(),
             ListTile(
-              leading:Icon(Icons.settings),
+              leading: Icon(Icons.settings),
               title: Text('Configurações'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -161,12 +166,12 @@ class _InvestirScreenState extends State<InvestirScreen> {
               InkWell(
                 onTap: () {
                   Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PoupancaScreen()),
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PoupancaScreen()),
                   );
                 },
-                child: 
-                Container(
+                child: Container(
                   decoration: BoxDecoration(
                     color: mainPurple,
                     borderRadius: BorderRadius.circular(12),
@@ -193,13 +198,13 @@ class _InvestirScreenState extends State<InvestirScreen> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RendafixaScreen()),
-                );
-              },
-              child: 
-              Container(
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RendafixaScreen()),
+                  );
+                },
+                child: Container(
                   decoration: BoxDecoration(
                     color: mainPurple,
                     borderRadius: BorderRadius.circular(12),
@@ -227,12 +232,12 @@ class _InvestirScreenState extends State<InvestirScreen> {
               InkWell(
                 onTap: () {
                   Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RendavariavelScreen()),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RendavariavelScreen()),
+                  );
                 },
-                child:
-                Container(
+                child: Container(
                   decoration: BoxDecoration(
                     color: mainPurple,
                     borderRadius: BorderRadius.circular(12),
@@ -258,11 +263,8 @@ class _InvestirScreenState extends State<InvestirScreen> {
               ),
               const SizedBox(height: 20),
               InkWell(
-                onTap: () {
-                
-              },
-              child: 
-                Container(
+                onTap: () {},
+                child: Container(
                   decoration: BoxDecoration(
                     color: mainPurple,
                     borderRadius: BorderRadius.circular(12),

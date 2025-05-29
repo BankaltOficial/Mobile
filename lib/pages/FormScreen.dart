@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/TermsScreen.dart';
+import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/Usuario.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class FormScreen extends StatefulWidget {

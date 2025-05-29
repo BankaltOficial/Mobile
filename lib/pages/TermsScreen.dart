@@ -1,9 +1,9 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/FormScreen.dart';
-import 'package:flutter_application_1/WelcomeScreen.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/pages/FormScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'package:flutter_application_1/pages/inicialScreen.dart';
 
 class TermsScreen extends StatefulWidget {
   const TermsScreen({super.key});
@@ -13,7 +13,6 @@ class TermsScreen extends StatefulWidget {
 }
 
 class _TermsScreenState extends State<TermsScreen> {
-
   bool isChecked = false;
   Icon icon = const Icon(Icons.check_circle, color: Colors.white);
 
@@ -147,16 +146,15 @@ class _TermsScreenState extends State<TermsScreen> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       child: Text(
-                      "Baixe aqui!",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: mainWhite,
+                        "Baixe aqui!",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: mainWhite,
+                        ),
                       ),
-                    ),),
+                    ),
                     const SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {

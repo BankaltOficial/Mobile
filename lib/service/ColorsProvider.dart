@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/colors.dart';
-import 'package:flutter_application_1/colors_service.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
 
 class ColorProvider with ChangeNotifier {
   Color _main = AppColors.main;

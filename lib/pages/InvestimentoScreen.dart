@@ -1,14 +1,14 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CardsScreen.dart';
-import 'package:flutter_application_1/PerfilInvestidorScreen.dart';
-import 'package:flutter_application_1/PixScreen.dart';
-import 'package:flutter_application_1/WelcomeScreen.dart';
-import 'inicialScreen.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'InicialScreen.dart';
 import 'InvestirScreen.dart';
-import 'package:flutter_application_1/colors.dart';
-import 'package:flutter_application_1/colors_provider.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
 
 class InvestimentoScreen extends StatefulWidget {
@@ -19,12 +19,10 @@ class InvestimentoScreen extends StatefulWidget {
 }
 
 class _InvestimentoScreenState extends State<InvestimentoScreen> {
-
   @override
   Widget build(BuildContext context) {
-    
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final colors = Provider.of<ColorProvider>(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final colors = Provider.of<ColorProvider>(context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -65,7 +63,8 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const InicialScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const InicialScreen()),
                     );
                   },
                 ),
@@ -109,12 +108,14 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InicialScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
+              leading: Image.asset("assets/icons/pixColorido.png",
+                  width: 20, height: 20),
               title: Text('PIX'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -124,17 +125,19 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               },
             ),
             ListTile(
-              leading:Icon(Icons.bar_chart),
+              leading: Icon(Icons.bar_chart),
               title: Text('Investimentos'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InvestimentoScreen()),
                 );
               },
             ),
             ListTile(
-              leading:Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
+              leading: Image.asset("assets/icons/cartoesColorido.png",
+                  height: 30, width: 30),
               title: Text('Cartões'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -149,7 +152,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               thickness: 1,
             ),
             ListTile(
-              leading:Icon(Icons.settings),
+              leading: Icon(Icons.settings),
               title: Text('Configurações'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -199,7 +202,8 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InvestirScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InvestirScreen()),
                 );
               },
               child: Container(
@@ -209,10 +213,10 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundColor: mainPurple,
-                      radius: 45,
-                      child: Image.asset("assets/icons/Investir.png", height: 50, width: 50)
-                    ),
+                        backgroundColor: mainPurple,
+                        radius: 45,
+                        child: Image.asset("assets/icons/Investir.png",
+                            height: 50, width: 50)),
                     SizedBox(width: 20),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,10 +294,10 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundColor: mainPurple,
-                      radius: 45,
-                      child: Image.asset("assets/icons/Resgate.png", height: 50, width: 50)
-                    ),
+                        backgroundColor: mainPurple,
+                        radius: 45,
+                        child: Image.asset("assets/icons/Resgate.png",
+                            height: 50, width: 50)),
                     SizedBox(width: 20),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,

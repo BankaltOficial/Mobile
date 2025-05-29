@@ -1,13 +1,13 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CardsScreen.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/FilterButton.dart';
-import 'package:flutter_application_1/InvestimentoScreen.dart';
-import 'package:flutter_application_1/InvestirScreen.dart';
-import 'package:flutter_application_1/PixScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/SubFilterButton.dart';
-import 'InvestCard.dart';
+import 'package:flutter_application_1/InvestCard.dart';
 import 'inicialScreen.dart';
 
 class RendavariavelScreen extends StatefulWidget {
@@ -22,65 +22,63 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
   String selectedSubFilter = 'Todos';
 
   List<Map<String, String>> allItems = [
-  {
-    'tipo': 'Ações',
-    'title': 'Ação PETR4',
-    'invMin': 'R\$ 35,00',
-    'resgate': 'D+2',
-    'ir': 'Isento (até 20 mil)',
-  },
-  {
-    'tipo': 'Ações',
-    'title': 'Ação ITUB4',
-    'invMin': 'R\$ 30,00',
-    'resgate': 'D+2',
-    'ir': 'Isento (até 20 mil)',
-  },
-  {
-    'tipo': 'FII',
-    'title': 'FII HGLG11',
-    'invMin': 'R\$ 120,00',
-    'resgate': 'D+2',
-    'ir': 'Isento',
-  },
-  {
-    'tipo': 'FII',
-    'title': 'FII KNRI11',
-    'invMin': 'R\$ 140,00',
-    'resgate': 'D+2',
-    'ir': 'Isento',
-  },
-  {
-    'tipo': 'ETF',
-    'title': 'ETF BOVA11',
-    'invMin': 'R\$ 110,00',
-    'resgate': 'D+2',
-    'ir': '15% sobre lucro',
-  },
-  {
-    'tipo': 'ETF',
-    'title': 'ETF IVVB11',
-    'invMin': 'R\$ 130,00',
-    'resgate': 'D+2',
-    'ir': '15% sobre lucro',
-  },
-  {
-    'tipo': 'BDR',
-    'title': 'BDR AAPL34',
-    'invMin': 'R\$ 50,00',
-    'resgate': 'D+2',
-    'ir': '15% sobre lucro',
-  },
-  {
-    'tipo': 'BDR',
-    'title': 'BDR TSLA34',
-    'invMin': 'R\$ 60,00',
-    'resgate': 'D+2',
-    'ir': '15% sobre lucro',
-  },
-];
-
-
+    {
+      'tipo': 'Ações',
+      'title': 'Ação PETR4',
+      'invMin': 'R\$ 35,00',
+      'resgate': 'D+2',
+      'ir': 'Isento (até 20 mil)',
+    },
+    {
+      'tipo': 'Ações',
+      'title': 'Ação ITUB4',
+      'invMin': 'R\$ 30,00',
+      'resgate': 'D+2',
+      'ir': 'Isento (até 20 mil)',
+    },
+    {
+      'tipo': 'FII',
+      'title': 'FII HGLG11',
+      'invMin': 'R\$ 120,00',
+      'resgate': 'D+2',
+      'ir': 'Isento',
+    },
+    {
+      'tipo': 'FII',
+      'title': 'FII KNRI11',
+      'invMin': 'R\$ 140,00',
+      'resgate': 'D+2',
+      'ir': 'Isento',
+    },
+    {
+      'tipo': 'ETF',
+      'title': 'ETF BOVA11',
+      'invMin': 'R\$ 110,00',
+      'resgate': 'D+2',
+      'ir': '15% sobre lucro',
+    },
+    {
+      'tipo': 'ETF',
+      'title': 'ETF IVVB11',
+      'invMin': 'R\$ 130,00',
+      'resgate': 'D+2',
+      'ir': '15% sobre lucro',
+    },
+    {
+      'tipo': 'BDR',
+      'title': 'BDR AAPL34',
+      'invMin': 'R\$ 50,00',
+      'resgate': 'D+2',
+      'ir': '15% sobre lucro',
+    },
+    {
+      'tipo': 'BDR',
+      'title': 'BDR TSLA34',
+      'invMin': 'R\$ 60,00',
+      'resgate': 'D+2',
+      'ir': '15% sobre lucro',
+    },
+  ];
 
   bool isResgateRapido(String resgate) {
     if (resgate.toLowerCase().contains('imediato')) return true;
@@ -148,7 +146,8 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvestirScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const InvestirScreen()),
                     );
                   },
                 ),
@@ -192,12 +191,14 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InicialScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
+              leading: Image.asset("assets/icons/pixColorido.png",
+                  width: 20, height: 20),
               title: Text('PIX'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -207,17 +208,19 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
               },
             ),
             ListTile(
-              leading:Icon(Icons.bar_chart),
+              leading: Icon(Icons.bar_chart),
               title: Text('Investimentos'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InvestimentoScreen()),
                 );
               },
             ),
             ListTile(
-              leading:Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
+              leading: Image.asset("assets/icons/cartoesColorido.png",
+                  height: 30, width: 30),
               title: Text('Cartões'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -228,7 +231,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
             ),
             Divider(),
             ListTile(
-              leading:Icon(Icons.settings),
+              leading: Icon(Icons.settings),
               title: Text('Configurações'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -271,16 +274,16 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
             ),
             SizedBox(height: 12),
             Row(
-                children: [
-                  Expanded(
-                    child: SubFilterButton(
-                      text: 'Todos',
-                      isSelected: selectedSubFilter == 'Todos',
-                      onTap: () => setState(() => selectedSubFilter = 'Todos'),
-                    ),
+              children: [
+                Expanded(
+                  child: SubFilterButton(
+                    text: 'Todos',
+                    isSelected: selectedSubFilter == 'Todos',
+                    onTap: () => setState(() => selectedSubFilter = 'Todos'),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
             Expanded(
               child: ListView(
                 children: filteredItems.map((item) {

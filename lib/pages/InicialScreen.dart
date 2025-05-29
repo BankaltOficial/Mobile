@@ -1,17 +1,17 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CardsScreen.dart';
-import 'package:flutter_application_1/EducationScreen.dart';
-import 'package:flutter_application_1/InvestimentoScreen.dart';
-import 'package:flutter_application_1/PersonalizedScreen.dart';
-import 'package:flutter_application_1/PixScreen.dart';
-import 'package:flutter_application_1/SplashScreen.dart';
-import 'WelcomeScreen.dart';
-import 'package:flutter_application_1/colors.dart';
-import 'package:flutter_application_1/colors_provider.dart';
-import 'package:flutter_application_1/Usuario.dart';
-import 'package:flutter_application_1/Sessao.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/pages/SplashScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -32,7 +32,8 @@ Color mainLightPurple = const Color(0xFFCBCBE5);
 Color mainGreen = AppColors.tertiary;
 double saldo = 28567.90;
 String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-Usuario usuario = Sessao.getUsuario() ?? Usuario('Usuário','CPF não encontrado', '', '', '', '', '');
+Usuario usuario = Sessao.getUsuario() ??
+    Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 String nome = usuario.nome;
 String cpf = usuario.cpf;
 Icon iconVisibility = Icon(Icons.visibility);

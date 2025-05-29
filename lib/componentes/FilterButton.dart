@@ -1,14 +1,15 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/pages/InicialScreen.dart';
 
 class FilterButton extends StatelessWidget {
   final String text;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const FilterButton({super.key, 
+  const FilterButton({
+    super.key,
     required this.text,
     required this.isSelected,
     required this.onTap,

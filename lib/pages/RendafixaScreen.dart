@@ -1,36 +1,98 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CardsScreen.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/FilterButton.dart';
-import 'package:flutter_application_1/InvestimentoScreen.dart';
-import 'package:flutter_application_1/InvestirScreen.dart';
-import 'package:flutter_application_1/PixScreen.dart';
+import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/SubFilterButton.dart';
-import 'InvestCard.dart';
-import 'inicialScreen.dart';
+import 'package:flutter_application_1/InvestCard.dart';
 
-class PoupancaScreen extends StatefulWidget {
-  const PoupancaScreen({super.key});
+class RendafixaScreen extends StatefulWidget {
+  const RendafixaScreen({super.key});
 
   @override
-  State<PoupancaScreen> createState() => _PoupancaScreenState();
+  State<RendafixaScreen> createState() => _RendafixaScreenState();
 }
 
-class _PoupancaScreenState extends State<PoupancaScreen> {
-  String selectedFilter = 'Comum';
+class _RendafixaScreenState extends State<RendafixaScreen> {
+  String selectedFilter = 'CDB';
   String selectedSubFilter = 'Todos';
 
   List<Map<String, String>> allItems = [
-  {
-    'tipo': 'Comum',
-    'title': 'Poupança',
-    'invMin': 'R\$ 1,00',
-    'resgate': 'Imediato',
-    'ir': 'Progressivo',
-  },
-];
-
+    {
+      'tipo': 'CDB',
+      'title': 'CDB POS DI LIQUIDEZ DIÁRIA',
+      'invMin': 'R\$ 10,00',
+      'resgate': 'Imediato',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'CDB',
+      'title': 'CDB XP LIQUIDEZ 7 DIAS',
+      'invMin': 'R\$ 50,00',
+      'resgate': '7 dias',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'CDB',
+      'title': 'CDB 180 DIAS 110% CDI',
+      'invMin': 'R\$ 100,00',
+      'resgate': '180 dias',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'CDB',
+      'title': 'CDB 15 DIAS 102% CDI',
+      'invMin': 'R\$ 30,00',
+      'resgate': '15 dias',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'LCA/LCI',
+      'title': 'LCI DI 1080',
+      'invMin': 'R\$ 150,00',
+      'resgate': '25/12/2024',
+      'ir': 'Isento',
+    },
+    {
+      'tipo': 'LCA/LCI',
+      'title': 'LCI DE LIQUIDEZ 30 DIAS',
+      'invMin': 'R\$ 30,00',
+      'resgate': '30 dias',
+      'ir': 'Isento',
+    },
+    {
+      'tipo': 'LCA/LCI',
+      'title': 'LCA 90 DIAS 97% CDI',
+      'invMin': 'R\$ 200,00',
+      'resgate': '90 dias',
+      'ir': 'Isento',
+    },
+    {
+      'tipo': 'TD',
+      'title': 'Tesouro IPCA+ 2029',
+      'invMin': 'R\$ 100,00',
+      'resgate': '2029',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'TD',
+      'title': 'Tesouro Selic 2025',
+      'invMin': 'R\$ 120,00',
+      'resgate': '2027',
+      'ir': 'Regressivo',
+    },
+    {
+      'tipo': 'TD',
+      'title': 'Tesouro Pré-Fixado 2026',
+      'invMin': 'R\$ 150,00',
+      'resgate': '2026',
+      'ir': 'Regressivo',
+    },
+  ];
 
   bool isResgateRapido(String resgate) {
     if (resgate.toLowerCase().contains('imediato')) return true;
@@ -98,14 +160,15 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvestirScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const InvestirScreen()),
                     );
                   },
                 ),
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Poupança',
+                      'Renda fixa',
                       style: TextStyle(
                         color: mainWhite,
                         fontWeight: FontWeight.bold,
@@ -142,12 +205,14 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InicialScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
+              leading: Image.asset("assets/icons/pixColorido.png",
+                  width: 20, height: 20),
               title: Text('PIX'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -157,17 +222,19 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
               },
             ),
             ListTile(
-              leading:Icon(Icons.bar_chart),
+              leading: Icon(Icons.bar_chart),
               title: Text('Investimentos'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const InvestimentoScreen()),
                 );
               },
             ),
             ListTile(
-              leading:Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
+              leading: Image.asset("assets/icons/cartoesColorido.png",
+                  height: 30, width: 30),
               title: Text('Cartões'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -178,7 +245,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
             ),
             Divider(),
             ListTile(
-              leading:Icon(Icons.settings),
+              leading: Icon(Icons.settings),
               title: Text('Configurações'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -198,24 +265,42 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FilterButton(
-                  text: 'Comum',
-                  isSelected: selectedFilter == 'Comum',
-                  onTap: () => setState(() => selectedFilter = 'Comum'),
+                  text: 'CDB',
+                  isSelected: selectedFilter == 'CDB',
+                  onTap: () => setState(() => selectedFilter = 'CDB'),
+                ),
+                FilterButton(
+                  text: 'LCA/LCI',
+                  isSelected: selectedFilter == 'LCA/LCI',
+                  onTap: () => setState(() => selectedFilter = 'LCA/LCI'),
+                ),
+                FilterButton(
+                  text: 'TD',
+                  isSelected: selectedFilter == 'TD',
+                  onTap: () => setState(() => selectedFilter = 'TD'),
                 ),
               ],
             ),
             SizedBox(height: 12),
             Row(
-                children: [
-                  Expanded(
-                    child: SubFilterButton(
-                      text: 'Todos',
-                      isSelected: selectedSubFilter == 'Todos',
-                      onTap: () => setState(() => selectedSubFilter = 'Todos'),
-                    ),
+              children: [
+                Expanded(
+                  child: SubFilterButton(
+                    text: 'Todos',
+                    isSelected: selectedSubFilter == 'Todos',
+                    onTap: () => setState(() => selectedSubFilter = 'Todos'),
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: SubFilterButton(
+                    text: 'Resgate rápido',
+                    isSelected: selectedSubFilter == 'Resgate rápido',
+                    onTap: () =>
+                        setState(() => selectedSubFilter = 'Resgate rápido'),
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: ListView(
                 children: filteredItems.map((item) {

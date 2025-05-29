@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
-import 'package:flutter_application_1/colors.dart';
-import 'package:flutter_application_1/colors_service.dart';
-import 'package:flutter_application_1/colors_provider.dart';
+import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
 
 class PersonalizedScreen extends StatefulWidget {

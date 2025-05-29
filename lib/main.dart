@@ -1,19 +1,18 @@
-
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/FormScreen.dart';
-import 'package:flutter_application_1/InvestimentoScreen.dart';
-import 'package:flutter_application_1/InvestirScreen.dart';
-import 'package:flutter_application_1/PoupancaScreen.dart';
-import 'package:flutter_application_1/RendaFixaScreen.dart';
-import 'package:flutter_application_1/RendavariavelScreen.dart';
-import 'package:flutter_application_1/SplashScreen.dart';
-import 'package:flutter_application_1/TermsScreen.dart';
-import 'package:flutter_application_1/WelcomeScreen.dart';
-import 'package:flutter_application_1/colors.dart';
-import 'package:flutter_application_1/colors_provider.dart';
-import 'package:flutter_application_1/colors_service.dart';
-import 'package:flutter_application_1/inicialScreen.dart';
+import 'package:flutter_application_1/pages/FormScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/PoupancaScreen.dart';
+import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
+import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
+import 'package:flutter_application_1/pages/SplashScreen.dart';
+import 'package:flutter_application_1/pages/TermsScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
+import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<ColorProvider>(
       builder: (context, colors, _) {
         return MaterialApp(
@@ -58,4 +56,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

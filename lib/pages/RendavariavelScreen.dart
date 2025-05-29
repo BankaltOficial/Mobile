@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
-import 'package:flutter_application_1/FilterButton.dart';
+import 'package:flutter_application_1/components/FilterButton.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/SubFilterButton.dart';
-import 'package:flutter_application_1/InvestCard.dart';
+import 'package:flutter_application_1/components/SubFilterButton.dart';
+import 'package:flutter_application_1/components/InvestCard.dart';
 import 'inicialScreen.dart';
 
 class RendavariavelScreen extends StatefulWidget {

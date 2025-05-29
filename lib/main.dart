@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: InicialScreen(),
+          home: SplashScreen(),
         );
       },
     );

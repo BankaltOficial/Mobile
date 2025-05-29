@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/componentes/InfoColumn.dart';
+import 'package:flutter_application_1/components/InfoColumn.dart';
 
 class InvestCard extends StatelessWidget {
   final String title;

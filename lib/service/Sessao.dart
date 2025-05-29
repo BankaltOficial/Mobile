@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/Usuario.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
 
 class Sessao {
   static Usuario? usuarioAtual;

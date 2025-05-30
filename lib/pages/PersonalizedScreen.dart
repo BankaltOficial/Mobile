@@ -6,6 +6,8 @@ import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:provider/provider.dart';
 
 class PersonalizedScreen extends StatefulWidget {
@@ -40,19 +42,15 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
       ),
     );
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'bankalt',
-          style: TextStyle(
-              color: AppColors.mainWhite, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: mainColor,
-        centerTitle: true,
-      ),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(title: 'Personalizar', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
+      }),
+      drawer: CustomDrawer(),
       body: Container(
         padding: const EdgeInsets.all(40),
         child: Column(
@@ -137,6 +135,16 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 20),
+            const Text(
+              "As cores escolhidas serão aplicadas em todo o aplicativo.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: AppColors.grayBlue),
+            ),
+
+            const SizedBox(height: 20),
+
+            
           ],
         ),
       ),

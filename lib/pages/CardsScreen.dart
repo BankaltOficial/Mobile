@@ -6,6 +6,8 @@ import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/components/Card.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:provider/provider.dart';
 
 class CardsScreen extends StatefulWidget {
@@ -19,27 +21,14 @@ class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<ColorProvider>(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: mainWhite),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const InicialScreen(),
-              ),
-            );
-          },
-        ),
-        title: Text(
-          'bankalt',
-          style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: colors.main,
-        centerTitle: true,
-      ),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(title: 'Cartões Virtuais', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
+      }),
+      drawer: const CustomDrawer(),
       body: Container(
         padding: const EdgeInsets.all(40),
         child: Column(

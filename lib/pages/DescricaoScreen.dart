@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
-import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,12 @@ class DescricaoScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: colors.main,
       appBar: SimpleCustomAppBar(title: 'Descrição do Projeto', showBackButton: true, onBackPressed:() {
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const WelcomeScreen(),
+              ),
+            );
       },),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -24,7 +29,6 @@ class DescricaoScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            
             Center(
               child: Container(
                 width: 150,

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 
 class PixScreen extends StatefulWidget {
   const PixScreen({super.key});
@@ -11,17 +13,16 @@ class PixScreen extends StatefulWidget {
 }
 
 class _PixScreenState extends State<PixScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "PIX",
-            style: TextStyle(color: mainWhite),
-          ),
-          centerTitle: true,
-          backgroundColor: mainPurple,
-        ),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(title: 'PIX', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
+      }),
+      drawer: const CustomDrawer(),
         body: ListView(
           children: [
             Container(

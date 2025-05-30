@@ -4,8 +4,10 @@ import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -148,7 +150,10 @@ class CustomDrawer extends StatelessWidget {
                       icon: Icons.school_outlined,
                       title: 'Educação',
                       onTap: () {
-                        // Navigator para tela de educação
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EducationScreen()));
                       },
                     ),
 
@@ -187,7 +192,16 @@ class CustomDrawer extends StatelessWidget {
               width: double.infinity,
               margin: EdgeInsets.all(16),
               child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async{
+                  AppColors.main = AppColors.mainPurple;
+                  AppColors.secondary = AppColors.mainBlue;
+                  AppColors.tertiary = AppColors.mainGreen;
+                  
+                  final provider = Provider.of<ColorProvider>(context, listen: false);
+                  provider.setColors(
+                        AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
+                    await ColorService.saveColors(
+                        AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

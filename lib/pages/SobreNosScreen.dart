@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:provider/provider.dart';
 
 class SobreNosScreen extends StatelessWidget {
@@ -12,7 +14,18 @@ class SobreNosScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colors.main,
-      appBar: AppBar(),
+      appBar: SimpleCustomAppBar(
+        title: 'Sobre nós',
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const WelcomeScreen(),
+            ),
+          );
+        },
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(

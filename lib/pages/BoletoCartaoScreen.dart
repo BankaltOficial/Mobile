@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 
 class BoletoCartaoScreen extends StatelessWidget {
@@ -21,78 +22,10 @@ class BoletoCartaoScreen extends StatelessWidget {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 120,
-        backgroundColor: mainPurple,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 48),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BoletoScreen()),
-                  );
-                  },
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Boletos',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Text(
-                        'Pagamento de fatura de cartão',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
-      ),
-      drawer: const CustomDrawer(),
+      appBar: CustomAppBar(title: 'Boleto', subtitle: 'Pagamento de fatura de cartão', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BoletoScreen()));
+      }),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(

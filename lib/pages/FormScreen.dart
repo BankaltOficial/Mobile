@@ -5,6 +5,7 @@ import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -35,30 +36,30 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: mainWhite),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TermsScreen(),
-                ),
-              );
-            },
-          ),
-          title: Text(
-            'bankalt',
-            style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: mainPurple,
-          centerTitle: true,
-        ),
+        key: _scaffoldKey,
+        appBar: SimpleCustomAppBar(
+        title: 'Cadastro',
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TermsScreen(),
+            ),
+          );
+        },
+      ),
         body: SingleChildScrollView(
           child: Container(
             color: mainLightPurple,
             padding: const EdgeInsets.all(40),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,

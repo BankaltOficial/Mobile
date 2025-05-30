@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/BoletoCartaoScreen.dart';
 import 'package:flutter_application_1/pages/BoletoPixScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:provider/provider.dart';
 
 class BoletoScreen extends StatefulWidget {
@@ -26,66 +27,15 @@ class _BoletoScreenState extends State<BoletoScreen> {
 
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          toolbarHeight: 100,
-          backgroundColor: colors.main,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: mainWhite),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'bankalt',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: mainWhite),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const InicialScreen()),
-                      );
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'Boletos',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-            ],
-          ),
-        ),
+        appBar: CustomAppBar(
+            title: 'Boleto',
+            scaffoldKey: _scaffoldKey,
+            onBackPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()));
+            }),
         drawer: CustomDrawer(),
         body: Container(
           padding: const EdgeInsets.all(20),
@@ -104,31 +54,31 @@ class _BoletoScreenState extends State<BoletoScreen> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                  color: colors.main,
-                  borderRadius: BorderRadius.circular(12),
+                    color: colors.main,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.all(20),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                    "Pagar com Pix",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: mainWhite),
-                    textAlign: TextAlign.left,
-                    ),
-                    Text(
-                    "Leia o QR code ou copie o codigo",
-                    style: TextStyle(fontSize: 16, color: mainWhite),
-                    textAlign: TextAlign.left,
-                    )
-                  ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Pagar com Pix",
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: mainWhite),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        "Leia o QR code ou copie o codigo",
+                        style: TextStyle(fontSize: 16, color: mainWhite),
+                        textAlign: TextAlign.left,
+                      )
+                    ],
                   ),
                 ),
-                ),
+              ),
               const SizedBox(height: 20),
               Divider(
                 color: Colors.grey,
@@ -136,7 +86,7 @@ class _BoletoScreenState extends State<BoletoScreen> {
                 thickness: 1,
               ),
               const SizedBox(height: 20),
-                InkWell(
+              InkWell(
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
@@ -146,24 +96,24 @@ class _BoletoScreenState extends State<BoletoScreen> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                  color: colors.main,
-                  borderRadius: BorderRadius.circular(12),
+                    color: colors.main,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.all(20),
                   child: Column(
-                  children: [
-                    Text(
-                    "Pagar fatura do cartão",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: mainWhite),
-                    ),
-                    Text(
-                    "Libere o limite do seu cartão de credito",
-                    style: TextStyle(fontSize: 16, color: mainWhite),
-                    )
-                  ],
+                    children: [
+                      Text(
+                        "Pagar fatura do cartão",
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: mainWhite),
+                      ),
+                      Text(
+                        "Libere o limite do seu cartão de credito",
+                        style: TextStyle(fontSize: 16, color: mainWhite),
+                      )
+                    ],
                   ),
                 ),
               ),

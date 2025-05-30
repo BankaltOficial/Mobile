@@ -28,11 +28,9 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: CustomAppBar(
-        title: "Boletos",
-        subtitle: "Pagamento de fatura de cartão",
-        scaffoldKey: _scaffoldKey,
-      ),
+      appBar: CustomAppBar(title: 'Investimento', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
+      }),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(

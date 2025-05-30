@@ -28,6 +28,11 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
+      appBar: CustomAppBar(
+        title: "Boletos",
+        subtitle: "Pagamento de fatura de cartão",
+        scaffoldKey: _scaffoldKey,
+      ),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(

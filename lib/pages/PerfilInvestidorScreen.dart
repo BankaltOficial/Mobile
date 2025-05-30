@@ -20,7 +20,6 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
   final List<String> perfis = ['CONSERVADOR', 'MODERADO', 'ARROJADO'];
   int perfilIndex = 2;
   
-  // Variáveis para os radio buttons
   String? selectedObjective;
   String? selectedTimeHorizon;
   String? selectedLoss;

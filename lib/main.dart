@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
 import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
 import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
+import 'package:flutter_application_1/pages/ResgateScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: PerfilInvestidorScreen(),
+          home: ResgateScreen(),
         );
       },
     );

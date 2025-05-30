@@ -4,6 +4,7 @@ import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
 import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
 import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +53,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: BoletoScreen(),
+          home: PerfilInvestidorScreen(),
         );
       },
     );

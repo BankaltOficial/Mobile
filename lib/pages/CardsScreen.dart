@@ -5,6 +5,7 @@ import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/components/Card.dart';
 import 'package:provider/provider.dart';
 
 class CardsScreen extends StatefulWidget {
@@ -53,13 +54,10 @@ class _CardsScreenState extends State<CardsScreen> {
             Column(
               children: [
                 const SizedBox(height: 20),
-                Container(
-                  height: 200,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: mainBlue,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                CreditCardWidget(
+                  cardNumber: '1234 5678 9000 0000',
+                  holderName: 'Seu Nome',
+                  expiryDate: '12/27',
                 ),
                 const SizedBox(height: 30),
                 Row(

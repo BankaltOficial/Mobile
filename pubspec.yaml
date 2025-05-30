@@ -70,6 +70,11 @@ flutter:
     - assets/images/LogoBANKALTsemfundo1.png
     - assets/images/LogoTitulo.png
     - assets/images/IgorSuracci.png
+    - assets/images/gabriel_augusto.png
+    - assets/images/gabriel_henrique.png
+    - assets/images/leonardo_pedroso.png
+    - assets/images/samuel_colucci.png
+    - assets/icons/Resgate.png
     - assets/icons/Pix.png
     - assets/icons/Estudos.png
     - assets/icons/Personalizacao.png
@@ -81,7 +86,6 @@ flutter:
     - assets/icons/pixColorido.png
     - assets/icons/cartoesColorido.png
     - assets/icons/Investir.png
-    - assets/icons/Resgate.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
+import 'package:flutter_application_1/pages/DescricaoScreen.dart';
+import 'package:flutter_application_1/pages/SobreNosScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -168,11 +170,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: const Text('ENTRAR'),
                         ),
                         SizedBox(height: 25),
-                        Row(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Row(children: [
-                              Icon(Icons.refresh, color: mainPurple),
                               TextButton(
                                   onPressed: () {
                                     Navigator.pushReplacement(
@@ -182,7 +185,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                                 const TermsScreen()));
                                   },
                                   child: Text(
-                                    "Trocar de conta",
+                                    "Não tem uma conta?",
                                     style: TextStyle(
                                         color: mainPurple,
                                         fontWeight: FontWeight.bold),
@@ -227,6 +230,46 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       SizedBox(height: 8),
                       Text("(19) 99819-3930"),
                       Text("(19) 97157-3019"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(onPressed: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SobreNosScreen()));
+                      }, child: Text(
+                        "Sobre o Projeto",
+                        style: TextStyle(
+                            color: mainBlue,
+                            fontWeight: FontWeight.bold,),
+                      ))
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(onPressed: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DescricaoScreen()));
+                      }, child: Text(
+                        "Descrição do Projeto",
+                        style: TextStyle(
+                            color: mainBlue,
+                            fontWeight: FontWeight.bold,),
+                      ))
                     ],
                   ),
                 ],

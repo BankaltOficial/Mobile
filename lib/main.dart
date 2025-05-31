@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
 import 'package:flutter_application_1/pages/ResgateScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
+import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: ResgateScreen(),
+          home:EmprestimoScreen(),
         );
       },
     );

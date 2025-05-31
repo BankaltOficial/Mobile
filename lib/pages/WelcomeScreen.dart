@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/DescricaoScreen.dart';
 import 'package:flutter_application_1/pages/SobreNosScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 200,
-          backgroundColor: mainPurple,
+          backgroundColor: AppColors.main,
           title: Image.asset('assets/images/LogoTitulo.png',
               height: 200, width: 200),
           centerTitle: true,
@@ -40,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         body: ListView(children: [
           Column(children: [
             Container(
-              color: mainPurpleWeak,
+              color: AppColors.mainPurpleWeak,
               padding: EdgeInsets.all(15),
               child: Form(
                   key: _formKey,
@@ -50,7 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         Text("Acesse sua conta",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: mainPurple,
+                                color: AppColors.main,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17)),
                         SizedBox(height: 20),
@@ -59,7 +60,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: Text("CPF",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  color: mainPurple,
+                                  color: AppColors.main,
                                   fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: 15),
@@ -92,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: Text("Senha",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  color: mainPurple,
+                                  color: AppColors.main,
                                   fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: 15),
@@ -156,7 +157,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: mainPurple,
+                            backgroundColor: AppColors.main,
                             foregroundColor: Colors.white,
                             elevation: 4,
                             shape: RoundedRectangleBorder(
@@ -187,7 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   child: Text(
                                     "Não tem uma conta?",
                                     style: TextStyle(
-                                        color: mainPurple,
+                                        color: AppColors.main,
                                         fontWeight: FontWeight.bold),
                                   ))
                             ]),
@@ -198,7 +199,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 onPressed: () {},
                                 child: Text(
                                   "Esqueceu a senha?",
-                                  style: TextStyle(color: gray),
+                                  style: TextStyle(color: AppColors.gray),
                                 )),
                           )
                         ]),
@@ -251,7 +252,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       }, child: Text(
                         "Sobre o Projeto",
                         style: TextStyle(
-                            color: mainBlue,
+                            color: AppColors.secondary,
                             fontWeight: FontWeight.bold,),
                       ))
                     ],
@@ -267,7 +268,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       }, child: Text(
                         "Descrição do Projeto",
                         style: TextStyle(
-                            color: mainBlue,
+                            color: AppColors.secondary,
                             fontWeight: FontWeight.bold,),
                       ))
                     ],

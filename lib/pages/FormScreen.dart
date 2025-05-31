@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
@@ -55,7 +56,7 @@ class _FormScreenState extends State<FormScreen> {
       ),
         body: SingleChildScrollView(
           child: Container(
-            color: mainLightPurple,
+            color: AppColors.mainLightPurple,
             padding: const EdgeInsets.all(40),
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
@@ -75,7 +76,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -84,7 +85,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -108,7 +109,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -132,7 +133,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -158,7 +159,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -184,7 +185,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -210,7 +211,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -236,7 +237,7 @@ class _FormScreenState extends State<FormScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: mainPurple,
+                          color: AppColors.main,
                         ),
                       ),
                       TextFormField(
@@ -286,7 +287,7 @@ class _FormScreenState extends State<FormScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: mainPurple,
+                          backgroundColor: AppColors.main,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           textStyle: const TextStyle(fontSize: 20),
                         ),

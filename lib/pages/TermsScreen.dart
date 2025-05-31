@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class TermsScreen extends StatefulWidget {
   const TermsScreen({super.key});
@@ -21,7 +22,7 @@ class _TermsScreenState extends State<TermsScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: mainWhite),
+          icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -33,13 +34,13 @@ class _TermsScreenState extends State<TermsScreen> {
         ),
         title: Text(
           'bankalt',
-          style: TextStyle(color: mainWhite, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.mainWhite, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         centerTitle: true,
       ),
       body: Container(
-        color: mainPurple,
+        color: AppColors.main,
         child: SizedBox.expand(
           child: Center(
             child: Padding(
@@ -57,16 +58,16 @@ class _TermsScreenState extends State<TermsScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                       ),
                     ),
                     const SizedBox(height: 80),
                     RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(
+                      text: const TextSpan(
                         style: TextStyle(
                           fontSize: 16,
-                          color: mainWhite,
+                          color: AppColors.mainWhite,
                         ),
                         children: [
                           const TextSpan(
@@ -76,7 +77,7 @@ class _TermsScreenState extends State<TermsScreen> {
                           TextSpan(
                             text: "Termos",
                             style: TextStyle(
-                                color: mainYellow, fontWeight: FontWeight.bold),
+                                color: AppColors.mainYellow, fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(
                             text: " e documentos relacionados com a ",
@@ -84,7 +85,7 @@ class _TermsScreenState extends State<TermsScreen> {
                           TextSpan(
                             text: "Privacidade",
                             style: TextStyle(
-                                color: mainYellow, fontWeight: FontWeight.bold),
+                                color: AppColors.mainYellow, fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(
                             text: " de forma confidencial.",
@@ -102,15 +103,15 @@ class _TermsScreenState extends State<TermsScreen> {
                               SnackBar(
                                 content: Text(
                                   "Você deve ler os documentos antes de continuar.",
-                                  style: TextStyle(color: mainWhite),
+                                  style: TextStyle(color: AppColors.mainWhite),
                                 ),
-                                backgroundColor: mainPurple,
+                                backgroundColor: AppColors.main,
                               );
                               isChecked = !isChecked;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: mainWhite,
+                            backgroundColor: AppColors.mainWhite,
                             shadowColor: Colors.transparent,
                             padding: const EdgeInsets.all(0),
                             minimumSize: Size(35, 35),
@@ -122,7 +123,7 @@ class _TermsScreenState extends State<TermsScreen> {
                             isChecked
                                 ? Icons.check_circle
                                 : Icons.check_box_outline_blank,
-                            color: mainBlue,
+                            color: AppColors.secondary,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -130,7 +131,7 @@ class _TermsScreenState extends State<TermsScreen> {
                           "Li, estou ciente e concordo",
                           style: TextStyle(
                             fontSize: 16,
-                            color: mainWhite,
+                            color: AppColors.mainWhite,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -141,7 +142,7 @@ class _TermsScreenState extends State<TermsScreen> {
                       "Ainda não leu os documentos?",
                       style: TextStyle(
                         fontSize: 15,
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -151,7 +152,7 @@ class _TermsScreenState extends State<TermsScreen> {
                         "Baixe aqui!",
                         style: TextStyle(
                           fontSize: 15,
-                          color: mainWhite,
+                          color: AppColors.mainWhite,
                         ),
                       ),
                     ),
@@ -170,15 +171,15 @@ class _TermsScreenState extends State<TermsScreen> {
                             SnackBar(
                               content: Text(
                                 "Você deve concordar com os documentos antes de continuar.",
-                                style: TextStyle(color: mainWhite),
+                                style: TextStyle(color: AppColors.mainWhite),
                               ),
-                              backgroundColor: mainPurple,
+                              backgroundColor: AppColors.main,
                             ),
                           );
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: mainBlue,
+                        backgroundColor: AppColors.secondary,
                         padding: const EdgeInsets.symmetric(
                           vertical: 16,
                           horizontal: 32,
@@ -191,7 +192,7 @@ class _TermsScreenState extends State<TermsScreen> {
                         "CONTINUAR",
                         style: TextStyle(
                           fontSize: 16,
-                          color: mainWhite,
+                          color: AppColors.mainWhite,
                         ),
                       ),
                     ),

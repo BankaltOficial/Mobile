@@ -231,14 +231,14 @@ Widget buildBlock(String title, String description, VoidCallback? onTap) {
           Text(
             title,
             style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: mainWhite),
+                fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.mainWhite),
           ),
           const Divider(
             thickness: 1,
           ),
           Text(
             description,
-            style: TextStyle(fontSize: 14, color: mainWhite),
+            style: TextStyle(fontSize: 14, color: AppColors.mainWhite, height: 1.5),
           )
         ],
       ),

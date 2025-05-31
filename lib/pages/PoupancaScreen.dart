@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 import 'InicialScreen.dart';
 
 class PoupancaScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -70,7 +71,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
@@ -80,7 +81,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -93,7 +94,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -107,7 +108,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                     child: Text(
                       'Poupança',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -126,12 +127,12 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),

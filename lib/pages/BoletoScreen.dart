@@ -23,20 +23,20 @@ class _BoletoScreenState extends State<BoletoScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<ColorProvider>(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-        key: _scaffoldKey,
+        key: scaffoldKey,
         appBar: CustomAppBar(
             title: 'Boleto',
-            scaffoldKey: _scaffoldKey,
+            scaffoldKey: scaffoldKey,
             onBackPressed: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const InicialScreen()));
             }),
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Container(
           padding: const EdgeInsets.all(20),
           child: Center(
@@ -58,7 +58,7 @@ class _BoletoScreenState extends State<BoletoScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.all(20),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -67,12 +67,13 @@ class _BoletoScreenState extends State<BoletoScreen> {
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: mainWhite),
+                            color: AppColors.mainWhite,
+                        ),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         "Leia o QR code ou copie o codigo",
-                        style: TextStyle(fontSize: 16, color: mainWhite),
+                        style: TextStyle(fontSize: 16, color: AppColors.mainWhite,),
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -80,7 +81,7 @@ class _BoletoScreenState extends State<BoletoScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Divider(
+              const Divider(
                 color: Colors.grey,
                 height: 1,
                 thickness: 1,
@@ -100,18 +101,18 @@ class _BoletoScreenState extends State<BoletoScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.all(20),
-                  child: Column(
+                  child: const Column(
                     children: [
                       Text(
                         "Pagar fatura do cartão",
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: mainWhite),
+                            color: AppColors.mainWhite),
                       ),
                       Text(
                         "Libere o limite do seu cartão de credito",
-                        style: TextStyle(fontSize: 16, color: mainWhite),
+                        style: TextStyle(fontSize: 16, color: AppColors.mainWhite),
                       )
                     ],
                   ),

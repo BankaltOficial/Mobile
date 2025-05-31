@@ -3,12 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
-import 'package:flutter_application_1/service/ColorsService.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/components/Card.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:provider/provider.dart';
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -20,12 +17,11 @@ class CardsScreen extends StatefulWidget {
 class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
-    final colors = Provider.of<ColorProvider>(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(title: 'Cartões Virtuais', scaffoldKey: _scaffoldKey, onBackPressed: (){
+      key: scaffoldKey,
+      appBar: CustomAppBar(title: 'Cartões Virtuais', scaffoldKey: scaffoldKey, onBackPressed: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
       }),
       drawer: const CustomDrawer(),
@@ -33,17 +29,17 @@ class _CardsScreenState extends State<CardsScreen> {
         padding: const EdgeInsets.all(40),
         child: Column(
           children: [
-            Text(
+            const Text(
               "Escolha o cartão",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: grayBlue),
+                  fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.grayBlue),
             ),
             const SizedBox(height: 20),
             Column(
               children: [
                 const SizedBox(height: 20),
-                CreditCardWidget(
+                const CreditCardWidget(
                   cardNumber: '1234 5678 9000 0000',
                   holderName: 'Seu Nome',
                   expiryDate: '12/27',
@@ -56,7 +52,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: grayBlue,
+                        color: AppColors.grayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -66,7 +62,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: grayBlue,
+                        color: AppColors.grayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -76,7 +72,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: grayBlue,
+                        color: AppColors.grayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -99,10 +95,10 @@ class _CardsScreenState extends State<CardsScreen> {
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(Icons.delete,
-                                      color: colors.main, size: 50)),
+                                      color: AppColors.main, size: 50)),
                               Text("Apagar",
                                   style: TextStyle(
-                                      color: colors.main,
+                                      color: AppColors.main,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 10),
@@ -125,10 +121,10 @@ class _CardsScreenState extends State<CardsScreen> {
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(Icons.lock,
-                                      color: colors.main, size: 50)),
+                                      color: AppColors.main, size: 50)),
                               Text("Bloquear",
                                   style: TextStyle(
-                                      color: colors.main,
+                                      color: AppColors.main,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 10),

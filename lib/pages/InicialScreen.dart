@@ -13,8 +13,8 @@ import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -24,19 +24,9 @@ class InicialScreen extends StatefulWidget {
   State<InicialScreen> createState() => _InicialScreenState();
 }
 
-Color mainPurple = AppColors.main;
-Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-Color mainWhite = AppColors.mainWhite;
-Color gray = const Color(0xFF828282);
-Color grayBlue = const Color(0xFF495057);
-Color mainBlue = AppColors.secondary;
-Color mainYellow = const Color(0xFFFFC700);
-Color mainLightPurple = const Color(0xFFCBCBE5);
-Color mainGreen = AppColors.tertiary;
 double saldo = 28567.90;
 String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-Usuario usuario = Sessao.getUsuario() ??
-    Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
+Usuario usuario = Sessao.getUsuario() ?? Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 String nome = usuario.nome;
 String cpf = usuario.cpf;
 Icon iconVisibility = Icon(Icons.visibility);
@@ -150,7 +140,7 @@ class _InicialScreenState extends State<InicialScreen> {
                     },
                     child: Text("Ver extrato >",
                         style: TextStyle(
-                            color: mainBlue, fontWeight: FontWeight.bold))),
+                            color: AppColors.secondary, fontWeight: FontWeight.bold))),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -181,7 +171,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Pix",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -212,7 +202,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Cartões",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -243,7 +233,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Boleto",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -282,7 +272,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Investimentos",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -315,7 +305,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Transferência",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -348,7 +338,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Empréstimo",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -385,7 +375,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Educação",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -418,7 +408,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Personalização",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.gray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],

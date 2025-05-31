@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class PixScreen extends StatefulWidget {
   const PixScreen({super.key});
@@ -37,7 +38,7 @@ class _PixScreenState extends State<PixScreen> {
                           child: ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: mainPurple, width: 2),
+                                  side: BorderSide(color: AppColors.main, width: 2),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               child: Column(
@@ -45,11 +46,11 @@ class _PixScreenState extends State<PixScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Icon(Icons.account_balance_wallet_outlined,
-                                      size: 60, color: mainPurple),
+                                      size: 60, color: AppColors.main),
                                   SizedBox(height: 10),
                                   Text("Pagar",
                                       style: TextStyle(
-                                          fontSize: 20, color: mainPurple)),
+                                          fontSize: 20, color: AppColors.main)),
                                 ],
                               )),
                         ),
@@ -60,7 +61,7 @@ class _PixScreenState extends State<PixScreen> {
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                     side:
-                                        BorderSide(color: mainPurple, width: 2),
+                                        BorderSide(color: AppColors.main, width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10))),
@@ -69,11 +70,11 @@ class _PixScreenState extends State<PixScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(Icons.qr_code,
-                                        size: 60, color: mainPurple),
+                                        size: 60, color: AppColors.main),
                                     SizedBox(height: 10),
                                     Text("Receber",
                                         style: TextStyle(
-                                            fontSize: 20, color: mainPurple)),
+                                            fontSize: 20, color: AppColors.main)),
                                   ],
                                 )))
                       ]),
@@ -81,7 +82,7 @@ class _PixScreenState extends State<PixScreen> {
                   ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          side: BorderSide(color: mainPurple, width: 2),
+                          side: BorderSide(color: AppColors.main, width: 2),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       child: Row(
@@ -89,8 +90,8 @@ class _PixScreenState extends State<PixScreen> {
                         children: [
                           Text("Minhas chaves",
                               style:
-                                  TextStyle(fontSize: 20, color: mainPurple)),
-                          Icon(Icons.key_rounded, size: 60, color: mainPurple),
+                                  TextStyle(fontSize: 20, color: AppColors.main)),
+                          Icon(Icons.key_rounded, size: 60, color: AppColors.main),
                         ],
                       )),
                   SizedBox(
@@ -108,10 +109,10 @@ class _PixScreenState extends State<PixScreen> {
                         ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: mainPurple),
+                                backgroundColor: AppColors.main),
                             child: Text(
                               "Cadastrar",
-                              style: TextStyle(color: mainWhite),
+                              style: TextStyle(color: AppColors.mainWhite),
                             )),
                         ElevatedButton(
                           onPressed: () {

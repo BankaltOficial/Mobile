@@ -42,7 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Menu button ou espaço vazio
               if (showMenuButton)
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: onMenuPressed ?? () {
                     scaffoldKey?.currentState?.openDrawer();
                   },
@@ -56,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Text(
                     'bankalt',
                     style: TextStyle(
-                      color: mainWhite,
+                      color: AppColors.mainWhite,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -79,7 +79,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 // Back button ou espaço vazio
                 if (showBackButton)
                   IconButton(
-                    icon: Icon(Icons.arrow_back, color: mainWhite),
+                    icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                     onPressed: onBackPressed ?? () {
                       Navigator.of(context).pop();
                     },
@@ -95,7 +95,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           Text(
                             title,
                             style: TextStyle(
-                              color: mainWhite,
+                              color: AppColors.mainWhite,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -103,7 +103,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           Text(
                             subtitle!,
                             style: TextStyle(
-                              color: mainWhite,
+                              color: AppColors.mainWhite,
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                             ),
@@ -114,7 +114,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            color: mainWhite,
+                            color: AppColors.mainWhite,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
@@ -162,7 +162,7 @@ class SimpleCustomAppBar extends StatelessWidget implements PreferredSizeWidget 
       centerTitle: true,
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back, color: mainWhite),
+              icon: const Icon(Icons.arrow_back, color: AppColors.mainWhite),
               onPressed: onBackPressed ?? () {
                 Navigator.of(context).pop();
               },
@@ -170,8 +170,8 @@ class SimpleCustomAppBar extends StatelessWidget implements PreferredSizeWidget 
           : null,
       title: Text(
         title,
-        style: TextStyle(
-          color: mainWhite,
+        style: const TextStyle(
+          color: AppColors.mainWhite,
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),

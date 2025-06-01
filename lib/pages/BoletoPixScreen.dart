@@ -130,7 +130,7 @@ class BoletoPixScreen extends StatelessWidget {
                   ),
                   prefixIcon: Icon(
                     Icons.search,
-                    color: AppColors.gray,
+                    color: AppColors.mainGray,
                   ),
                 ),
                 keyboardType: TextInputType.number,

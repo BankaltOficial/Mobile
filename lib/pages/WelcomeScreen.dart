@@ -199,7 +199,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 onPressed: () {},
                                 child: Text(
                                   "Esqueceu a senha?",
-                                  style: TextStyle(color: AppColors.gray),
+                                  style: TextStyle(color: AppColors.mainGray),
                                 )),
                           )
                         ]),

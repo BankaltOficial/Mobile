@@ -33,7 +33,7 @@ class _CardsScreenState extends State<CardsScreen> {
               "Escolha o cartão",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.grayBlue),
+                  fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.mainGrayBlue),
             ),
             const SizedBox(height: 20),
             Column(
@@ -52,7 +52,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.grayBlue,
+                        color: AppColors.mainGrayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -62,7 +62,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.grayBlue,
+                        color: AppColors.mainGrayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -72,7 +72,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.grayBlue,
+                        color: AppColors.mainGrayBlue,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),

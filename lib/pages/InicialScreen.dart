@@ -52,6 +52,7 @@ class _InicialScreenState extends State<InicialScreen> {
               );
             }),
         drawer: CustomDrawer(),
+        backgroundColor: AppColors.themeColor,
         body: ListView(children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -88,7 +89,7 @@ class _InicialScreenState extends State<InicialScreen> {
                       child: Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: lightPurple,
+                          color: AppColors.mainLight,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -171,7 +172,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Pix",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -202,7 +203,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Cartões",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -233,7 +234,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Boleto",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -272,7 +273,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Investimentos",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -305,7 +306,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Transferência",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -338,7 +339,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Empréstimo",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -375,7 +376,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Educação",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -408,7 +409,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Personalização",
                             style: TextStyle(
-                                color: AppColors.gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],

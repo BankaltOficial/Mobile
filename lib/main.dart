@@ -25,7 +25,7 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ColorProvider(),
+      create: (_) => ColorProvider()..toggleDarkMode(AppColors.isDarkMode),
       child: const MyApp(),
     ),
   );
@@ -36,14 +36,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorProvider = Provider.of<ColorProvider>(context);
+    
     return Consumer<ColorProvider>(
+
       builder: (context, colors, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Bankalt',
           theme: ThemeData(
             fontFamily: 'Poppins',
-            scaffoldBackgroundColor: AppColors.mainWhite,
+            scaffoldBackgroundColor: colorProvider.theme,
             primaryColor: colors.main,
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: colors.main,
@@ -54,7 +57,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: SplashScreen(),
+          home: InicialScreen(),
         );
       },
     );

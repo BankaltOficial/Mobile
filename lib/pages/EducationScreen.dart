@@ -106,7 +106,7 @@ class _EducationScreenState extends State<EducationScreen> {
               }),
               const SizedBox(height: 40),
               const Divider(
-                color: AppColors.gray,
+                color: AppColors.mainGray,
                 thickness: 1,
               ),
               const SizedBox(height: 40),
@@ -160,7 +160,7 @@ class _EducationScreenState extends State<EducationScreen> {
               }),
               const SizedBox(height: 40),
               const Divider(
-                color: AppColors.gray,
+                color: AppColors.mainGray,
                 thickness: 1,
               ),
               const SizedBox(height: 40),

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorProvider = Provider.of<ColorProvider>(context);
-    
+
     return Consumer<ColorProvider>(
 
       builder: (context, colors, _) {
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: InicialScreen(),
+          home: SplashScreen(),
         );
       },
     );

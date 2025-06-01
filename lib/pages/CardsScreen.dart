@@ -6,6 +6,8 @@ import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/components/Card.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -17,13 +19,21 @@ class CardsScreen extends StatefulWidget {
 class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
+    Usuario usuario = Sessao.getUsuario() ??
+        Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
+    String nome = usuario.nome;
+    String cpf = usuario.cpf;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: CustomAppBar(title: 'Cartões Virtuais', scaffoldKey: scaffoldKey, onBackPressed: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
-      }),
+      appBar: CustomAppBar(
+          title: 'Cartões Virtuais',
+          scaffoldKey: scaffoldKey,
+          onBackPressed: () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const InicialScreen()));
+          }),
       drawer: const CustomDrawer(),
       body: Container(
         padding: const EdgeInsets.all(40),
@@ -33,16 +43,18 @@ class _CardsScreenState extends State<CardsScreen> {
               "Escolha o cartão",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.mainGrayBlue),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.mainGrayBlue),
             ),
             const SizedBox(height: 20),
             Column(
               children: [
                 const SizedBox(height: 20),
-                const CreditCardWidget(
-                  cardNumber: '1234 5678 9000 0000',
-                  holderName: 'Seu Nome',
-                  expiryDate: '12/27',
+                CreditCardWidget(
+                  cardNumber: usuario.numeroCartao,
+                  holderName: usuario.nome,
+                  expiryDate: usuario.validadeCartao,
                 ),
                 const SizedBox(height: 30),
                 Row(

@@ -24,11 +24,11 @@ class InicialScreen extends StatefulWidget {
   State<InicialScreen> createState() => _InicialScreenState();
 }
 
-double saldo = 28567.90;
 String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
 Usuario usuario = Sessao.getUsuario() ?? Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 String nome = usuario.nome;
 String cpf = usuario.cpf;
+double saldo = usuario.saldo;
 Icon iconVisibility = Icon(Icons.visibility);
 
 class _InicialScreenState extends State<InicialScreen> {

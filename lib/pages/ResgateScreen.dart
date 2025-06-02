@@ -25,7 +25,7 @@ class _ResgateScreenState extends State<ResgateScreen> {
     thousandSeparator: '.',
     initialValue: 0.0,
     leftSymbol: 'R\$ ',
-    );
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -34,150 +34,148 @@ class _ResgateScreenState extends State<ResgateScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-          toolbarHeight: 100,
-          backgroundColor: AppColors.main,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'bankalt',
-                        style: TextStyle(
-                          color: AppColors.mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const InvestimentoScreen()),
-                      );
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'Resgate',
-                        style: TextStyle(
-                          color: AppColors.mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-            ],
-          ),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: AppColors.main,
-                ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: AppColors.mainWhite,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.home_filled),
-                title: Text('Página inicial'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InicialScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/pixColorido.png",
-                    width: 20, height: 20),
-                title: Text('PIX'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PixScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.bar_chart),
-                title: Text('Investimentos'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InvestimentoScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/cartoesColorido.png",
-                    height: 30, width: 30),
-                title: Text('Cartões'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-              Divider(
-                color: AppColors.mainGray,
-                height: 1,
-                thickness: 1,
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Configurações'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
+        toolbarHeight: 100,
+        backgroundColor: AppColors.main,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Row(
               children: [
-                InkWell(
+                IconButton(
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
+                  onPressed: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      'bankalt',
+                      style: TextStyle(
+                        color: AppColors.mainWhite,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 48),
+              ],
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const InvestimentoScreen()),
+                    );
+                  },
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      'Resgate',
+                      style: TextStyle(
+                        color: AppColors.mainWhite,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 48),
+              ],
+            ),
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppColors.main,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: AppColors.mainWhite,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home_filled),
+              title: Text('Página inicial'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Image.asset("assets/icons/pixColorido.png",
+                  width: 20, height: 20),
+              title: Text('PIX'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PixScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.bar_chart),
+              title: Text('Investimentos'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InvestimentoScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Image.asset("assets/icons/cartoesColorido.png",
+                  height: 30, width: 30),
+              title: Text('Cartões'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
+                );
+              },
+            ),
+            Divider(
+              color: AppColors.mainGray,
+              height: 1,
+              thickness: 1,
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Configurações'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              InkWell(
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
@@ -208,91 +206,104 @@ class _ResgateScreenState extends State<ResgateScreen> {
                         ),
                       ),
                     ],
-                ),
-                ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                Text("Quanto você quer regatar?",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    )),
-
-                SizedBox(height: 10),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                    controller: _valorController,
-                    onTap: () {
-                    },
-                    decoration: InputDecoration(
-                      constraints: BoxConstraints(
-                        minHeight: 40,
-                        maxHeight: 40,
-                        minWidth: 150,
-                        maxWidth: 150,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
-                    ),
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.main,
-                    ),
                   ),
                 ),
-                Container(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Row(
-                  children: [
-                    Radio<String>(
-                      value: 'hoje',
-                      groupValue: _resgateOption,
-                      onChanged: (value) {
-                        setState(() {
-                          _resgateOption = value!;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Resgatar hoje',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 20),
-                Row(
-                children: [
-                  Radio<String>(
-                    value: 'agendar',
-                    groupValue: _resgateOption,
-                    onChanged: (value) {
-                      setState(() {
-                        _resgateOption = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    'Agendar resgate',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
               ),
-              ]
+              SizedBox(
+                height: 20,
+              ),
+              Text("Quanto você quer regatar?",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: _valorController,
+                  validator: (value) {
+                    final cleaned = value?.replaceAll(RegExp(r'[^0-9,]'), '');
+                    if (cleaned == null || cleaned.isEmpty) {
+                      return 'Digite um valor válido';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    final cleaned = value.replaceAll(RegExp(r'[A-Za-z]'), '');
+                    if (value != cleaned) {
+                      _valorController.text = cleaned;
+                      _valorController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: cleaned.length),
+                      );
+                    }
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                  ],
+                  decoration: InputDecoration(
+                    constraints: BoxConstraints(
+                      minHeight: 40,
+                      maxHeight: 40,
+                      minWidth: 150,
+                      maxWidth: 320,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    isDense: true,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                  ),
+                  keyboardType: TextInputType.numberWithOptions(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.main,
+                  ),
                 ),
+              ),
+              Container(
+                padding: EdgeInsets.all(16),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Row(
+                    children: [
+                      Radio<String>(
+                        value: 'hoje',
+                        groupValue: _resgateOption,
+                        onChanged: (value) {
+                          setState(() {
+                            _resgateOption = value!;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Resgatar hoje',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 20),
+                  Row(
+                    children: [
+                      Radio<String>(
+                        value: 'agendar',
+                        groupValue: _resgateOption,
+                        onChanged: (value) {
+                          setState(() {
+                            _resgateOption = value!;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Agendar resgate',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ]),
               ),
             ],
           ),

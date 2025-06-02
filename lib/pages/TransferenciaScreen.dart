@@ -1,11 +1,14 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class TransferenciaScreen extends StatefulWidget {
   const TransferenciaScreen({super.key});
@@ -18,6 +21,15 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    String nome = usuario.nome;
+    final MoneyMaskedTextController _valorController =
+        MoneyMaskedTextController(
+      decimalSeparator: ',',
+      thousandSeparator: '.',
+      initialValue: 0.0,
+      leftSymbol: 'R\$ ',
+    );
+    double valorTransferencia = 0.0;
 
     return Scaffold(
       key: scaffoldKey,
@@ -149,8 +161,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const CardsScreen()),
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
                 );
               },
             ),
@@ -165,8 +176,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const CardsScreen()),
+                  MaterialPageRoute(builder: (context) => const CardsScreen()),
                 );
               },
             ),
@@ -182,7 +192,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                 child: Column(
                   children: [
                     SizedBox(height: 40),
-                    
                     Row(
                       children: [
                         Expanded(
@@ -214,13 +223,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                               ),
                               SizedBox(height: 12),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  'Igor Suracci',
+                                  nome,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -231,7 +241,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                             ],
                           ),
                         ),
-                        
                         Expanded(
                           child: Column(
                             children: [
@@ -256,7 +265,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                             ],
                           ),
                         ),
-                        
                         Expanded(
                           child: Column(
                             children: [
@@ -286,7 +294,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                               ),
                               SizedBox(height: 12),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(20),
@@ -305,9 +314,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         ),
                       ],
                     ),
-                    
                     SizedBox(height: 40),
-                    
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(20),
@@ -329,12 +336,55 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'R\$ 35,00',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: TextFormField(
+                                  controller: _valorController,
+                                  validator: (value) {
+                                    final cleaned = value?.replaceAll(
+                                        RegExp(r'[^0-9,]'), '');
+                                    if (cleaned == null || cleaned.isEmpty) {
+                                      return 'Digite um valor válido';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    final cleaned = value.replaceAll(
+                                        RegExp(r'[A-Za-z]'), '');
+                                    if (value != cleaned) {
+                                      _valorController.text = cleaned;
+                                      _valorController.selection =
+                                          TextSelection.fromPosition(
+                                        TextPosition(offset: cleaned.length),
+                                      );
+                                      valorTransferencia =
+                                          _valorController.numberValue;
+                                    }
+                                  },
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9.,]')),
+                                  ],
+                                  decoration: InputDecoration(
+                                    constraints: BoxConstraints(
+                                      minHeight: 40,
+                                      maxHeight: 40,
+                                      minWidth: 150,
+                                      maxWidth: 320,
+                                    ),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 1, horizontal: 1),
+                                  ),
+                                  keyboardType:
+                                      TextInputType.numberWithOptions(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.main,
+                                  ),
                                 ),
                               ),
                             ],
@@ -342,14 +392,12 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         ],
                       ),
                     ),
-                    
                     SizedBox(height: 60),
                   ],
                 ),
               ),
             ),
           ),
-          
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(
@@ -362,7 +410,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text('Confirmar Transferência'),
-                        content: Text('Deseja confirmar a transferência de R\$ 35,00 para De Paula?'),
+                        content: Text(
+                            'Deseja confirmar a transferência de R\$ $valorTransferencia para ${usuarios.last.nome}'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -370,13 +419,20 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Transferência realizada com sucesso!'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
+                              if (true) {
+                                usuario.transferir(
+                                    valorTransferencia, usuarios.last);
+                                valorTransferencia =
+                                    _valorController.numberValue;
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Transferência realizada com sucesso!'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.main,

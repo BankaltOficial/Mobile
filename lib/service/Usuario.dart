@@ -11,7 +11,7 @@ class Usuario {
   String _dataNascimento;
   String _celular;
   String _senha;
-  double _saldo = 0.0;
+  double _saldo = 0;
   int _score = 0;
   int _ponto = 0;
   final String _numeroCartao;
@@ -140,37 +140,37 @@ List<Usuario> usuarios = [
     'brunoPass@2024',
   ),
   Usuario(
-    'Carla Souza',
-    'carla.souza@email.com',
-    '456.789.123-00',
+    'Igor Suracci',
+    'igor@email.com',
+    '333.333.333-33',
     '45.678.912-3',
     formatarData(DateTime(2000, 1, 5)),
     '(31) 93456-7890',
-    'carla2025!',
+    '23',
   ),
 ];
 
-Usuario? buscarUsuarioPorCpf(String cpf) {
+Usuario buscarUsuarioPorCpf(String cpf) {
   try {
     return usuarios.firstWhere((u) => u.cpf == cpf);
   } catch (e) {
-    return null;
+    throw Exception('Usuário já cadastrado com este CPF');
   }
 }
 
-Usuario? buscarUsuarioPorRg(String rg) {
+Usuario buscarUsuarioPorRg(String rg) {
   try {
     return usuarios.firstWhere((u) => u.rg == rg);
   } catch (e) {
-    return null;
+    throw Exception('Usuário já cadastrado com este CPF');
   }
 }
 
-Usuario? buscarUsuarioPorEmail(String email) {
+Usuario buscarUsuarioPorEmail(String email) {
   try {
     return usuarios.firstWhere((u) => u.email == email);
   } catch (e) {
-    return null;
+    throw Exception('Usuário já cadastrado com este CPF');
   }
 }
 

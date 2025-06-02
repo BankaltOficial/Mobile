@@ -5,10 +5,12 @@ import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
+import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
@@ -291,7 +293,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const PixScreen()));
+                                                const TransferenciaScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: colors.main,
@@ -324,7 +326,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const PixScreen()));
+                                                const EmprestimoScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: colors.main,

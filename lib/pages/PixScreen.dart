@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
@@ -14,8 +17,8 @@ class PixScreen extends StatefulWidget {
 }
 
 class _PixScreenState extends State<PixScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

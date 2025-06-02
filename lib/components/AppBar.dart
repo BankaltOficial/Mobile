@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';

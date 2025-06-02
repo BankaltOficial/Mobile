@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/pages/ResgateScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'InicialScreen.dart';
 import 'InvestirScreen.dart';
@@ -106,7 +108,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen()),
+                      builder: (context) => const PerfilInvestidorScreen()),
                 );
               },
               child: Container(
@@ -149,7 +151,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PerfilInvestidorScreen()),
+                      builder: (context) => const ResgateScreen()),
                 );
               },
               child: Container(

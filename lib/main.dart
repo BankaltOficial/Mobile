@@ -1,23 +1,28 @@
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/DescricaoScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
 import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
 import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
+import 'package:flutter_application_1/pages/ResgateScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
+import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/pages/PixScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

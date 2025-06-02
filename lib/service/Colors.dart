@@ -23,13 +23,17 @@ class AppColors {
 
   // Cores personalizáveis (inicialmente padrão)
   static Color main = defaultMain;
-  static Color get mainLight => _getLighterColor(main);
+  static Color get mainLight => getColorWithOpacity(main, 0.3);
+  static Color get mainWeak => getColorWithOpacity(main, 0.4);
 
   static Color secondary = defaultSecondary;
-  static Color get secondaryLight => _getLighterColor(secondary);
+  static Color get secondaryLight => getColorWithOpacity(secondary, 0.3);
 
   static Color tertiary = defaultTertiary;
-  static Color get tertiaryLight => _getLighterColor(tertiary);
+  static Color get tertiaryLight => getColorWithOpacity(tertiary, 0.3);
+
+  // Tema atual
+  static Color get theme => isDarkMode ? darkMode : lightMode;
   static Color themeColor = lightMode;
 
   // Padrões

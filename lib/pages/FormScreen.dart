@@ -57,7 +57,7 @@ class _FormScreenState extends State<FormScreen> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            color: AppColors.mainLightPurple,
+            color: AppColors.mainLight,
             padding: const EdgeInsets.all(40),
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,

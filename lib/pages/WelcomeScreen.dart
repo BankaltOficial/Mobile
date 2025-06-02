@@ -41,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         body: ListView(children: [
           Column(children: [
             Container(
-              color: AppColors.mainPurpleWeak,
+              color: AppColors.mainWeak,
               padding: EdgeInsets.all(15),
               child: Form(
                   key: _formKey,

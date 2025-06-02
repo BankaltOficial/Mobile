@@ -19,6 +19,7 @@ class CustomDrawer extends StatelessWidget {
     final colors = Provider.of<ColorProvider>(context);
 
     return Drawer(
+      backgroundColor: AppColors.themeColor,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -33,7 +34,7 @@ class CustomDrawer extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 24),
               decoration: BoxDecoration(
-                color: colors.main,
+                color: AppColors.main,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20),
                 ),
@@ -62,7 +63,7 @@ class CustomDrawer extends StatelessWidget {
             // Menu items
             Expanded(
               child: Container(
-                color: Colors.white,
+                color: AppColors.mainWhite,
                 child: ListView(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   children: [
@@ -202,6 +203,7 @@ class CustomDrawer extends StatelessWidget {
                         AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
                     await ColorService.saveColors(
                         AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
+                  provider.resetColors();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -209,13 +211,13 @@ class CustomDrawer extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.main,
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                icon: Icon(Icons.logout, color: Colors.white),
-                label: Text(
+                icon: const Icon(Icons.logout, color: Colors.white),
+                label: const Text(
                   'Logout',
                   style: TextStyle(
                     color: Colors.white,
@@ -237,13 +239,12 @@ class CustomDrawer extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
   }) {
-    final colors = Provider.of<ColorProvider>(context);
 
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       leading: Icon(
         icon,
-        color: colors.main,
+        color: AppColors.main,
         size: 24,
       ),
       title: Text(
@@ -251,7 +252,7 @@ class CustomDrawer extends StatelessWidget {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: colors.main,
+          color: AppColors.main,
         ),
       ),
       onTap: onTap,

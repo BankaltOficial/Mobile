@@ -30,6 +30,7 @@ class ColorProvider with ChangeNotifier {
     _main = AppColors.defaultMain;
     _secondary = AppColors.defaultSecondary;
     _tertiary = AppColors.defaultTertiary;
+    _isDarkMode = false;
     notifyListeners();
   }
 

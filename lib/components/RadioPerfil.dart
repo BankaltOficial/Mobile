@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class RadioUtils {
   static Widget buildRadioOption(String title, String? groupValue, Function(String?) onChanged) {
     return Container(
       decoration: BoxDecoration(
-        color: mainWhite,
+        color: AppColors.mainWhite,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[300]!),
       ),
@@ -20,7 +20,7 @@ class RadioUtils {
         value: title,
         groupValue: groupValue,
         onChanged: onChanged,
-        activeColor: mainPurple,
+        activeColor: AppColors.main,
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.symmetric(horizontal: 8),
       ),

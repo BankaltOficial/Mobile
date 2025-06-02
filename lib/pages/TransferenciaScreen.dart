@@ -5,8 +5,7 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class TransferenciaScreen extends StatefulWidget {
   const TransferenciaScreen({super.key});
@@ -19,13 +18,12 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final colors = Provider.of<ColorProvider>(context, listen: false);
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -33,7 +31,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     scaffoldKey.currentState?.openDrawer();
                   },
@@ -43,7 +41,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -56,7 +54,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -70,7 +68,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                     child: Text(
                       'Transferência',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -89,12 +87,12 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: colors.main ?? mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),
@@ -191,8 +189,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           child: Column(
                             children: [
                               Container(
-                                width: 80,
-                                height: 80,
+                                width: 100,
+                                height: 100,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.grey[300],
@@ -239,14 +237,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                             children: [
                               Icon(
                                 Icons.flight_takeoff,
-                                color: mainPurple,
+                                color: AppColors.main,
                                 size: 50,
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(vertical: 8),
                                 padding: EdgeInsets.all(6),
                                 decoration: BoxDecoration(
-                                  color: mainPurple,
+                                  color: AppColors.main,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -271,7 +269,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 ),
                                 child: ClipOval(
                                   child: Image.asset(
-                                    'assets/images/dePaula.png',
+                                    'assets/images/gabriel_henrique.png',
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
@@ -381,7 +379,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: mainPurple,
+                              backgroundColor: AppColors.main,
                             ),
                             child: Text(
                               'Confirmar',
@@ -394,7 +392,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: mainPurple,
+                  backgroundColor: AppColors.main,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

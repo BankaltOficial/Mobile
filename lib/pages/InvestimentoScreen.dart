@@ -38,7 +38,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.mainPurpleWeak,
+                  color: AppColors.mainWeak,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(

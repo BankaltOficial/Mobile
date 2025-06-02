@@ -5,8 +5,7 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class EmprestimoScreen extends StatefulWidget {
   const EmprestimoScreen({super.key});
@@ -26,13 +25,12 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
   Widget build(BuildContext context) {
     double totalAmount = loanAmount + (loanAmount * interestRate / 100);
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final colors = Provider.of<ColorProvider>(context, listen: false);
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -40,7 +38,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     scaffoldKey.currentState?.openDrawer();
                   },
@@ -50,7 +48,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -63,7 +61,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -77,7 +75,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                     child: Text(
                       'Empréstimo',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -96,12 +94,12 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: colors.main ?? mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),
@@ -184,9 +182,9 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: mainPurple,
+                        color: AppColors.main,
                         decoration: TextDecoration.underline,
-                        decorationColor: mainPurple,
+                        decorationColor: AppColors.main,
                       ),
                     ),
                     SizedBox(height: 8),
@@ -244,7 +242,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                         'Taxa = ${interestRate.toStringAsFixed(2)}%',
                         style: TextStyle(
                           fontSize: 14,
-                          color: mainPurple,
+                          color: AppColors.main,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -259,7 +257,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
-                  color: mainPurple,
+                  color: AppColors.main,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -368,7 +366,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: mainPurple,
+                                backgroundColor: AppColors.main,
                               ),
                               child: Text('Confirmar', style: TextStyle(color: Colors.white),),
                             ),
@@ -378,7 +376,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: mainPurple,
+                    backgroundColor: AppColors.main,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

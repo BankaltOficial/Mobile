@@ -6,6 +6,7 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 
 class PerfilInvestidorScreen extends StatefulWidget {
@@ -117,7 +118,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
         return AlertDialog(
           title: Row(
             children: [
-              Icon(Icons.analytics, color: mainPurple),
+              Icon(Icons.analytics, color: AppColors.main),
               SizedBox(width: 8),
               Text('Análise Completa'),
             ],
@@ -132,7 +133,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: mainPurple,
+                    color: AppColors.main,
                   ),
                 ),
                 SizedBox(height: 12),
@@ -152,7 +153,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('• ', style: TextStyle(color: mainPurple, fontWeight: FontWeight.bold)),
+                      Text('• ', style: TextStyle(color: AppColors.main, fontWeight: FontWeight.bold)),
                       Expanded(child: Text(sugestao)),
                     ],
                   ),
@@ -163,7 +164,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Fechar', style: TextStyle(color: mainPurple)),
+              child: Text('Fechar', style: TextStyle(color: AppColors.main)),
             ),
           ],
         );
@@ -177,7 +178,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: gray),
+        border: Border.all(color: AppColors.main),
       ),
       child: RadioListTile<String>(
         title: Text(
@@ -190,7 +191,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
         value: title,
         groupValue: groupValue,
         onChanged: onChanged,
-        activeColor: mainPurple,
+        activeColor: AppColors.main,
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.symmetric(horizontal: 8),
       ),
@@ -203,7 +204,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -211,7 +212,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
@@ -221,7 +222,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -234,7 +235,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -247,7 +248,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                     child: Text(
                       'Perfil de Investidor',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -266,12 +267,12 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),
@@ -352,7 +353,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   height: 70,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: gray,
+                      color: AppColors.mainGray,
                       width: 1,
                     ),
                     borderRadius: BorderRadius.circular(5),
@@ -360,7 +361,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.person, color: mainPurple, size: 40,),
+                      Icon(Icons.person, color: AppColors.main, size: 40,),
                       SizedBox(width: 8),
                       Text.rich(
                         TextSpan(
@@ -380,7 +381,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                         child: Text(
                           'Alterar',
                           style: TextStyle(
-                            color: mainPurple,
+                            color: AppColors.main,
                             fontWeight: FontWeight.bold,
                             fontSize: 19,
                           ),
@@ -393,7 +394,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(
-                      color: grayBlue,
+                      color: AppColors.mainGrayBlue,
                       thickness: 0.5,
                       height: 1,
                     ),
@@ -428,7 +429,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(
-                      color: grayBlue,
+                      color: AppColors.mainGrayBlue,
                       thickness: 0.5,
                       height: 1,
                     ),
@@ -463,7 +464,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(
-                      color: grayBlue,
+                      color: AppColors.mainGrayBlue,
                       thickness: 0.5,
                       height: 1,
                     ),
@@ -498,7 +499,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(
-                      color: grayBlue,
+                      color: AppColors.mainGrayBlue,
                       thickness: 0.5,
                       height: 1,
                     ),
@@ -533,7 +534,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(
-                      color: grayBlue,
+                      color: AppColors.mainGrayBlue,
                       thickness: 0.5,
                       height: 1,
                     ),
@@ -598,7 +599,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                       child: ElevatedButton(
                         onPressed: _analisarPerfil,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: mainPurple,
+                          backgroundColor: AppColors.main,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(

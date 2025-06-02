@@ -8,6 +8,9 @@ import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 import 'inicialScreen.dart';
 
 class RendavariavelScreen extends StatefulWidget {
@@ -111,7 +114,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -119,7 +122,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
@@ -129,7 +132,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -142,7 +145,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -156,7 +159,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                     child: Text(
                       'Renda variável',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -175,12 +178,12 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),

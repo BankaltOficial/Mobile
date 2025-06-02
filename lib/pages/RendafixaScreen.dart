@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class RendafixaScreen extends StatefulWidget {
   const RendafixaScreen({super.key});
@@ -125,7 +126,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: mainPurple,
+        backgroundColor: AppColors.main,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Column(
@@ -133,7 +134,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.menu, color: mainWhite),
+                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
@@ -143,7 +144,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
                     child: Text(
                       'bankalt',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -156,7 +157,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: mainWhite),
+                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -170,7 +171,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
                     child: Text(
                       'Renda fixa',
                       style: TextStyle(
-                        color: mainWhite,
+                        color: AppColors.mainWhite,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -189,12 +190,12 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: mainPurple,
+                color: AppColors.main,
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: mainWhite,
+                  color: AppColors.mainWhite,
                   fontSize: 24,
                 ),
               ),

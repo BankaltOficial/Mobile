@@ -5,6 +5,8 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 
 class PixScreen extends StatefulWidget {
@@ -16,151 +18,15 @@ class PixScreen extends StatefulWidget {
 
 class _PixScreenState extends State<PixScreen> {
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-        appBar: AppBar(
-          toolbarHeight: 100,
-          backgroundColor: mainPurple,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: mainWhite),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'bankalt',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: mainWhite),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const InicialScreen()),
-                      );
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'PIX',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-            ],
-          ),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: AppColors.main,
-                ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: mainWhite,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.home_filled),
-                title: Text('Página inicial'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InicialScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/pixColorido.png",
-                    width: 20, height: 20),
-                title: Text('PIX'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PixScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.bar_chart),
-                title: Text('Investimentos'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InvestimentoScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/cartoesColorido.png",
-                    height: 30, width: 30),
-                title: Text('Cartões'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-              Divider(
-                color: Colors.grey,
-                height: 1,
-                thickness: 1,
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Configurações'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+      appBar: CustomAppBar(title: 'PIX', scaffoldKey: _scaffoldKey, onBackPressed: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
+      }),
+      drawer: const CustomDrawer(),
         body: ListView(
           children: [
             Container(
@@ -175,7 +41,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                           child: ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: mainPurple, width: 2),
+                                  side: BorderSide(color: AppColors.main, width: 2),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               child: Column(
@@ -183,11 +49,11 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Icon(Icons.account_balance_wallet_outlined,
-                                      size: 60, color: mainPurple),
+                                      size: 60, color: AppColors.main),
                                   SizedBox(height: 10),
                                   Text("Pagar",
                                       style: TextStyle(
-                                          fontSize: 20, color: mainPurple)),
+                                          fontSize: 20, color: AppColors.main)),
                                 ],
                               )),
                         ),
@@ -198,7 +64,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                     side:
-                                        BorderSide(color: mainPurple, width: 2),
+                                        BorderSide(color: AppColors.main, width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10))),
@@ -207,11 +73,11 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(Icons.qr_code,
-                                        size: 60, color: mainPurple),
+                                        size: 60, color: AppColors.main),
                                     SizedBox(height: 10),
                                     Text("Receber",
                                         style: TextStyle(
-                                            fontSize: 20, color: mainPurple)),
+                                            fontSize: 20, color: AppColors.main)),
                                   ],
                                 )))
                       ]),
@@ -219,7 +85,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                   ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          side: BorderSide(color: mainPurple, width: 2),
+                          side: BorderSide(color: AppColors.main, width: 2),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       child: Row(
@@ -227,8 +93,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                         children: [
                           Text("Minhas chaves",
                               style:
-                                  TextStyle(fontSize: 20, color: mainPurple)),
-                          Icon(Icons.key_rounded, size: 60, color: mainPurple),
+                                  TextStyle(fontSize: 20, color: AppColors.main)),
+                          Icon(Icons.key_rounded, size: 60, color: AppColors.main),
                         ],
                       )),
                   SizedBox(
@@ -246,10 +112,10 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                         ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: mainPurple),
+                                backgroundColor: AppColors.main),
                             child: Text(
                               "Cadastrar",
-                              style: TextStyle(color: mainWhite),
+                              style: TextStyle(color: AppColors.mainWhite),
                             )),
                         ElevatedButton(
                           onPressed: () {

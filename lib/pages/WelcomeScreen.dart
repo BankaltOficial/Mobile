@@ -4,8 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
+import 'package:flutter_application_1/pages/DescricaoScreen.dart';
+import 'package:flutter_application_1/pages/SobreNosScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -30,7 +33,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 200,
-          backgroundColor: mainPurple,
+          backgroundColor: AppColors.main,
           title: Image.asset('assets/images/LogoTitulo.png',
               height: 200, width: 200),
           centerTitle: true,
@@ -38,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         body: ListView(children: [
           Column(children: [
             Container(
-              color: mainPurpleWeak,
+              color: AppColors.mainPurpleWeak,
               padding: EdgeInsets.all(15),
               child: Form(
                   key: _formKey,
@@ -48,7 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         Text("Acesse sua conta",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: mainPurple,
+                                color: AppColors.main,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17)),
                         SizedBox(height: 20),
@@ -57,7 +60,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: Text("CPF",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  color: mainPurple,
+                                  color: AppColors.main,
                                   fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: 15),
@@ -90,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: Text("Senha",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  color: mainPurple,
+                                  color: AppColors.main,
                                   fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: 15),
@@ -154,7 +157,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: mainPurple,
+                            backgroundColor: AppColors.main,
                             foregroundColor: Colors.white,
                             elevation: 4,
                             shape: RoundedRectangleBorder(
@@ -168,11 +171,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: const Text('ENTRAR'),
                         ),
                         SizedBox(height: 25),
-                        Row(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Row(children: [
-                              Icon(Icons.refresh, color: mainPurple),
                               TextButton(
                                   onPressed: () {
                                     Navigator.pushReplacement(
@@ -182,9 +186,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                                 const TermsScreen()));
                                   },
                                   child: Text(
-                                    "Trocar de conta",
+                                    "Não tem uma conta?",
                                     style: TextStyle(
-                                        color: mainPurple,
+                                        color: AppColors.main,
                                         fontWeight: FontWeight.bold),
                                   ))
                             ]),
@@ -195,7 +199,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 onPressed: () {},
                                 child: Text(
                                   "Esqueceu a senha?",
-                                  style: TextStyle(color: gray),
+                                  style: TextStyle(color: AppColors.mainGray),
                                 )),
                           )
                         ]),
@@ -227,6 +231,46 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       SizedBox(height: 8),
                       Text("(19) 99819-3930"),
                       Text("(19) 97157-3019"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(onPressed: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SobreNosScreen()));
+                      }, child: Text(
+                        "Sobre o Projeto",
+                        style: TextStyle(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.bold,),
+                      ))
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(onPressed: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DescricaoScreen()));
+                      }, child: Text(
+                        "Descrição do Projeto",
+                        style: TextStyle(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.bold,),
+                      ))
                     ],
                   ),
                 ],

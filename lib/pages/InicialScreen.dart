@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
@@ -13,8 +15,8 @@ import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -24,21 +26,11 @@ class InicialScreen extends StatefulWidget {
   State<InicialScreen> createState() => _InicialScreenState();
 }
 
-Color mainPurple = AppColors.main;
-Color mainPurpleWeak = const Color.fromARGB(51, 53, 61, 171);
-Color mainWhite = AppColors.mainWhite;
-Color gray = const Color(0xFF828282);
-Color grayBlue = const Color(0xFF495057);
-Color mainBlue = AppColors.secondary;
-Color mainYellow = const Color(0xFFFFC700);
-Color mainLightPurple = const Color(0xFFCBCBE5);
-Color mainGreen = AppColors.tertiary;
-double saldo = 28567.90;
 String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-Usuario usuario = Sessao.getUsuario() ??
-    Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
+Usuario usuario = Sessao.getUsuario() ?? Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 String nome = usuario.nome;
 String cpf = usuario.cpf;
+double saldo = usuario.saldo;
 Icon iconVisibility = Icon(Icons.visibility);
 
 class _InicialScreenState extends State<InicialScreen> {
@@ -50,146 +42,19 @@ class _InicialScreenState extends State<InicialScreen> {
 
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          toolbarHeight: 100,
-          backgroundColor: mainPurple,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: mainWhite),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'bankalt',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: mainWhite),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const WelcomeScreen()),
-                      );
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'Pagina inicial',
-                        style: TextStyle(
-                          color: mainWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-            ],
-          ),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: colors.main,
+        appBar: CustomAppBar(
+            title: 'Pagina Inicial',
+            scaffoldKey: _scaffoldKey,
+            onBackPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WelcomeScreen(),
                 ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: mainWhite,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.home_filled),
-                title: Text('Página inicial'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InicialScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/pixColorido.png",
-                    width: 20, height: 20),
-                title: Text('PIX'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PixScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.bar_chart),
-                title: Text('Investimentos'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InvestimentoScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Image.asset("assets/icons/cartoesColorido.png",
-                    height: 30, width: 30),
-                title: Text('Cartões'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-              Divider(
-                color: Colors.grey,
-                height: 1,
-                thickness: 1,
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Configurações'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CardsScreen()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+              );
+            }),
+        drawer: CustomDrawer(),
+        backgroundColor: AppColors.themeColor,
         body: ListView(children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -226,7 +91,7 @@ class _InicialScreenState extends State<InicialScreen> {
                       child: Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: lightPurple,
+                          color: AppColors.mainLight,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -278,7 +143,7 @@ class _InicialScreenState extends State<InicialScreen> {
                     },
                     child: Text("Ver extrato >",
                         style: TextStyle(
-                            color: mainBlue, fontWeight: FontWeight.bold))),
+                            color: AppColors.secondary, fontWeight: FontWeight.bold))),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -309,7 +174,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Pix",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -340,7 +205,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Cartões",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -371,7 +236,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Boleto",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -410,7 +275,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Investimentos",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -443,7 +308,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Transferência",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -476,7 +341,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Empréstimo",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -513,7 +378,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Educação",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -546,7 +411,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Personalização",
                             style: TextStyle(
-                                color: gray,
+                                color: AppColors.mainGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],

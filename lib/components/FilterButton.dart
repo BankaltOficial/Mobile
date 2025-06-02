@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class FilterButton extends StatelessWidget {
   final String text;
@@ -20,13 +20,13 @@ class FilterButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? mainPurple : mainWhite,
-        foregroundColor: isSelected ? mainWhite : Colors.black,
+        backgroundColor: isSelected ? AppColors.main : AppColors.mainWhite,
+        foregroundColor: isSelected ? AppColors.mainWhite : Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         elevation: 0,
-        side: BorderSide(color: mainPurple),
+        side: BorderSide(color: AppColors.main),
       ),
       child: Text(text),
     );

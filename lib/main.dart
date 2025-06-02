@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
+import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/DescricaoScreen.dart';
+import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
@@ -27,7 +30,7 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ColorProvider(),
+      create: (_) => ColorProvider()..toggleDarkMode(AppColors.isDarkMode),
       child: const MyApp(),
     ),
   );
@@ -38,14 +41,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorProvider = Provider.of<ColorProvider>(context);
+
     return Consumer<ColorProvider>(
+
       builder: (context, colors, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Bankalt',
           theme: ThemeData(
             fontFamily: 'Poppins',
-            scaffoldBackgroundColor: AppColors.mainWhite,
+            scaffoldBackgroundColor: colorProvider.theme,
             primaryColor: colors.main,
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: colors.main,
@@ -56,7 +62,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home:EmprestimoScreen(),
+          home: SplashScreen(),
         );
       },
     );

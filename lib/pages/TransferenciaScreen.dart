@@ -185,10 +185,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                   children: [
                     SizedBox(height: 40),
                     
-                    // Seção dos avatares
                     Row(
                       children: [
-                        // Avatar Igor Suracci
                         Expanded(
                           child: Column(
                             children: [
@@ -236,7 +234,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                         ),
                         
-                        // Ícones do meio
                         Expanded(
                           child: Column(
                             children: [
@@ -262,13 +259,12 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                         ),
                         
-                        // Avatar De Paula
                         Expanded(
                           child: Column(
                             children: [
                               Container(
-                                width: 80,
-                                height: 80,
+                                width: 100,
+                                height: 100,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.grey[300],
@@ -314,7 +310,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                     
                     SizedBox(height: 40),
                     
-                    // Container do valor
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(20),
@@ -350,14 +345,13 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                       ),
                     ),
                     
-                    SizedBox(height: 60), // Espaço antes do botão
+                    SizedBox(height: 60),
                   ],
                 ),
               ),
             ),
           ),
           
-          // Botão fixo na parte inferior
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(

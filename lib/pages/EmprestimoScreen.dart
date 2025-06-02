@@ -175,8 +175,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-              
-              // Valor do empréstimo
+            
               Center(
                 child: Column(
                   children: [
@@ -204,7 +203,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               
               SizedBox(height: 30),
               
-              // Tipo de empréstimo e taxa
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -257,7 +255,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               
               SizedBox(height: 25),
               
-              // Botão Total
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 16),
@@ -290,7 +287,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               
               SizedBox(height: 25),
               
-              // Número de parcelas
               Text(
                 'Número de parcelas',
                 style: TextStyle(
@@ -318,7 +314,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               
               SizedBox(height: 25),
               
-              // Datas para parcelas
               Text(
                 'Datas para parcelas',
                 style: TextStyle(
@@ -346,7 +341,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               
               SizedBox(height: 40),
               
-              // Botão Confirmar
               Container(
                 width: double.infinity,
                 height: 50,
@@ -376,7 +370,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: mainPurple,
                               ),
-                              child: Text('Confirmar'),
+                              child: Text('Confirmar', style: TextStyle(color: Colors.white),),
                             ),
                           ],
                         );

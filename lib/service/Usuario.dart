@@ -151,7 +151,14 @@ List<Usuario> usuarios = [
   ),
 ];
 
-Usuario buscarUsuarioPorCpf(String cpf) {
+bool encontrarUsuarioPorCpf (String cpf) {
+  if (usuarios.firstWhere((u) => u.cpf == cpf) != null) {
+    return true;
+  }
+  return false;
+}
+
+Usuario verificarUsuarioPorCpf(String cpf) {
   try {
     return usuarios.firstWhere((u) => u.cpf == cpf);
   } catch (e) {
@@ -159,7 +166,7 @@ Usuario buscarUsuarioPorCpf(String cpf) {
   }
 }
 
-Usuario buscarUsuarioPorRg(String rg) {
+Usuario verificarUsuarioPorRg(String rg) {
   try {
     return usuarios.firstWhere((u) => u.rg == rg);
   } catch (e) {
@@ -167,7 +174,7 @@ Usuario buscarUsuarioPorRg(String rg) {
   }
 }
 
-Usuario buscarUsuarioPorEmail(String email) {
+Usuario verificarUsuarioPorEmail(String email) {
   try {
     return usuarios.firstWhere((u) => u.email == email);
   } catch (e) {
@@ -176,7 +183,7 @@ Usuario buscarUsuarioPorEmail(String email) {
 }
 
 Usuario login(String cpf, String senha) {
-  Usuario? usuario = buscarUsuarioPorCpf(cpf);
+  Usuario? usuario = verificarUsuarioPorCpf(cpf);
   if (usuario != null && usuario.senha == senha) {
     return usuario;
   } else {
@@ -185,13 +192,13 @@ Usuario login(String cpf, String senha) {
 }
 
 void cadastrarUsuario(Usuario usuario) {
-  if (buscarUsuarioPorCpf(usuario.cpf) != null) {
+  if (verificarUsuarioPorCpf(usuario.cpf) != null) {
     throw Exception('Usuário já cadastrado com este CPF');
   }
-  if (buscarUsuarioPorRg(usuario.rg) != null) {
+  if (verificarUsuarioPorRg(usuario.rg) != null) {
     throw Exception('Usuário já cadastrado com este RG');
   }
-  if (buscarUsuarioPorEmail(usuario.email) != null) {
+  if (verificarUsuarioPorEmail(usuario.email) != null) {
     throw Exception('Usuário já cadastrado com este email');
   }
   usuarios.add(usuario);

@@ -30,10 +30,8 @@ class Sessao {
 
   static Usuario? getUsuario() {
     if (usuarioAtual == null) {
-      print("Nenhum usuário logado na sessão");
       return null;
     }
-    print("Usuário atual: ${usuarioAtual!.nome}");
     return usuarioAtual;
   }
 }

@@ -13,6 +13,7 @@ import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class TransferenciaScreen extends StatefulWidget {
   const TransferenciaScreen({super.key});
@@ -22,9 +23,16 @@ class TransferenciaScreen extends StatefulWidget {
 }
 
 class _TransferenciaScreenState extends State<TransferenciaScreen> {
+  TextEditingController cpfController = TextEditingController();
+  var cpfMask = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
+      Usuario usuarioDestinatario = Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
+     String cpfDestinatario = '';
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    
     Usuario? usuario = Sessao.getUsuario();
     String nome = usuario!.nome ?? 'Usuário';
     final MoneyMaskedTextController _valorController =
@@ -217,7 +225,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  'De Paula',
+                                  usuarioDestinatario.nome,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -309,11 +317,90 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                       ),
                     ),
                     SizedBox(height: 60),
+                    Text("Digite o CPF do destinatário",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87)),
+                    SizedBox(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.main,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextFormField(
+                        controller: cpfController,
+                        inputFormatters: [cpfMask],
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          if (value.length == 14) {
+                            cpfDestinatario = value;
+                            if (encontrarUsuarioPorCpf(cpfDestinatario)) {
+                              Usuario encontrado =
+                                  verificarUsuarioPorCpf(cpfDestinatario);
+                              setState(() {
+                                usuarioDestinatario = encontrado;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Usuário encontrado: ${usuarioDestinatario.nome}'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                usuarioDestinatario = Usuario(
+                                    "Destinatário",
+                                    "destinatario@gmail.com",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "");
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Usuário não encontrado.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Preencha todos os campos antes de continuar";
+                          } else if (value.length != 14) {
+                            return "O CPF deve ter exatamente 11 dígitos";
+                          }
+
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+          SizedBox(height: 20),
+          SizedBox(height: 20),
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(
@@ -327,7 +414,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                       return AlertDialog(
                         title: Text('Confirmar Transferência'),
                         content: Text(
-                            'Deseja confirmar a transferência de R\$ $valorTransferencia para ${usuarios.last.nome}'),
+                            'Deseja confirmar a transferência de R\$ $valorTransferencia para ${usuarioDestinatario.nome}'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -347,16 +434,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                   return;
                                 }
                                 usuario.transferir(
-                                    valorTransferencia, usuarios.last);
+                                    valorTransferencia, usuarioDestinatario);
                                 valorTransferencia =
                                     _valorController.numberValue;
-                                usuario.transferir(
-                                    valorTransferencia, usuarios.last);
                                 Sessao.atualizarUsuario(usuario);
                                 salvarSaldo(usuario.saldo);
                                 Navigator.pop(context);
                                 print(usuario.saldo);
-                                print(usuarios.last.saldo);
+                                print(usuarioDestinatario.saldo);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

@@ -136,7 +136,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             if (_formKey.currentState!.validate()) {
                               String cpf = cpfController.text;
                               String senha = passwordController.text;
-                              Usuario? usuario = buscarUsuarioPorCpf(cpf);
+                              Usuario? usuario = verificarUsuarioPorCpf(cpf);
                               if (usuario != null && usuario.senha == senha) {
                                 Sessao.limparUsuario();
                                 Sessao.salvarUsuario(usuario);

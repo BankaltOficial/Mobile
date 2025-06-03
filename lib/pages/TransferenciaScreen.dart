@@ -26,13 +26,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   TextEditingController cpfController = TextEditingController();
   var cpfMask = MaskTextInputFormatter(
       mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
-      Usuario usuarioDestinatario = Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
-     String cpfDestinatario = '';
+  Usuario usuarioDestinatario =
+      Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
+  String cpfDestinatario = '';
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    
+
     Usuario? usuario = Sessao.getUsuario();
     String nome = usuario!.nome ?? 'Usuário';
     final MoneyMaskedTextController _valorController =
@@ -239,6 +240,94 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                       ],
                     ),
                     SizedBox(height: 40),
+                    Text("Digite o CPF do destinatário",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87)),
+                    SizedBox(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.main,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextFormField(
+                        controller: cpfController,
+                        inputFormatters: [cpfMask],
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          if (value.length == 14) {
+                            cpfDestinatario = value;
+                            if (encontrarUsuarioPorCpf(cpfDestinatario)) {
+                              Usuario encontrado =
+                                  verificarUsuarioPorCpf(cpfDestinatario);
+                              setState(() {
+                                usuarioDestinatario = encontrado;
+                              });
+                              if (usuarioDestinatario.cpf == usuario.cpf) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Você não pode fazer uma transferência para mesma conta'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Usuário encontrado: ${usuarioDestinatario.nome}'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                usuarioDestinatario = Usuario(
+                                    "Destinatário",
+                                    "destinatario@gmail.com",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "");
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Usuário não encontrado.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Preencha todos os campos antes de continuar";
+                          } else if (value.length != 14) {
+                            return "O CPF deve ter exatamente 11 dígitos";
+                          }
+
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(20),
@@ -316,93 +405,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 60),
-                    Text("Digite o CPF do destinatário",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black87)),
-                    SizedBox(height: 5),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.main,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextFormField(
-                        controller: cpfController,
-                        inputFormatters: [cpfMask],
-                        decoration: InputDecoration(
-                          hintText: '',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          if (value.length == 14) {
-                            cpfDestinatario = value;
-                            if (encontrarUsuarioPorCpf(cpfDestinatario)) {
-                              Usuario encontrado =
-                                  verificarUsuarioPorCpf(cpfDestinatario);
-                              setState(() {
-                                usuarioDestinatario = encontrado;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'Usuário encontrado: ${usuarioDestinatario.nome}'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            } else {
-                              setState(() {
-                                usuarioDestinatario = Usuario(
-                                    "Destinatário",
-                                    "destinatario@gmail.com",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "");
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Usuário não encontrado.'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Preencha todos os campos antes de continuar";
-                          } else if (value.length != 14) {
-                            return "O CPF deve ter exatamente 11 dígitos";
-                          }
-
-                          return null;
-                        },
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
           ),
-          SizedBox(height: 20),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(10),
             child: Container(
               width: double.infinity,
               height: 50,
@@ -428,6 +438,16 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                     SnackBar(
                                       content: Text(
                                           'Saldo insuficiente para transferência.'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (usuarioDestinatario.cpf == usuario.cpf) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Você não pode fazer uma transferência para mesma conta'),
                                       backgroundColor: Colors.red,
                                     ),
                                   );

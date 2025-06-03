@@ -11,7 +11,7 @@ class Usuario {
   String _dataNascimento;
   String _celular;
   String _senha;
-  double _saldo = 0;
+  double _saldo = 100;
   int _score = 0;
   int _ponto = 0;
   final String _numeroCartao;
@@ -26,6 +26,7 @@ class Usuario {
     this._dataNascimento,
     this._celular,
     this._senha,
+    //double saldo = 100.0,
   )   : _id = _idCounter++,
         _numeroCartao = _gerarNumeroCartao(),
         _cvv = _gerarCvv(),
@@ -84,6 +85,13 @@ class Usuario {
       _saldo += valor;
     }
   }
+  
+  void pagarComCartao(double valor) {
+    if (valor > 0 && _saldo >= valor) {
+      _saldo -= valor;
+      _score += 5;
+    }
+  }
 
   static String _gerarNumeroCartao() {
     final random = Random();
@@ -122,23 +130,16 @@ List<Usuario> usuarios = [
     '123',
   ),
   Usuario(
-    'Alice Martins',
-    'alice.martins@email.com',
-    '123.456.789-01',
-    '12.345.678-9',
+    'Flakes',
+    'flakes@email.com',
+    '555.555.555-55',
+    '55.555.555-5',
     formatarData(DateTime(1995, 4, 10)),
     '(11) 91234-5678',
     '123',
   ),
-  Usuario(
-    'Bruno Silva',
-    'bruno.silva@email.com',
-    '987.654.321-00',
-    '98.765.432-1',
-    formatarData(DateTime(1988, 9, 23)),
-    '(21) 99876-5432',
-    'brunoPass@2024',
-  ),
+  Usuario("João", "jp@gmail.com", "111.111.111-11", "11.111.111-1",
+      "11/11/1111", "(31) 93456-7890", "123"),
   Usuario(
     'Igor Suracci',
     'igor@email.com',

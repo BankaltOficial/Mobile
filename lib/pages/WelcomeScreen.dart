@@ -2,7 +2,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, duplicate_ignore
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/pages/DescricaoScreen.dart';
 import 'package:flutter_application_1/pages/SobreNosScreen.dart';
@@ -138,7 +138,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               String senha = passwordController.text;
                               Usuario? usuario = buscarUsuarioPorCpf(cpf);
                               if (usuario != null && usuario.senha == senha) {
+                                Sessao.limparUsuario();
                                 Sessao.salvarUsuario(usuario);
+                                cpfController.clear();
+                                passwordController.clear();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('Login Feito com Sucesso')),

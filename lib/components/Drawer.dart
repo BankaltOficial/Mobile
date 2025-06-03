@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -204,6 +205,7 @@ class CustomDrawer extends StatelessWidget {
                     await ColorService.saveColors(
                         AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
                   provider.resetColors();
+                  Sessao.limparUsuario();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

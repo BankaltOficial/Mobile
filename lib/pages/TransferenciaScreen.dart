@@ -2,12 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class TransferenciaScreen extends StatefulWidget {
@@ -21,7 +25,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    String nome = usuario.nome;
+    Usuario? usuario = Sessao.getUsuario();
+    String nome = usuario!.nome ?? 'Usuário';
     final MoneyMaskedTextController _valorController =
         MoneyMaskedTextController(
       decimalSeparator: ',',
@@ -93,96 +98,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.main,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.mainWhite,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Página inicial'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicialScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset(
-                "assets/icons/pixColorido.png",
-                width: 20,
-                height: 20,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.pix, color: Colors.blue);
-                },
-              ),
-              title: Text('PIX'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PixScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Investimentos'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InvestimentoScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset(
-                "assets/icons/cartoesColorido.png",
-                height: 30,
-                width: 30,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.credit_card);
-                },
-              ),
-              title: Text('Cartões'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-            Divider(
-              color: Colors.grey,
-              height: 1,
-              thickness: 1,
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: Column(
         children: [
           Expanded(
@@ -419,12 +335,28 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              if (true) {
+                              if (usuario != null && valorTransferencia > 0) {
+                                if (valorTransferencia > usuario.saldo) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Saldo insuficiente para transferência.'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
                                 usuario.transferir(
                                     valorTransferencia, usuarios.last);
                                 valorTransferencia =
                                     _valorController.numberValue;
+                                usuario.transferir(
+                                    valorTransferencia, usuarios.last);
+                                Sessao.atualizarUsuario(usuario);
+                                salvarSaldo(usuario.saldo);
                                 Navigator.pop(context);
+                                print(usuario.saldo);
+                                print(usuarios.last.saldo);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

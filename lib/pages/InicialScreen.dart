@@ -15,6 +15,7 @@ import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:provider/provider.dart';
@@ -26,19 +27,29 @@ class InicialScreen extends StatefulWidget {
   State<InicialScreen> createState() => _InicialScreenState();
 }
 
-String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
-Usuario usuario = Sessao.getUsuario() ?? Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
-String nome = usuario.nome;
-String cpf = usuario.cpf;
-double saldo = usuario.saldo;
 Icon iconVisibility = Icon(Icons.visibility);
 
 class _InicialScreenState extends State<InicialScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Usuario usuario = Sessao.getUsuario() ??
+      Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
+  void initState() {
+    super.initState();
+    carregarSaldo().then((saldo) {
+      setState(() {
+        usuario.saldo = saldo;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<ColorProvider>(context);
+    print('Sessão: ${usuario.nome}');
+    String nome = usuario.nome;
+    String cpf = usuario.cpf;
+    double saldo = usuario.saldo;
+    String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
 
     return Scaffold(
         key: _scaffoldKey,
@@ -143,7 +154,8 @@ class _InicialScreenState extends State<InicialScreen> {
                     },
                     child: Text("Ver extrato >",
                         style: TextStyle(
-                            color: AppColors.secondary, fontWeight: FontWeight.bold))),
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.bold))),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

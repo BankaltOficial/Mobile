@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
+import 'package:flutter_application_1/pages/PixPagarScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
 import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
 import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: WelcomeScreen(),
+          home: PixPagarScreen(),
         );
       },
     );

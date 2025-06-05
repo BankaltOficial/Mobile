@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
@@ -134,7 +136,10 @@ class CustomDrawer extends StatelessWidget {
                       icon: Icons.account_balance,
                       title: 'Empréstimo',
                       onTap: () {
-                        // Navigator para tela de empréstimo
+                        Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EmprestimoScreen()));
                       },
                     ),
 
@@ -143,7 +148,10 @@ class CustomDrawer extends StatelessWidget {
                       icon: Icons.sync_alt,
                       title: 'Transferência',
                       onTap: () {
-                        // Navigator para tela de transferência
+                        Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TransferenciaScreen()));
                       },
                     ),
 

@@ -361,7 +361,7 @@ class _FormScreenState extends State<FormScreen> {
                               print('CPF: ${usuario.cpf}');
                               print('RG: ${usuario.rg}');
                               print('Nascimento: ${usuario.dataNascimento}');
-                              print('Celular: ${usuario.celular}');
+                              print('Celular: ${usuario.telefone}');
                               print('Senha: ${usuario.senha}');
                               print('----------------');
                             });

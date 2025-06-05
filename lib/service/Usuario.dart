@@ -9,7 +9,7 @@ class Usuario {
   String _cpf;
   String _rg;
   String _dataNascimento;
-  String _celular;
+  String _telefone;
   String _senha;
   double _saldo = 100;
   int _score = 0;
@@ -17,6 +17,7 @@ class Usuario {
   final String _numeroCartao;
   final String _cvv;
   final String _validadeCartao;
+  String _chavePix;
 
   Usuario(
     this._nome,
@@ -24,13 +25,14 @@ class Usuario {
     this._cpf,
     this._rg,
     this._dataNascimento,
-    this._celular,
+    this._telefone,
     this._senha,
-    //double saldo = 100.0,
   )   : _id = _idCounter++,
         _numeroCartao = _gerarNumeroCartao(),
         _cvv = _gerarCvv(),
-        _validadeCartao = _gerarValidadeCartao();
+        _validadeCartao = _gerarValidadeCartao(),
+        _chavePix =
+            _gerarChavePix(_email); // Gera automaticamente com base no e-mail
 
   int get id => _id;
   String get nome => _nome;
@@ -38,7 +40,7 @@ class Usuario {
   String get cpf => _cpf;
   String get rg => _rg;
   String get dataNascimento => _dataNascimento;
-  String get celular => _celular;
+  String get telefone => _telefone;
   String get senha => _senha;
   double get saldo => _saldo;
   int get score => _score;
@@ -46,17 +48,19 @@ class Usuario {
   String get numeroCartao => _numeroCartao;
   String get cvv => _cvv;
   String get validadeCartao => _validadeCartao;
+  String get chavePix => _chavePix;
 
   set nome(String value) => _nome = value;
   set email(String value) => _email = value;
   set cpf(String value) => _cpf = value;
   set rg(String value) => _rg = value;
   set dataNascimento(String value) => _dataNascimento = value;
-  set celular(String value) => _celular = value;
+  set telefone(String value) => _telefone = value;
   set senha(String value) => _senha = value;
   set saldo(double value) => _saldo = value;
   set score(int value) => _score = value;
   set ponto(int value) => _ponto = value;
+  set chavePix(String value) => _chavePix = value;
 
   void depositar(double valor) {
     if (valor > 0) {
@@ -69,6 +73,15 @@ class Usuario {
       _saldo -= valor;
       destino._receber(valor);
       _score += 10;
+    }
+  }
+
+  void pixPorChave(String chavePix, double valor) {
+    try {
+      Usuario destino = usuarios.firstWhere((u) => u.chavePix == chavePix);
+      pix(valor, destino);
+    } catch (e) {
+      throw Exception('Chave Pix não encontrada');
     }
   }
 
@@ -85,7 +98,7 @@ class Usuario {
       _saldo += valor;
     }
   }
-  
+
   void pagarComCartao(double valor) {
     if (valor > 0 && _saldo >= valor) {
       _saldo -= valor;
@@ -95,7 +108,9 @@ class Usuario {
 
   static String _gerarNumeroCartao() {
     final random = Random();
-    return List.generate(16, (_) => random.nextInt(10)).join();
+    final numeros = List.generate(16, (_) => random.nextInt(10));
+    return List.generate(4, (i) => numeros.sublist(i * 4, (i + 1) * 4).join())
+        .join(' ');
   }
 
   static String _gerarCvv() {
@@ -109,6 +124,10 @@ class Usuario {
     final mes = validade.month.toString().padLeft(2, '0');
     final ano = validade.year.toString();
     return '$mes/$ano';
+  }
+
+  static String _gerarChavePix(String chave) {
+    return chave;
   }
 }
 
@@ -135,11 +154,18 @@ List<Usuario> usuarios = [
     '555.555.555-55',
     '55.555.555-5',
     formatarData(DateTime(1995, 4, 10)),
-    '(11) 91234-5678',
+    '(11) 91234-5625',
     '123',
   ),
-  Usuario("João", "jp@gmail.com", "111.111.111-11", "11.111.111-1",
-      "11/11/1111", "(31) 93456-7890", "123"),
+  Usuario(
+    "João",
+    "jp@gmail.com",
+    "111.111.111-11",
+    "11.111.111-1",
+    "11/11/1111",
+    "(31) 93456-7890",
+    "123",
+  ),
   Usuario(
     'Igor Suracci',
     'igor@email.com',
@@ -151,18 +177,15 @@ List<Usuario> usuarios = [
   ),
 ];
 
-bool encontrarUsuarioPorCpf (String cpf) {
-  if (usuarios.firstWhere((u) => u.cpf == cpf) != null) {
-    return true;
-  }
-  return false;
+bool encontrarUsuarioPorCpf(String cpf) {
+  return usuarios.any((u) => u.cpf == cpf);
 }
 
 Usuario verificarUsuarioPorCpf(String cpf) {
   try {
     return usuarios.firstWhere((u) => u.cpf == cpf);
   } catch (e) {
-    throw Exception('Usuário já cadastrado com este CPF');
+    throw Exception('Usuário não encontrado com este CPF');
   }
 }
 
@@ -170,7 +193,7 @@ Usuario verificarUsuarioPorRg(String rg) {
   try {
     return usuarios.firstWhere((u) => u.rg == rg);
   } catch (e) {
-    throw Exception('Usuário já cadastrado com este CPF');
+    throw Exception('Usuário não encontrado com este RG');
   }
 }
 
@@ -178,13 +201,21 @@ Usuario verificarUsuarioPorEmail(String email) {
   try {
     return usuarios.firstWhere((u) => u.email == email);
   } catch (e) {
-    throw Exception('Usuário já cadastrado com este CPF');
+    throw Exception('Usuário não encontrado com este email');
+  }
+}
+
+Usuario verificarUsuarioPorTelefone(String telefone) {
+  try {
+    return usuarios.firstWhere((u) => u.telefone == telefone);
+  } catch (e) {
+    throw Exception('Usuário não encontrado com este telefone');
   }
 }
 
 Usuario login(String cpf, String senha) {
-  Usuario? usuario = verificarUsuarioPorCpf(cpf);
-  if (usuario != null && usuario.senha == senha) {
+  Usuario usuario = verificarUsuarioPorCpf(cpf);
+  if (usuario.senha == senha) {
     return usuario;
   } else {
     throw Exception('CPF ou senha inválidos');
@@ -192,13 +223,13 @@ Usuario login(String cpf, String senha) {
 }
 
 void cadastrarUsuario(Usuario usuario) {
-  if (verificarUsuarioPorCpf(usuario.cpf) != null) {
+  if (usuarios.any((u) => u.cpf == usuario.cpf)) {
     throw Exception('Usuário já cadastrado com este CPF');
   }
-  if (verificarUsuarioPorRg(usuario.rg) != null) {
+  if (usuarios.any((u) => u.rg == usuario.rg)) {
     throw Exception('Usuário já cadastrado com este RG');
   }
-  if (verificarUsuarioPorEmail(usuario.email) != null) {
+  if (usuarios.any((u) => u.email == usuario.email)) {
     throw Exception('Usuário já cadastrado com este email');
   }
   usuarios.add(usuario);

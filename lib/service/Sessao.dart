@@ -30,7 +30,7 @@ class Sessao {
 
   static Usuario? getUsuario() {
     if (usuarioAtual == null) {
-      return null;
+      return Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
     }
     return usuarioAtual;
   }

@@ -34,7 +34,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    Usuario? usuario = Sessao.getUsuario();
+    Usuario? usuario = Sessao.getUsuario() ;
     String nome = usuario!.nome ?? 'Usuário';
     final MoneyMaskedTextController _valorController =
         MoneyMaskedTextController(

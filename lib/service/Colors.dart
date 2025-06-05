@@ -18,8 +18,13 @@ class AppColors {
   static const Color darkMode = Color(0xFF332E46);
   static const Color lightMode = Color(0xFFFFFFFF);
 
+  static Color get invertMode => isDarkMode ? mainWhite : mainBlack;
+  static Color get invertModeGray => isDarkMode ? mainWhite : mainGray;
+
   static const bool isDarkModeDefault = false;
   static bool isDarkMode = isDarkModeDefault;
+
+
 
   // Cores personalizáveis (inicialmente padrão)
   static Color main = defaultMain;

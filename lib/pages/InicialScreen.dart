@@ -76,7 +76,7 @@ class _InicialScreenState extends State<InicialScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('Olá, $nome', style: TextStyle(fontSize: 27)),
+                    Text('Olá, $nome', style: TextStyle(fontSize: 27, color: AppColors.invertMode)),
                     SizedBox(width: 15),
                     CircleAvatar(
                       radius: 40,
@@ -114,7 +114,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                 Text('Saldo',
                                     style: TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
+                                        fontWeight: FontWeight.bold, color: AppColors.invertMode)),
                                 IconButton(
                                     onPressed: () {
                                       setState(() {
@@ -137,7 +137,7 @@ class _InicialScreenState extends State<InicialScreen> {
                               ],
                             ),
                             Text('R\$ $txtSaldo',
-                                style: TextStyle(fontSize: 24)),
+                                style: TextStyle(fontSize: 24, color: AppColors.invertMode)),
                           ],
                         ),
                       ),

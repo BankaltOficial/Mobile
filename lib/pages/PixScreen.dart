@@ -5,6 +5,7 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
+import 'package:flutter_application_1/pages/PixPagarScreen.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/service/Colors.dart';
@@ -39,7 +40,13 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                         Expanded(
                           flex: 1,
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PixPagarScreen()));
+                              },
                               style: ElevatedButton.styleFrom(
                                   side: BorderSide(color: AppColors.main, width: 2),
                                   shape: RoundedRectangleBorder(

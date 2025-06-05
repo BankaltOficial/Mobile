@@ -167,7 +167,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 140, vertical: 15),
+                                horizontal: 100, vertical: 15),
                             textStyle: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
@@ -202,7 +202,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 onPressed: () {},
                                 child: Text(
                                   "Esqueceu a senha?",
-                                  style: TextStyle(color: AppColors.mainGray),
+                                  style: TextStyle(color: AppColors.invertModeGray),
                                 )),
                           )
                         ]),
@@ -218,10 +218,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Contato",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode)),
                       SizedBox(height: 8),
-                      Text("@bankalt.ofc"),
-                      Text("projetobankalt@gmail.com"),
+                      Text("@bankalt.ofc" 
+                          , style: TextStyle(color: AppColors.invertMode)),
+                      Text("projetobankalt@gmail.com", style: TextStyle(color: AppColors.invertMode)),
                     ],
                   ),
 
@@ -230,10 +231,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Se preferir ligue",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode)),
                       SizedBox(height: 8),
-                      Text("(19) 99819-3930"),
-                      Text("(19) 97157-3019"),
+                      Text("(19) 99819-3930", style: TextStyle(color: AppColors.invertMode)),
+                      Text("(19) 97157-3019", style: TextStyle(color: AppColors.invertMode)),
                     ],
                   ),
                 ],

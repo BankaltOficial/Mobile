@@ -42,7 +42,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
       body: Container(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

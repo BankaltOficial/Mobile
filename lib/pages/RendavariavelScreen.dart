@@ -112,140 +112,17 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: AppColors.main,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InvestirScreen()),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Renda variável',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Renda Variável',
+        scaffoldKey: _scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const InvestirScreen()),
+          );
+        },
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.main,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.mainWhite,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Página inicial'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicialScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png",
-                  width: 20, height: 20),
-              title: Text('PIX'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PixScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Investimentos'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InvestimentoScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/cartoesColorido.png",
-                  height: 30, width: 30),
-              title: Text('Cartões'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: Column(
           children: [

@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, duplicate_ignore, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/components/ProfileAnalyzer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
@@ -202,135 +204,17 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: AppColors.main,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Perfil de Investidor',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Perfil de Investidor',
+        scaffoldKey: _scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+          );
+        },
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.main,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.mainWhite,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Página inicial'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const InicialScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png", width: 20, height: 20),
-              title: Text('PIX'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PixScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Investimentos'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/cartoesColorido.png", height: 30, width: 30),
-              title: Text('Cartões'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(25),
@@ -340,11 +224,12 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
               children: [
                 Text(
                   "Descubra o seu perfil de investidor",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.invertMode,),
                 ),
                 SizedBox(height: 10),
                 Text(
                   "O seu perfil atualmente está ativo como ${perfis[perfilIndex].toLowerCase()}. Você pode mudar o tipo de investidor abaixo:",
+                style: TextStyle(color: AppColors.invertMode),
                 ),
                 SizedBox(height: 20),
                 Container(
@@ -366,11 +251,11 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                       Text.rich(
                         TextSpan(
                           text: 'O seu perfil é ',
-                          style: TextStyle(fontSize: 19),
+                          style: TextStyle(fontSize: 19, color: AppColors.invertMode),
                           children: [
                             TextSpan(
                               text: perfis[perfilIndex],
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode),
                             ),
                           ],
                         ),
@@ -405,7 +290,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: AppColors.invertMode
                   ),
                 ),
                 SizedBox(height: 16),
@@ -440,7 +325,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColors.invertMode
                   ),
                 ),
                 SizedBox(height: 16),
@@ -475,7 +360,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColors.invertMode
                   ),
                 ),
                 SizedBox(height: 16),
@@ -510,7 +395,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColors.invertMode
                   ),
                 ),
                 SizedBox(height: 16),
@@ -545,7 +430,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColors.invertMode,
                   ),
                 ),
                 SizedBox(height: 16), 

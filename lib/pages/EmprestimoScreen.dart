@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
@@ -28,144 +30,17 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: AppColors.main,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                  onPressed: () {
-                    scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InicialScreen()),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Empréstimo',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Empréstimo',
+        scaffoldKey: scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const InicialScreen()),
+          );
+        },
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.main,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.mainWhite,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Página inicial'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicialScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.pix, color: Colors.blue),
-              title: Text('PIX'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PixScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Investimentos'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InvestimentoScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.credit_card),
-              title: Text('Cartões'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-            Divider(
-              color: Colors.grey,
-              height: 1,
-              thickness: 1,
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -192,7 +67,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                       'Simular empréstimo',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: AppColors.invertModeGray,
                       ),
                     ),
                   ],
@@ -213,7 +88,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                            color: AppColors.invertMode,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -227,7 +102,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                             'Pessoal',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[700],
+                              color: AppColors.mainGray,
                             ),
                           ),
                         ),
@@ -290,7 +165,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: AppColors.invertMode,
                 ),
               ),
               SizedBox(height: 8),
@@ -305,7 +180,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                   '3x de R\$39.850',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: AppColors.mainGray,
                   ),
                 ),
               ),
@@ -317,7 +192,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: AppColors.invertMode,
                 ),
               ),
               SizedBox(height: 8),
@@ -332,7 +207,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                   'Todo mês dia $paymentDay',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: AppColors.mainGray,
                   ),
                 ),
               ),

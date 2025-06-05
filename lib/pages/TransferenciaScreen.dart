@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
@@ -47,65 +48,15 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: AppColors.main,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                  onPressed: () {
-                    scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InicialScreen()),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Transferência',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Transferência',
+        scaffoldKey: GlobalKey<ScaffoldState>(),
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const InicialScreen()),
+          );
+        },
       ),
       drawer: CustomDrawer(),
       body: Column(
@@ -244,7 +195,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black87)),
+                            color: AppColors.invertMode)),
                     SizedBox(height: 5),
                     Container(
                       decoration: BoxDecoration(
@@ -323,7 +274,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         },
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black87,
+                          color: AppColors.invertMode,
                         ),
                       ),
                     ),
@@ -332,7 +283,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Color(0xFFB8B5E8),
+                        color: AppColors.mainLight,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
@@ -342,7 +293,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: Colors.black87,
+                              color: AppColors.invertMode,
                             ),
                           ),
                           SizedBox(height: 12),

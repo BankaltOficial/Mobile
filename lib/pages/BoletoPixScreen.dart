@@ -100,12 +100,12 @@ class BoletoPixScreen extends StatelessWidget {
             const SizedBox(height: 40),
 
             // Seção de digitação
-            const Text(
+            Text(
               'Digite o código do boleto para pagar',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF333333),
+                color: AppColors.invertModeGray,
               ),
             ),
 
@@ -120,8 +120,8 @@ class BoletoPixScreen extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                decoration: const InputDecoration(
                   hintText: '',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
@@ -133,6 +133,7 @@ class BoletoPixScreen extends StatelessWidget {
                     color: AppColors.mainGray,
                   ),
                 ),
+                style: TextStyle(color: AppColors.invertMode),
                 keyboardType: TextInputType.number,
               ),
             ),

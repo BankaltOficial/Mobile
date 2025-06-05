@@ -49,6 +49,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.invertMode
                       ),
                     ),
                     SizedBox(height: 8),
@@ -56,6 +57,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                       'R\$ 350,90',
                       style: TextStyle(
                         fontSize: 24,
+                        color: AppColors.invertMode
                       ),
                     ),
                   ],
@@ -89,12 +91,12 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                         Text(
                           "Investir",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.invertMode),
                         ),
                         SizedBox(height: 10),
                         Text(
                           "Aplique seu dinheiro de forma segura e prática,\npara alcançar seus objetivos financeiros.",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, color: AppColors.invertMode),
                         )
                       ],
                     )
@@ -132,12 +134,12 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                         Text(
                           "Perfil de investidor",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.invertMode),
                         ),
                         SizedBox(height: 10),
                         Text(
                           "Identifique seu perfil financeiro, recomendando \ninvestimentos alinhados ao seu nível de \nexperiência e tolerância ao risco.",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, color: AppColors.invertMode),
                         )
                       ],
                     )
@@ -171,12 +173,12 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                         Text(
                           "Resgate",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.invertMode),
                         ),
                         SizedBox(height: 10),
                         Text(
                           "Retirar o valor investido de forma rápida e \nfácil, diretamente para a sua conta.",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, color: AppColors.invertMode),
                         )
                       ],
                     )

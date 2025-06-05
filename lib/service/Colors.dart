@@ -15,11 +15,12 @@ class AppColors {
   static const Color mainGreen = Color(0xFF04A95C);
   static const Color mainRed = Color(0xFFEB5757);
 
-  static const Color darkMode = Color(0xFF332E46);
+  static const Color darkMode = Color.fromARGB(255, 37, 36, 37);
   static const Color lightMode = Color(0xFFFFFFFF);
 
   static Color get invertMode => isDarkMode ? mainWhite : mainBlack;
   static Color get invertModeGray => isDarkMode ? mainWhite : mainGray;
+  static Color get invertModeMain => isDarkMode ? mainWhite : main;
 
   static const bool isDarkModeDefault = false;
   static bool isDarkMode = isDarkModeDefault;

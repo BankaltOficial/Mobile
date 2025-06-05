@@ -3,6 +3,7 @@ import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
@@ -66,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
             // Menu items
             Expanded(
               child: Container(
-                color: AppColors.mainWhite,
+                color: AppColors.themeColor,
                 child: ListView(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   children: [
@@ -167,6 +168,18 @@ class CustomDrawer extends StatelessWidget {
                       },
                     ),
 
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.format_paint_rounded,
+                      title: 'Personalizar',
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PersonalizedScreen()));
+                      },
+                    ),
+
                     // Divisor
                     Container(
                       margin:
@@ -254,7 +267,7 @@ class CustomDrawer extends StatelessWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       leading: Icon(
         icon,
-        color: AppColors.main,
+        color: AppColors.invertModeMain,
         size: 24,
       ),
       title: Text(
@@ -262,7 +275,7 @@ class CustomDrawer extends StatelessWidget {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: AppColors.main,
+          color: AppColors.invertModeMain,
         ),
       ),
       onTap: onTap,

@@ -27,7 +27,7 @@ class InicialScreen extends StatefulWidget {
   State<InicialScreen> createState() => _InicialScreenState();
 }
 
-Icon iconVisibility = Icon(Icons.visibility);
+
 
 class _InicialScreenState extends State<InicialScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -49,6 +49,7 @@ class _InicialScreenState extends State<InicialScreen> {
     String nome = usuario.nome;
     String cpf = usuario.cpf;
     double saldo = usuario.saldo;
+    Icon iconVisibility = Icon(Icons.visibility);
     String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
 
     return Scaffold(
@@ -186,7 +187,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Pix",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -217,7 +218,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Cartões",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -248,7 +249,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Boleto",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -287,7 +288,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Investimentos",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -320,7 +321,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Transferência",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -353,7 +354,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Empréstimo",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -390,7 +391,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Educação",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],
@@ -423,7 +424,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         SizedBox(height: 5),
                         Text("Personalização",
                             style: TextStyle(
-                                color: AppColors.mainGray,
+                                color: AppColors.invertModeGray,
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold)),
                       ],

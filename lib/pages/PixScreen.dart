@@ -50,7 +50,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                               style: ElevatedButton.styleFrom(
                                   side: BorderSide(color: AppColors.main, width: 2),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
+                                      borderRadius: BorderRadius.circular(10)),
+                                      backgroundColor: AppColors.themeColor),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -74,7 +75,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                                         BorderSide(color: AppColors.main, width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(10))),
+                                            BorderRadius.circular(10)),
+                                            backgroundColor: AppColors.themeColor),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -94,7 +96,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                       style: ElevatedButton.styleFrom(
                           side: BorderSide(color: AppColors.main, width: 2),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
+                              borderRadius: BorderRadius.circular(10)), backgroundColor: AppColors.themeColor),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -109,9 +111,11 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                   ),
                   Text("Registre sua chave",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  Text("Não tem uma chave ainda?"),
-                  Text("Cadastre agora!"),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.invertMode)),
+                  Text("Não tem uma chave ainda?", style:
+                          TextStyle(color: AppColors.invertMode)),
+                  Text("Cadastre agora!", style:
+                          TextStyle(color: AppColors.invertMode)),
                   SizedBox(height: 30),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -39,13 +39,13 @@ class _CardsScreenState extends State<CardsScreen> {
         padding: const EdgeInsets.all(40),
         child: Column(
           children: [
-            const Text(
+            Text(
               "Escolha o cartão",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.mainGrayBlue),
+                  color: AppColors.invertModeGray),
             ),
             const SizedBox(height: 20),
             Column(
@@ -64,7 +64,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.mainGrayBlue,
+                        color: AppColors.invertModeGray,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -74,7 +74,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.mainGrayBlue,
+                        color: AppColors.invertModeGray,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),
@@ -84,7 +84,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.mainGrayBlue,
+                        color: AppColors.invertModeGray,
                         borderRadius:
                             BorderRadius.circular(12), // Rounded corners
                       ),

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class Usuario {
   static int _idCounter = 1;
@@ -18,21 +19,26 @@ class Usuario {
   final String _cvv;
   final String _validadeCartao;
   String _chavePix;
+  String _corPrincipal; // = '#353DAB';
+  String _corSecundaria; //= '#027BD4';
+  String _corTerciaria; // = '#04A95C';
+  bool _temaEscuro;
 
-  Usuario(
-    this._nome,
-    this._email,
-    this._cpf,
-    this._rg,
-    this._dataNascimento,
-    this._telefone,
-    this._senha,
-  )   : _id = _idCounter++,
+  Usuario(this._nome, this._email, this._cpf, this._rg, this._dataNascimento,
+      this._telefone, this._senha,
+      {String corPrincipal = '#353DAB',
+      String corSecundaria = '#027BD4',
+      String corTerciaria = '#04A95C',
+      bool temaEscuro = false})
+      : _id = _idCounter++,
+        _corPrincipal = corPrincipal,
+        _corSecundaria = corSecundaria,
+        _corTerciaria = corTerciaria,
         _numeroCartao = _gerarNumeroCartao(),
         _cvv = _gerarCvv(),
         _validadeCartao = _gerarValidadeCartao(),
-        _chavePix =
-            _gerarChavePix(_email); // Gera automaticamente com base no e-mail
+        _chavePix = _gerarChavePix(_email),
+        _temaEscuro = temaEscuro;
 
   int get id => _id;
   String get nome => _nome;
@@ -49,6 +55,10 @@ class Usuario {
   String get cvv => _cvv;
   String get validadeCartao => _validadeCartao;
   String get chavePix => _chavePix;
+  String get corPrincipal => _corPrincipal;
+  String get corSecundaria => _corSecundaria;
+  String get corTerciaria => _corTerciaria;
+  bool get temaEscuro => _temaEscuro;
 
   set nome(String value) => _nome = value;
   set email(String value) => _email = value;
@@ -61,6 +71,10 @@ class Usuario {
   set score(int value) => _score = value;
   set ponto(int value) => _ponto = value;
   set chavePix(String value) => _chavePix = value;
+  set corPrincipal(String value) => _corPrincipal = value;
+  set corSecundaria(String value) => _corSecundaria = value;
+  set corTerciaria(String value) => _corTerciaria = value;
+  set temaEscuro(bool value) => _temaEscuro = value;
 
   void depositar(double valor) {
     if (valor > 0) {
@@ -158,13 +172,14 @@ List<Usuario> usuarios = [
     '123',
   ),
   Usuario(
-    "João",
-    "jp@gmail.com",
-    "111.111.111-11",
-    "11.111.111-1",
-    "11/11/1111",
-    "(31) 93456-7890",
-    "123",
+    'João',
+    'joao@email.com',
+    '111.111.111-11',
+    '11.111.111-1',
+    '01/01/2000',
+    '(11) 91234-5678',
+    'senha123',
+    temaEscuro: false,
   ),
   Usuario(
     'Igor Suracci',
@@ -174,6 +189,7 @@ List<Usuario> usuarios = [
     formatarData(DateTime(2000, 1, 5)),
     '(31) 93456-7890',
     '23',
+    temaEscuro: true,
   ),
 ];
 

@@ -6,10 +6,13 @@ import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/pages/DescricaoScreen.dart';
 import 'package:flutter_application_1/pages/SobreNosScreen.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -24,6 +27,21 @@ bool _senhaVisivel = false;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _formKey = GlobalKey<FormState>();
+  late Usuario? usuario;
+
+  @override
+  void initState() {
+    super.initState();
+    usuario = Sessao.getUsuario();
+    final provider = Provider.of<ColorProvider>(context, listen: false);
+    if (usuario == null || usuario!.nome == "Usuário") {
+      provider.resetColors();
+      print("Usuário não encontrado, resetando cores.");
+    } else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const InicialScreen()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +150,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               String cpf = cpfController.text;
                               String senha = passwordController.text;
@@ -140,6 +158,48 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               if (usuario != null && usuario.senha == senha) {
                                 Sessao.limparUsuario();
                                 Sessao.salvarUsuario(usuario);
+                                print('Usuário logado: '
+                                    'CPF: ${usuario.cpf}, '
+                                    'Nome: ${usuario.nome}, '
+                                    'Senha: ${usuario.senha}, '
+                                    'Cor Principal: ${usuario.corPrincipal}, '
+                                    'Cor Secundária: ${usuario.corSecundaria}, '
+                                    'Cor Terciária: ${usuario.corTerciaria}, '
+                                    'Tema Escuro: ${usuario.temaEscuro}');
+                                String main = usuario.corPrincipal;
+                                Color mainColor = Color(int.parse(
+                                    'FF${main.replaceAll('#', '')}',
+                                    radix: 16));
+
+                                String secondary = usuario.corSecundaria;
+                                Color secondaryColor = Color(int.parse(
+                                    'FF${secondary.replaceAll('#', '')}',
+                                    radix: 16));
+
+                                String tertiary = usuario.corTerciaria;
+                                Color tertiaryColor = Color(int.parse(
+                                    'FF${tertiary.replaceAll('#', '')}',
+                                    radix: 16));
+
+                                bool isDarkMode = usuario.temaEscuro;
+                                final provider = Provider.of<ColorProvider>(
+                                    context,
+                                    listen: false);
+                                provider.setColors(
+                                    mainColor, secondaryColor, tertiaryColor);
+                                provider.setTheme(isDarkMode);
+                                await ColorService.setTheme(isDarkMode);
+                                await ColorService.saveColors(
+                                    mainColor, secondaryColor, tertiaryColor);
+                                await ColorProvider()
+                                  ..toggleDarkMode(isDarkMode);
+                                await ColorService.saveTheme(isDarkMode);
+                                setState(() {
+                                  AppColors.isDarkMode = isDarkMode;
+                                  AppColors.main = mainColor;
+                                  AppColors.secondary = secondaryColor;
+                                  AppColors.tertiary = tertiaryColor;
+                                });
                                 cpfController.clear();
                                 passwordController.clear();
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -175,37 +235,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         SizedBox(height: 25),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const TermsScreen()));
-                                  },
-                                  child: Text(
-                                    "Não tem uma conta?",
-                                    style: TextStyle(
-                                        color: AppColors.main,
-                                        fontWeight: FontWeight.bold),
-                                  ))
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const TermsScreen()));
+                                      },
+                                      child: Text(
+                                        "Não tem uma conta?",
+                                        style: TextStyle(
+                                            color: AppColors.main,
+                                            fontWeight: FontWeight.bold),
+                                      ))
+                                ]),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "Esqueceu a senha?",
+                                      style: TextStyle(
+                                          color: AppColors.invertModeGray),
+                                    )),
+                              )
                             ]),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Esqueceu a senha?",
-                                  style: TextStyle(color: AppColors.invertModeGray),
-                                )),
-                          )
-                        ]),
                       ])),
             ),
             Container(
@@ -218,11 +279,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Contato",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode)),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.invertMode)),
                       SizedBox(height: 8),
-                      Text("@bankalt.ofc" 
-                          , style: TextStyle(color: AppColors.invertMode)),
-                      Text("projetobankalt@gmail.com", style: TextStyle(color: AppColors.invertMode)),
+                      Text("@bankalt.ofc",
+                          style: TextStyle(color: AppColors.invertMode)),
+                      Text("projetobankalt@gmail.com",
+                          style: TextStyle(color: AppColors.invertMode)),
                     ],
                   ),
 
@@ -231,10 +295,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Se preferir ligue",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode)),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.invertMode)),
                       SizedBox(height: 8),
-                      Text("(19) 99819-3930", style: TextStyle(color: AppColors.invertMode)),
-                      Text("(19) 97157-3019", style: TextStyle(color: AppColors.invertMode)),
+                      Text("(19) 99819-3930",
+                          style: TextStyle(color: AppColors.invertMode)),
+                      Text("(19) 97157-3019",
+                          style: TextStyle(color: AppColors.invertMode)),
                     ],
                   ),
                 ],
@@ -248,33 +316,41 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextButton(onPressed: (){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SobreNosScreen()));
-                      }, child: Text(
-                        "Sobre o Projeto",
-                        style: TextStyle(
-                            color: AppColors.secondary,
-                            fontWeight: FontWeight.bold,),
-                      ))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SobreNosScreen()));
+                          },
+                          child: Text(
+                            "Sobre o Projeto",
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextButton(onPressed: (){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DescricaoScreen()));
-                      }, child: Text(
-                        "Descrição do Projeto",
-                        style: TextStyle(
-                            color: AppColors.secondary,
-                            fontWeight: FontWeight.bold,),
-                      ))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DescricaoScreen()));
+                          },
+                          child: Text(
+                            "Descrição do Projeto",
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))
                     ],
                   ),
                 ],

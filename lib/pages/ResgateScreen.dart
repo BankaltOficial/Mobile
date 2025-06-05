@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
@@ -33,144 +35,17 @@ class _ResgateScreenState extends State<ResgateScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: AppColors.main,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.mainWhite),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'bankalt',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InvestimentoScreen()),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Resgate',
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 48),
-              ],
-            ),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Resgate',
+        scaffoldKey: _scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const InvestimentoScreen()),
+          );
+        },
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.main,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.mainWhite,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Página inicial'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicialScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/pixColorido.png",
-                  width: 20, height: 20),
-              title: Text('PIX'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PixScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Investimentos'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InvestimentoScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Image.asset("assets/icons/cartoesColorido.png",
-                  height: 30, width: 30),
-              title: Text('Cartões'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-            Divider(
-              color: AppColors.mainGray,
-              height: 1,
-              thickness: 1,
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CardsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -203,6 +78,7 @@ class _ResgateScreenState extends State<ResgateScreen> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
+                          color: AppColors.invertMode
                         ),
                       ),
                     ],
@@ -216,6 +92,7 @@ class _ResgateScreenState extends State<ResgateScreen> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.invertMode
                   )),
               SizedBox(height: 10),
               Padding(
@@ -278,10 +155,11 @@ class _ResgateScreenState extends State<ResgateScreen> {
                             _resgateOption = value!;
                           });
                         },
+                        fillColor: MaterialStateProperty.all(AppColors.invertModeMain),
                       ),
                       Text(
                         'Resgatar hoje',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: AppColors.invertMode),
                       ),
                     ],
                   ),
@@ -296,10 +174,11 @@ class _ResgateScreenState extends State<ResgateScreen> {
                             _resgateOption = value!;
                           });
                         },
+                        fillColor: MaterialStateProperty.all(AppColors.invertModeMain),
                       ),
                       Text(
                         'Agendar resgate',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: AppColors.invertMode),
                       ),
                     ],
                   ),

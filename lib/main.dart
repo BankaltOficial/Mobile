@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
     final colorProvider = Provider.of<ColorProvider>(context);
 
     return Consumer<ColorProvider>(
-
       builder: (context, colors, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -63,7 +62,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
           ),
-          home: PixPagarScreen(),
+          home: SplashScreen(),
         );
       },
     );

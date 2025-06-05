@@ -108,9 +108,12 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         provider.setColors(
                             mainColor, secondaryColor, tertiaryColor);
                         provider.setTheme(isDarkMode);
-                        ColorService.setTheme(isDarkMode);
+                        await ColorService.setTheme(isDarkMode);
                         await ColorService.saveColors(
                             mainColor, secondaryColor, tertiaryColor);
+                        await ColorProvider()
+                          ..toggleDarkMode(isDarkMode);
+                        await ColorService.saveTheme(isDarkMode);
                         setState(() {
                           AppColors.isDarkMode = isDarkMode;
                           AppColors.main = mainColor;
@@ -175,15 +178,12 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                     activeColor: AppColors.secondary,
                     inactiveThumbColor: AppColors.main,
                     onChanged: (value) {
+                      ColorService.toggleDarkMode();
                       setState(() {
                         isDarkMode = value;
                       });
-
                       if (isDarkMode) {
-                        ColorService.setTheme(isDarkMode);
-                      } else{
-                        ColorService.setTheme(isDarkMode);
-                      }
+                      } else {}
                     },
                   ),
                 ]),

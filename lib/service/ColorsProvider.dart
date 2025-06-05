@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ColorProvider with ChangeNotifier {
@@ -13,16 +14,29 @@ class ColorProvider with ChangeNotifier {
   Color get secondary => _secondary;
   Color get tertiary => _tertiary;
   Color get theme => _theme;
+  bool get isDarkMode => _isDarkMode;
 
   void setColors(Color main, Color secondary, Color tertiary) {
     _main = main;
     _secondary = secondary;
     _tertiary = tertiary;
+    AppColors.main = main;
+    AppColors.secondary = secondary;
+    AppColors.tertiary = tertiary;
+
+    ColorService.saveColors(main, secondary, tertiary);
+
     notifyListeners();
   }
 
-  void setTheme(bool isDark) {
+  Future<void> setTheme(bool isDark) async {
     _isDarkMode = isDark;
+    _theme = isDark ? AppColors.darkMode : AppColors.lightMode;
+
+    AppColors.isDarkMode = isDark;
+    AppColors.themeColor = _theme;
+    await ColorService.setTheme(isDark);
+
     notifyListeners();
   }
 
@@ -31,6 +45,17 @@ class ColorProvider with ChangeNotifier {
     _secondary = AppColors.defaultSecondary;
     _tertiary = AppColors.defaultTertiary;
     _isDarkMode = false;
+    _theme = AppColors.lightMode;
+
+    AppColors.main = AppColors.defaultMain;
+    AppColors.secondary = AppColors.defaultSecondary;
+    AppColors.tertiary = AppColors.defaultTertiary;
+    AppColors.isDarkMode = false;
+    AppColors.themeColor = AppColors.lightMode;
+
+    ColorService.saveColors(_main, _secondary, _tertiary);
+    ColorService.setTheme(false);
+
     notifyListeners();
   }
 

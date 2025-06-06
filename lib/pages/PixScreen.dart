@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
+import 'package:flutter_application_1/pages/MinhasChaves.dart';
+import 'package:flutter_application_1/pages/ReceberPixScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/pages/PixPagarScreen.dart';
@@ -18,16 +20,22 @@ class PixScreen extends StatefulWidget {
 }
 
 class _PixScreenState extends State<PixScreen> {
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(title: 'PIX', scaffoldKey: _scaffoldKey, onBackPressed: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
-      }),
-      drawer: const CustomDrawer(),
+        key: _scaffoldKey,
+        appBar: CustomAppBar(
+            title: 'PIX',
+            scaffoldKey: _scaffoldKey,
+            onBackPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InicialScreen()));
+            }),
+        drawer: const CustomDrawer(),
         body: ListView(
           children: [
             Container(
@@ -48,20 +56,26 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                                             PixPagarScreen()));
                               },
                               style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: AppColors.main, width: 2),
+                                  side: BorderSide(
+                                      color: AppColors.invertModeMain,
+                                      width: 2),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
-                                      backgroundColor: AppColors.themeColor),
+                                  backgroundColor: AppColors.themeColor),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  SizedBox(height: 20),
                                   Icon(Icons.account_balance_wallet_outlined,
-                                      size: 60, color: AppColors.main),
+                                      size: 60,
+                                      color: AppColors.invertModeMain),
                                   SizedBox(height: 10),
                                   Text("Pagar",
                                       style: TextStyle(
-                                          fontSize: 20, color: AppColors.main)),
+                                          fontSize: 20,
+                                          color: AppColors.invertModeMain)),
+                                  SizedBox(height: 20),
                                 ],
                               )),
                         ),
@@ -69,87 +83,94 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                         Expanded(
                             flex: 1,
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReceberPixScreen()));
+                                },
                                 style: ElevatedButton.styleFrom(
-                                    side:
-                                        BorderSide(color: AppColors.main, width: 2),
+                                    side: BorderSide(
+                                        color: AppColors.invertModeMain,
+                                        width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                            backgroundColor: AppColors.themeColor),
+                                    backgroundColor: AppColors.themeColor),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    SizedBox(height: 20),
                                     Icon(Icons.qr_code,
-                                        size: 60, color: AppColors.main),
+                                        size: 60,
+                                        color: AppColors.invertModeMain),
                                     SizedBox(height: 10),
                                     Text("Receber",
                                         style: TextStyle(
-                                            fontSize: 20, color: AppColors.main)),
+                                            fontSize: 20,
+                                            color: AppColors.invertModeMain)),
+                                    SizedBox(height: 20),
                                   ],
                                 )))
                       ]),
                   SizedBox(height: 10),
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MinhasChavesScreen()));
+                      },
                       style: ElevatedButton.styleFrom(
-                          side: BorderSide(color: AppColors.main, width: 2),
+                          side: BorderSide(
+                              color: AppColors.invertModeMain, width: 2),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)), backgroundColor: AppColors.themeColor),
+                              borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: AppColors.themeColor),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("Minhas chaves",
-                              style:
-                                  TextStyle(fontSize: 20, color: AppColors.main)),
-                          Icon(Icons.key_rounded, size: 60, color: AppColors.main),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.invertModeMain)),
+                          Icon(Icons.key_rounded,
+                              size: 60, color: AppColors.invertModeMain),
                         ],
                       )),
                   SizedBox(
                     height: 30,
                   ),
                   Text("Registre sua chave",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.invertMode)),
-                  Text("Não tem uma chave ainda?", style:
-                          TextStyle(color: AppColors.invertMode)),
-                  Text("Cadastre agora!", style:
-                          TextStyle(color: AppColors.invertMode)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: AppColors.invertMode)),
+                  Text("Não tem uma chave ainda?",
+                      style: TextStyle(color: AppColors.invertMode)),
+                  Text(
+                    "Cadastre agora!",
+                    style: TextStyle(color: AppColors.invertMode),
+                  ),
                   SizedBox(height: 30),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MinhasChavesScreen()));
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.main),
                             child: Text(
                               "Cadastrar",
                               style: TextStyle(color: AppColors.mainWhite),
                             )),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InicialScreen()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 32),
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          child: const Text(
-                            "Cancelar",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
                       ])
                 ],
               ),

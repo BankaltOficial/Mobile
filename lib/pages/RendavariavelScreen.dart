@@ -5,7 +5,6 @@ import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/components/FilterButton.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
 import 'package:flutter_application_1/components/AppBar.dart';

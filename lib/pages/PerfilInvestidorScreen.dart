@@ -159,7 +159,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                       Expanded(child: Text(sugestao)),
                     ],
                   ),
-                )).toList(),
+                ))
               ],
             ),
           ),

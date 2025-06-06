@@ -12,9 +12,9 @@ class Usuario {
   String _dataNascimento;
   String _telefone;
   String _senha;
-  double _saldo = 100;
-  int _score = 0;
-  int _ponto = 0;
+  double _saldo;
+  int _score;
+  int _ponto;
   final String _numeroCartao;
   final String _cvv;
   final String _validadeCartao;
@@ -31,13 +31,16 @@ class Usuario {
       String corTerciaria = '#04A95C',
       bool temaEscuro = false})
       : _id = _idCounter++,
+        _saldo = 100,
+        _score = 0,
+        _ponto = 0,
         _corPrincipal = corPrincipal,
         _corSecundaria = corSecundaria,
         _corTerciaria = corTerciaria,
         _numeroCartao = _gerarNumeroCartao(),
         _cvv = _gerarCvv(),
         _validadeCartao = _gerarValidadeCartao(),
-        _chavePix = _gerarChavePix(_email),
+        _chavePix = _email,
         _temaEscuro = temaEscuro;
 
   int get id => _id;

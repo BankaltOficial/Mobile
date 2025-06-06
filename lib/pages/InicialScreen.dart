@@ -9,7 +9,6 @@ import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
@@ -33,24 +32,27 @@ class _InicialScreenState extends State<InicialScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Usuario usuario = Sessao.getUsuario() ??
       Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
+
+  Icon iconVisibility = Icon(Icons.visibility);
+  String txtSaldo = '';
+
+  @override
   void initState() {
     super.initState();
     carregarSaldo().then((saldo) {
       setState(() {
         usuario.saldo = saldo;
+        txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
       });
     });
+    txtSaldo = usuario.saldo.toStringAsFixed(2).replaceAll('.', ',');
   }
 
   @override
   Widget build(BuildContext context) {
-    final colors = Provider.of<ColorProvider>(context);
-    print('Sessão: ${usuario.nome}');
     String nome = usuario.nome;
     String cpf = usuario.cpf;
     double saldo = usuario.saldo;
-    Icon iconVisibility = Icon(Icons.visibility);
-    String txtSaldo = saldo.toStringAsFixed(2).replaceAll('.', ',');
 
     return Scaffold(
         key: _scaffoldKey,
@@ -134,7 +136,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                       });
                                     },
                                     icon: Icon(iconVisibility.icon,
-                                        color: colors.main, size: 25)),
+                                        color: AppColors.main, size: 25)),
                               ],
                             ),
                             Text('R\$ $txtSaldo',
@@ -177,7 +179,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PixScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -208,7 +210,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const CardsScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -239,7 +241,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const BoletoScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -276,7 +278,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const InvestimentoScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -309,7 +311,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const TransferenciaScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -342,7 +344,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const EmprestimoScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -380,7 +382,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                             const EducationScreen()));
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: colors.main,
+                                  backgroundColor: AppColors.main,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               child: Image.asset("assets/icons/Estudos.png",
@@ -412,7 +414,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                                 const PersonalizedScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: colors.main,
+                                      backgroundColor: AppColors.main,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),

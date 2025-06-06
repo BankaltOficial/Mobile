@@ -50,7 +50,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
       key: scaffoldKey,
       appBar: CustomAppBar(
         title: 'Transferência',
-        scaffoldKey: GlobalKey<ScaffoldState>(),
+        scaffoldKey: scaffoldKey,
         onBackPressed: () {
           Navigator.pushReplacement(
             context,

@@ -22,6 +22,7 @@ class _EducationScreenState extends State<EducationScreen> {
     final colors = Provider.of<ColorProvider>(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: CustomAppBar(
           title: 'Educação Financeira',
           scaffoldKey: _scaffoldKey,

@@ -149,10 +149,12 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldKey,
         appBar: CustomAppBar(
           title: 'Pagar com PIX',
-          scaffoldKey: GlobalKey<ScaffoldState>(),
+          scaffoldKey: scaffoldKey,
           onBackPressed: () {
             Navigator.pushReplacement(
               context,

@@ -8,9 +8,11 @@ import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
+import 'package:flutter_application_1/pages/MinhasChaves.dart';
 import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/pages/PixPagarScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
+import 'package:flutter_application_1/pages/ReceberPixScreen.dart';
 import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
 import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
 import 'package:flutter_application_1/pages/ResgateScreen.dart';
@@ -59,10 +61,10 @@ class MyApp extends StatelessWidget {
             ),
             appBarTheme: AppBarTheme(
               backgroundColor: colors.main,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: PixPagarScreen(),
+          home: InicialScreen(),
         );
       },
     );

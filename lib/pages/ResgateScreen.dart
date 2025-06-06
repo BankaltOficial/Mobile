@@ -3,14 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:provider/provider.dart';
 
 class ResgateScreen extends StatefulWidget {
   const ResgateScreen({super.key});
@@ -31,13 +27,13 @@ class _ResgateScreenState extends State<ResgateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: CustomAppBar(
         title: 'Resgate',
-        scaffoldKey: _scaffoldKey,
+        scaffoldKey: scaffoldKey,
         onBackPressed: () {
           Navigator.pushReplacement(
             context,

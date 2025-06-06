@@ -16,8 +16,6 @@ import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
-import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -51,7 +49,6 @@ class _InicialScreenState extends State<InicialScreen> {
   @override
   Widget build(BuildContext context) {
     String nome = usuario.nome;
-    String cpf = usuario.cpf;
     double saldo = usuario.saldo;
 
     return Scaffold(

@@ -2,19 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
-import 'package:provider/provider.dart';
 
 class DescricaoScreen extends StatelessWidget {
-  const DescricaoScreen({Key? key}) : super(key: key);
+  const DescricaoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
 
-    final colors = Provider.of<ColorProvider>(context);
-
     return Scaffold(
-      backgroundColor: colors.main,
+      backgroundColor: AppColors.main,
       appBar: SimpleCustomAppBar(title: 'Descrição do Projeto', showBackButton: true, onBackPressed:() {
         Navigator.pushReplacement(
               context,
@@ -30,7 +26,7 @@ class DescricaoScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Center(
-              child: Container(
+              child: SizedBox(
                 width: 150,
                 height: 150,
                 child: Image.asset('assets/images/Logo.png',
@@ -41,11 +37,11 @@ class DescricaoScreen extends StatelessWidget {
             const SizedBox(height: 32),
             
             // Título principal
-            const Center(
+            Center(
               child: Text(
                 'Bem Vindo ao BankAlt!',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.main,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,13 +52,13 @@ class DescricaoScreen extends StatelessWidget {
             
             // Primeiro parágrafo
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.main,
                   fontSize: 16,
                   height: 1.5,
                 ),
-                children: [
+                children: const [
                   TextSpan(
                     text: 'O nosso projeto propõe a criação de um banco inovador que tem o intuito de ensinar ',
                   ),
@@ -94,13 +90,13 @@ class DescricaoScreen extends StatelessWidget {
             
             // Segundo parágrafo
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.main,
                   fontSize: 16,
                   height: 1.5,
                 ),
-                children: [
+                children: const [
                   TextSpan(
                     text: 'O ensino proporcionado em nosso projeto é ',
                   ),
@@ -182,13 +178,13 @@ class DescricaoScreen extends StatelessWidget {
             
             // Terceiro parágrafo
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.main,
                   fontSize: 16,
                   height: 1.5,
                 ),
-                children: [
+                children: const [
                   TextSpan(
                     text: 'A ',
                   ),

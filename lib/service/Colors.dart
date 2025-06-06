@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 
 class AppColors {
   // Cores fixas
@@ -47,11 +46,8 @@ class AppColors {
   static const Color defaultSecondary = mainBlue;
   static const Color defaultTertiary = mainGreen;
 
-  static Color _getLighterColor(Color color, [double factor = 0.3]) {
-    return Color.lerp(color, Colors.white, factor)!;
-  }
-
   static Color getColorWithOpacity(Color color, double opacity) {
+    // ignore: deprecated_member_use
     return color.withOpacity(opacity);
   }
 }

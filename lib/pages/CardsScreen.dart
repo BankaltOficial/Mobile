@@ -21,8 +21,6 @@ class _CardsScreenState extends State<CardsScreen> {
   Widget build(BuildContext context) {
     Usuario usuario = Sessao.getUsuario() ??
         Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
-    String nome = usuario.nome;
-    String cpf = usuario.cpf;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(

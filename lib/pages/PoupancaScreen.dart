@@ -3,15 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/components/FilterButton.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
-import 'package:flutter_application_1/service/Colors.dart';
-import 'InicialScreen.dart';
 
 class PoupancaScreen extends StatefulWidget {
   const PoupancaScreen({super.key});

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Colors.dart';
-import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 
@@ -39,10 +38,10 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-        key: _scaffoldKey,
+        key: scaffoldKey,
         appBar: SimpleCustomAppBar(
           title: 'Cadastro',
           showBackButton: true,
@@ -185,18 +184,21 @@ class _FormScreenState extends State<FormScreen> {
                               return 'Por favor, insira sua data de nascimento';
                             }
                             final parts = value.split('/');
-                            if (parts.length != 3)
+                            if (parts.length != 3) {
                               return 'Formato inválido (dd/mm/aaaa)';
+                            }
                             final day = int.tryParse(parts[0]);
                             final month = int.tryParse(parts[1]);
                             final year = int.tryParse(parts[2]);
-                            if (day == null || month == null || year == null)
+                            if (day == null || month == null || year == null) {
                               return 'Data inválida';
+                            }
 
                             try {
                               final date = DateTime(year, month, day);
-                              if (date.isAfter(DateTime.now()))
+                              if (date.isAfter(DateTime.now())) {
                                 return 'Data no futuro é inválida';
+                              }
                             } catch (_) {
                               return 'Data inválida';
                             }

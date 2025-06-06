@@ -15,14 +15,11 @@ import 'package:provider/provider.dart';
 class PersonalizedScreen extends StatefulWidget {
   const PersonalizedScreen({super.key});
 
-
   @override
   State<PersonalizedScreen> createState() => _PersonalizedScreenState();
 }
 
 class _PersonalizedScreenState extends State<PersonalizedScreen> {
-
-  @override
   Color mainColor = AppColors.main;
   Color secondaryColor = AppColors.secondary;
   Color tertiaryColor = AppColors.tertiary;
@@ -63,7 +60,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                   MaterialPageRoute(
                       builder: (context) => const InicialScreen()));
             }),
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         backgroundColor: AppColors.themeColor,
         body: SingleChildScrollView(
           child: Container(
@@ -124,10 +121,13 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                           return;
                         }
                         usuario.corPrincipal =
+                            // ignore: deprecated_member_use
                             '#${mainColor.value.toRadixString(16).substring(2).toUpperCase()}';
                         usuario.corSecundaria =
+                        // ignore: deprecated_member_use
                             '#${secondaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
                         usuario.corTerciaria =
+                        // ignore: deprecated_member_use
                             '#${tertiaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
                         usuario.temaEscuro = isDarkMode;
                         Sessao.atualizarUsuario(usuario);
@@ -137,8 +137,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         await ColorService.setTheme(isDarkMode);
                         await ColorService.saveColors(
                             mainColor, secondaryColor, tertiaryColor);
-                        await ColorProvider()
-                          ..toggleDarkMode(isDarkMode);
+                        ColorProvider().toggleDarkMode(isDarkMode);
                         await ColorService.saveTheme(isDarkMode);
                         setState(() {
                           AppColors.isDarkMode = isDarkMode;
@@ -158,7 +157,8 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                             vertical: 16, horizontal: 32),
                       ),
                       child: const Text("Continuar",
-                          style: TextStyle(fontSize: 15, color: AppColors.mainWhite)),
+                          style: TextStyle(
+                              fontSize: 15, color: AppColors.mainWhite)),
                     ),
                     const SizedBox(width: 20),
                     ElevatedButton(
@@ -175,7 +175,8 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                             vertical: 16, horizontal: 32),
                       ),
                       child: const Text("Cancelar",
-                          style: TextStyle(fontSize: 15, color: AppColors.mainWhite)),
+                          style: TextStyle(
+                              fontSize: 15, color: AppColors.mainWhite)),
                     ),
                   ],
                 ),
@@ -183,7 +184,8 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                 Text(
                   "As cores escolhidas serão aplicadas em todo o aplicativo.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: AppColors.invertModeGray),
+                  style:
+                      TextStyle(fontSize: 16, color: AppColors.invertModeGray),
                 ),
                 const SizedBox(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -240,9 +242,11 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
             child: Column(
               children: [
                 Text(title,
-                    style: TextStyle(color: AppColors.invertModeGray, fontSize: 18)),
+                    style: TextStyle(
+                        color: AppColors.invertModeGray, fontSize: 18)),
                 const SizedBox(height: 10),
                 Text(
+                  // ignore: deprecated_member_use
                   '#${color.value.toRadixString(16).substring(2).toUpperCase()}',
                   style: TextStyle(
                       color: color, fontSize: 18, fontWeight: FontWeight.bold),

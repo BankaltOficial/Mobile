@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
-import 'package:flutter_application_1/pages/WelcomeScreen.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
@@ -35,9 +31,9 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    Usuario? usuario = Sessao.getUsuario() ;
-    String nome = usuario!.nome ?? 'Usuário';
-    final MoneyMaskedTextController _valorController =
+    Usuario usuario = Sessao.getUsuario()!;
+    String nome = usuario.nome;
+    final MoneyMaskedTextController valorController =
         MoneyMaskedTextController(
       decimalSeparator: ',',
       thousandSeparator: '.',
@@ -134,7 +130,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 ),
                                 child: Icon(
                                   Icons.attach_money,
-                                  color: Colors.white,
+                                  color: AppColors.mainWhite,
                                   size: 20,
                                 ),
                               ),
@@ -304,7 +300,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: TextFormField(
-                                  controller: _valorController,
+                                  controller: valorController,
                                   validator: (value) {
                                     final cleaned = value?.replaceAll(
                                         RegExp(r'[^0-9,]'), '');
@@ -317,13 +313,13 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                     final cleaned = value.replaceAll(
                                         RegExp(r'[A-Za-z]'), '');
                                     if (value != cleaned) {
-                                      _valorController.text = cleaned;
-                                      _valorController.selection =
+                                      valorController.text = cleaned;
+                                      valorController.selection =
                                           TextSelection.fromPosition(
                                         TextPosition(offset: cleaned.length),
                                       );
                                       valorTransferencia =
-                                          _valorController.numberValue;
+                                          valorController.numberValue;
                                     }
                                   },
                                   inputFormatters: [
@@ -383,7 +379,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              if (usuario != null && valorTransferencia > 0) {
+                              if (valorTransferencia > 0) {
                                 if (valorTransferencia > usuario.saldo) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -407,12 +403,10 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 usuario.transferir(
                                     valorTransferencia, usuarioDestinatario);
                                 valorTransferencia =
-                                    _valorController.numberValue;
+                                    valorController.numberValue;
                                 Sessao.atualizarUsuario(usuario);
                                 salvarSaldo(usuario.saldo);
                                 Navigator.pop(context);
-                                print(usuario.saldo);
-                                print(usuarioDestinatario.saldo);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -427,7 +421,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                             ),
                             child: Text(
                               'Confirmar',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppColors.mainWhite),
                             ),
                           ),
                         ],
@@ -447,7 +441,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: AppColors.mainWhite,
                   ),
                 ),
               ),

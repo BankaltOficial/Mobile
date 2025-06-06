@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
-import 'package:flutter_application_1/pages/BoletoCartaoScreen.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:provider/provider.dart';
 
 class BoletoPixScreen extends StatelessWidget {
-  const BoletoPixScreen({Key? key}) : super(key: key);
+  const BoletoPixScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colors = Provider.of<ColorProvider>(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(title: 'Boleto - PIX', scaffoldKey: _scaffoldKey, onBackPressed: (){
+      key: scaffoldKey,
+      appBar: CustomAppBar(title: 'Boleto - PIX', scaffoldKey: scaffoldKey, onBackPressed: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BoletoScreen()));
       }),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -39,6 +30,7 @@ class BoletoPixScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
+                    // ignore: deprecated_member_use
                     color: Colors.black.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
@@ -76,7 +68,7 @@ class BoletoPixScreen extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: colors.main,
+                      color: AppColors.main,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -115,7 +107,7 @@ class BoletoPixScreen extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: colors.main,
+                  color: AppColors.main,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -145,12 +137,12 @@ class BoletoPixScreen extends StatelessWidget {
                 },
                 icon: Icon(
                   Icons.share,
-                  color: colors.main,
+                  color: AppColors.main,
                 ),
                 label: Text(
                   'Compartilhar',
                   style: TextStyle(
-                    color: colors.main,
+                    color: AppColors.main,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),

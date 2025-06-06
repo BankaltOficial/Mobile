@@ -36,7 +36,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final provider = Provider.of<ColorProvider>(context, listen: false);
     if (usuario == null || usuario!.nome == "Usuário") {
       provider.resetColors();
-      print("Usuário não encontrado, resetando cores.");
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const InicialScreen()));
@@ -154,18 +153,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             if (_formKey.currentState!.validate()) {
                               String cpf = cpfController.text;
                               String senha = passwordController.text;
-                              Usuario? usuario = verificarUsuarioPorCpf(cpf);
-                              if (usuario != null && usuario.senha == senha) {
+                              Usuario usuario = verificarUsuarioPorCpf(cpf);
+                              if (usuario.senha == senha) {
                                 Sessao.limparUsuario();
                                 Sessao.salvarUsuario(usuario);
-                                print('Usuário logado: '
-                                    'CPF: ${usuario.cpf}, '
-                                    'Nome: ${usuario.nome}, '
-                                    'Senha: ${usuario.senha}, '
-                                    'Cor Principal: ${usuario.corPrincipal}, '
-                                    'Cor Secundária: ${usuario.corSecundaria}, '
-                                    'Cor Terciária: ${usuario.corTerciaria}, '
-                                    'Tema Escuro: ${usuario.temaEscuro}');
                                 String main = usuario.corPrincipal;
                                 Color mainColor = Color(int.parse(
                                     'FF${main.replaceAll('#', '')}',
@@ -191,8 +182,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 await ColorService.setTheme(isDarkMode);
                                 await ColorService.saveColors(
                                     mainColor, secondaryColor, tertiaryColor);
-                                await ColorProvider()
-                                  ..toggleDarkMode(isDarkMode);
+                                ColorProvider().toggleDarkMode(isDarkMode);
                                 await ColorService.saveTheme(isDarkMode);
                                 setState(() {
                                   AppColors.isDarkMode = isDarkMode;
@@ -308,53 +298,51 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ],
               ),
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SobreNosScreen()));
-                          },
-                          child: Text(
-                            "Sobre o Projeto",
-                            style: TextStyle(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const DescricaoScreen()));
-                          },
-                          child: Text(
-                            "Descrição do Projeto",
-                            style: TextStyle(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))
-                    ],
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SobreNosScreen()));
+                        },
+                        child: Text(
+                          "Sobre o Projeto",
+                          style: TextStyle(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DescricaoScreen()));
+                        },
+                        child: Text(
+                          "Descrição do Projeto",
+                          style: TextStyle(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                  ],
+                ),
+              ],
             )
           ])
         ]));

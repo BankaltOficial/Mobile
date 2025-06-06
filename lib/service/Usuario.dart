@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter_application_1/service/Colors.dart';
 
 class Usuario {
   static int _idCounter = 1;
@@ -141,10 +140,6 @@ class Usuario {
     final mes = validade.month.toString().padLeft(2, '0');
     final ano = validade.year.toString();
     return '$mes/$ano';
-  }
-
-  static String _gerarChavePix(String chave) {
-    return chave;
   }
 }
 

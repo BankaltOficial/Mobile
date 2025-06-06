@@ -3,10 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 
 class EmprestimoScreen extends StatefulWidget {
@@ -25,7 +22,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double totalAmount = loanAmount + (loanAmount * interestRate / 100);
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
-import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 
 class TermsScreen extends StatefulWidget {

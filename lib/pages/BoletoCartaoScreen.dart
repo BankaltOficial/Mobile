@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
-import 'package:flutter_application_1/pages/BoletoCartaoScreen.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
-import 'package:flutter_application_1/pages/WelcomeScreen.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 
 class BoletoCartaoScreen extends StatelessWidget {
-  const BoletoCartaoScreen({Key? key}) : super(key: key);
+  const BoletoCartaoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colors = Provider.of<ColorProvider>(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(title: 'Boleto', subtitle: 'Pagamento de fatura de cartão', scaffoldKey: _scaffoldKey, onBackPressed: (){
+      key: scaffoldKey,
+      appBar: CustomAppBar(title: 'Boleto', subtitle: 'Pagamento de fatura de cartão', scaffoldKey: scaffoldKey, onBackPressed: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BoletoScreen()));
       }),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -41,7 +32,7 @@ class BoletoCartaoScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,16 +41,16 @@ class BoletoCartaoScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey[700],
+                            color: AppColors.mainGray,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
+                        SizedBox(height: 8),
+                        Text(
                           'R\$ 350,90',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: AppColors.mainBlack,
                           ),
                         ),
                       ],
@@ -69,12 +60,12 @@ class BoletoCartaoScreen extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: colors.main,
+                      color: AppColors.main,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: const Icon(
                       Icons.attach_money,
-                      color: Colors.white,
+                      color: AppColors.mainWhite,
                       size: 28,
                     ),
                   ),
@@ -84,7 +75,7 @@ class BoletoCartaoScreen extends StatelessWidget {
             
             const SizedBox(height: 24),
             
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
@@ -92,16 +83,16 @@ class BoletoCartaoScreen extends StatelessWidget {
                   // Ação de pagar total
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: colors.main,
+                  backgroundColor: AppColors.main,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
                 ),
-                child: Text(
+                child: const Text(
                   'Pagar o total',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.mainWhite,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -118,7 +109,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                 color: const Color(0xFFE8E8F5),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
+              child: const Row(
                 children: [
                   Expanded(
                     child: Column(
@@ -129,7 +120,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                            color: AppColors.mainBlack,
                           ),
                         ),
                         SizedBox(height: 4),
@@ -137,7 +128,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                           'Escolha quanto pagar. Lembre de você o mínimo de todo dia',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey[700],
+                            color: AppColors.mainGray,
                           ),
                         ),
                       ],
@@ -145,7 +136,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                   ),
                   Icon(
                     Icons.chevron_right,
-                    color: Colors.grey[600],
+                    color: AppColors.mainGray,
                     size: 24,
                   ),
                 ],
@@ -161,7 +152,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                 color: const Color(0xFFE8E8F5),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
+              child: const Row(
                 children: [
                   Expanded(
                     child: Column(
@@ -172,7 +163,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                            color: AppColors.mainBlack,
                           ),
                         ),
                         SizedBox(height: 4),
@@ -180,7 +171,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                           'Pague um valor fixo de entrada e, nas próximas faturas, as parcelas que selecionar',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey[700],
+                            color: AppColors.mainGray,
                           ),
                         ),
                       ],
@@ -188,7 +179,7 @@ class BoletoCartaoScreen extends StatelessWidget {
                   ),
                   Icon(
                     Icons.chevron_right,
-                    color: Colors.grey[600],
+                    color: AppColors.mainGray,
                     size: 24,
                   ),
                 ],

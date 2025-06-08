@@ -1,6 +1,22 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/CodigoConsumidorScreen.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/ImpostoRendaScreen.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/Procon.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/TaxaJurosScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/EmprestimoScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/EndividamentoScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/HipotecaScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/FinanciamentoScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/CartaoCreditoScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/ContaPoupancaScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/DespesasScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/AnaliseDespesasScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/OrcamentoScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/ReduzirDespesas.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/RendaFixaScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/RendaVariavelScreen.dart';
 import 'package:flutter_application_1/pages/inicialScreen.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
@@ -18,14 +34,14 @@ class EducationScreen extends StatefulWidget {
 class _EducationScreenState extends State<EducationScreen> {
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final colors = Provider.of<ColorProvider>(context);
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: CustomAppBar(
           title: 'Educação Financeira',
-          scaffoldKey: _scaffoldKey,
+          scaffoldKey: scaffoldKey,
           onBackPressed: () {
             Navigator.pushReplacement(
               context,
@@ -34,7 +50,7 @@ class _EducationScreenState extends State<EducationScreen> {
               ),
             );
           }),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(40),
@@ -53,7 +69,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const RendaFixaScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Renda Variável",
@@ -62,21 +78,21 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const RendaVariavelScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Despesas", "Despesas são todos os gastos que uma pessoa ou empresa tem ao utilizar recursos para manter o funcionamento de suas atividades ou o seu padrão de vida.", () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const DespesasScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Análise de Despesas", "A análise de despesas é um dos pilares do controle financeiro, tanto pessoal quanto empresarial. Entender para onde vai seu dinheiro permite decisões mais conscientes e equilibradas.", () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const AnaliseDespesasScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Reduzir Despesas",
@@ -85,7 +101,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const ReduzirDespesasScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Orçamento",
@@ -94,7 +110,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const OrcamentoScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Conta Poupança",
@@ -103,7 +119,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const ContaPoupancaScreen()));
               }),
               const SizedBox(height: 40),
               const Divider(
@@ -123,7 +139,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const CartaoCreditoScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Empréstimo",
@@ -132,7 +148,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const EmprestimoScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Financiamento",
@@ -141,7 +157,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const FinanciamentoScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Hipoteca",
@@ -150,14 +166,14 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const HipotecaScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Endividamento", "O endividamento acontece quando os gastos superam a renda e a pessoa passa a depender de crédito para cobrir suas despesas. Com o tempo, isso pode se transformar em uma bola de neve difícil de controlar.", () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const EndividamentoScreen()));
               }),
               const SizedBox(height: 40),
               const Divider(
@@ -177,7 +193,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const CodigoConsumidorScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("PROCON",
@@ -186,7 +202,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const ProconScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Imposto de Renda (IR)",
@@ -195,7 +211,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => const ImpostoRendaScreen()));
               }),
               const SizedBox(height: 20),
               buildBlock("Taxa de Juros",
@@ -204,7 +220,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InicialScreen()));
+                        builder: (context) => TaxaJurosScreen()));
               }),
               const SizedBox(height: 20),
               
@@ -231,7 +247,7 @@ Widget buildBlock(String title, String description, VoidCallback? onTap) {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.mainWhite),
           ),
           const Divider(
@@ -239,7 +255,7 @@ Widget buildBlock(String title, String description, VoidCallback? onTap) {
           ),
           Text(
             description,
-            style: TextStyle(fontSize: 14, color: AppColors.mainWhite, height: 1.5),
+            style: const TextStyle(fontSize: 14, color: AppColors.mainWhite, height: 1.5),
           )
         ],
       ),

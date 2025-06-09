@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
@@ -11,7 +10,6 @@ class PageEducationScreen extends StatefulWidget {
   final String title;
   final String content;
   final String appBarTitle;
-
   final String? brandName;
   final String? highlightedQuestion;
   final String? buttonText;
@@ -31,9 +29,8 @@ class PageEducationScreen extends StatefulWidget {
   final Widget? customHeader;
   final Widget? customFooter;
   final List<Widget>? additionalContent;
-
   final String language;
-  final double speechRate;
+  final double initialSpeechRate;
   final double pitch;
   final double volume;
 
@@ -62,7 +59,7 @@ class PageEducationScreen extends StatefulWidget {
     this.customFooter,
     this.additionalContent,
     this.language = "pt-BR",
-    this.speechRate = 0.5,
+    this.initialSpeechRate = 0.5,
     this.pitch = 1.0,
     this.volume = 0.8,
   }) : super(key: key);
@@ -71,13 +68,11 @@ class PageEducationScreen extends StatefulWidget {
   State<PageEducationScreen> createState() => _PageEducationScreenState();
 }
 
-class _PageEducationScreenState extends State<PageEducationScreen>
-    with TickerProviderStateMixin {
+class _PageEducationScreenState extends State<PageEducationScreen> with TickerProviderStateMixin {
   late FlutterTts flutterTts;
   bool isSpeaking = false;
   bool isPaused = false;
   bool isInitialized = false;
-
   Duration currentPosition = Duration.zero;
   Duration totalDuration = Duration.zero;
   late AnimationController _progressController;
@@ -85,21 +80,27 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   int currentWordIndex = 0;
   List<String> words = [];
   String? currentSpeechType; // 'full', 'content', 'question'
-  
-  // Timer para simular progresso quando não há callback de progresso real
   Timer? _progressTimer;
+  double speechRate = 0.5; // Taxa de reprodução inicial
+
+  // Lista de velocidades disponíveis
+  final List<double> speechRates = [0.5, 1.0, 1.5, 2.0];
 
   @override
   void initState() {
     super.initState();
-    _progressController = AnimationController(vsync: this);
+    speechRate = widget.initialSpeechRate;
+    _progressController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     _initializeTts();
   }
 
   @override
   void dispose() {
+    _stopSpeech();
     _progressTimer?.cancel();
-    flutterTts.stop();
     _progressController.dispose();
     super.dispose();
   }
@@ -108,87 +109,83 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     try {
       flutterTts = FlutterTts();
 
-      // Configurações básicas primeiro
-      await flutterTts.setLanguage(widget.language);
-      await flutterTts.setSpeechRate(widget.speechRate);
-      await flutterTts.setPitch(widget.pitch);
-      await flutterTts.setVolume(widget.volume);
-      await flutterTts.awaitSpeakCompletion(true);
+      await Future.wait([
+        flutterTts.setLanguage(widget.language),
+        flutterTts.setSpeechRate(speechRate),
+        flutterTts.setPitch(widget.pitch),
+        flutterTts.setVolume(widget.volume),
+        flutterTts.awaitSpeakCompletion(true),
+      ]);
 
-      // Configurações dos handlers com verificação de mounted
       flutterTts.setStartHandler(() {
-        if (mounted) {
-          setState(() {
-            isSpeaking = true;
-            isPaused = false;
-          });
-          _startProgressTimer();
-        }
+        if (!mounted) return;
+        setState(() {
+          isSpeaking = true;
+          isPaused = false;
+        });
+        _startProgressTimer();
       });
 
       flutterTts.setCompletionHandler(() {
-        if (mounted) {
-          setState(() {
-            isSpeaking = false;
-            isPaused = false;
-            currentPosition = Duration.zero;
-            currentWordIndex = 0;
-            currentSpeechType = null;
-          });
-          _stopProgressTimer();
-          _progressController.reset();
-        }
+        if (!mounted) return;
+        setState(() {
+          isSpeaking = false;
+          isPaused = false;
+          currentPosition = Duration.zero;
+          currentWordIndex = 0;
+          currentSpeechType = null;
+        });
+        _stopProgressTimer();
+        _progressController.reset();
       });
 
       flutterTts.setErrorHandler((msg) {
-        if (mounted) {
-          setState(() {
-            isSpeaking = false;
-            isPaused = false;
-            currentSpeechType = null;
-          });
-          _stopProgressTimer();
-          _progressController.reset();
-          _showErrorMessage('Erro no áudio: $msg');
-        }
+        if (!mounted) return;
+        setState(() {
+          isSpeaking = false;
+          isPaused = false;
+          currentSpeechType = null;
+        });
+        _stopProgressTimer();
+        _progressController.reset();
+        _showErrorMessage('Erro no áudio: $msg');
       });
 
       flutterTts.setProgressHandler((String text, int start, int end, String word) {
-        if (mounted && words.isNotEmpty) {
-          final newIndex = _findWordIndex(word);
-          if (newIndex != currentWordIndex) {
-            setState(() {
-              currentWordIndex = newIndex;
-            });
-          }
+        if (!mounted || words.isEmpty) return;
+        final newIndex = _findWordIndex(word);
+        if (newIndex != currentWordIndex) {
+          setState(() {
+            currentWordIndex = newIndex;
+            currentPosition = Duration(
+              milliseconds: (totalDuration.inMilliseconds * (currentWordIndex / words.length)).round(),
+            );
+          });
         }
       });
 
-      if (mounted) {
-        setState(() {
-          isInitialized = true;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        isInitialized = true;
+      });
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          isInitialized = false;
-        });
-        _showErrorMessage('Erro ao inicializar áudio: ${e.toString()}');
-      }
+      if (!mounted) return;
+      setState(() {
+        isInitialized = false;
+      });
+      _showErrorMessage('Erro ao inicializar áudio: ${e.toString()}');
     }
   }
 
   void _showErrorMessage(String message) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   int _findWordIndex(String word) {
@@ -197,7 +194,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     final cleanWord = word.toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '').trim();
     if (cleanWord.isEmpty) return currentWordIndex;
     
-    // Procura a partir do índice atual
     for (int i = currentWordIndex; i < words.length; i++) {
       final cleanCurrentWord = words[i].toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '').trim();
       if (cleanCurrentWord.isNotEmpty && 
@@ -208,7 +204,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       }
     }
     
-    // Se não encontrou, procura do início
     for (int i = 0; i < currentWordIndex; i++) {
       final cleanCurrentWord = words[i].toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '').trim();
       if (cleanCurrentWord.isNotEmpty && 
@@ -225,7 +220,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   Duration _calculateEstimatedDuration(String text) {
     if (text.trim().isEmpty) return Duration.zero;
     
-    final wordsPerMinute = 150 * widget.speechRate;
+    final wordsPerMinute = 150 * speechRate; // Ajuste com base na taxa de reprodução
     final wordCount = text.trim().split(RegExp(r'\s+')).length;
     final minutes = wordCount / wordsPerMinute;
     return Duration(milliseconds: (minutes * 60 * 1000).round());
@@ -234,24 +229,26 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   void _startProgressTimer() {
     _stopProgressTimer();
     
-    if (totalDuration.inMilliseconds > 0 && words.isNotEmpty) {
-      final intervalMs = (totalDuration.inMilliseconds / words.length).round();
+    if (totalDuration.inMilliseconds <= 0 || words.isEmpty) return;
+    
+    final intervalMs = (totalDuration.inMilliseconds / words.length).round();
+    _progressTimer = Timer.periodic(Duration(milliseconds: intervalMs), (timer) {
+      if (!mounted || !isSpeaking || isPaused) {
+        timer.cancel();
+        return;
+      }
       
-      _progressTimer = Timer.periodic(Duration(milliseconds: intervalMs), (timer) {
-        if (!mounted || !isSpeaking || isPaused) {
+      setState(() {
+        if (currentWordIndex < words.length - 1) {
+          currentWordIndex++;
+          currentPosition = Duration(
+            milliseconds: (totalDuration.inMilliseconds * (currentWordIndex / words.length)).round(),
+          );
+        } else {
           timer.cancel();
-          return;
         }
-        
-        setState(() {
-          if (currentWordIndex < words.length - 1) {
-            currentWordIndex++;
-          } else {
-            timer.cancel();
-          }
-        });
       });
-    }
+    });
   }
 
   void _stopProgressTimer() {
@@ -280,13 +277,12 @@ class _PageEducationScreenState extends State<PageEducationScreen>
 
   Future<void> _startSpeech() async {
     String textToSpeak = widget.title;
-
     if (widget.highlightedQuestion != null && widget.highlightedQuestion!.isNotEmpty) {
       textToSpeak += ". ${widget.highlightedQuestion}";
     }
-
     textToSpeak += ". ${widget.content}";
 
+    if (!mounted) return;
     setState(() {
       currentText = textToSpeak;
       words = textToSpeak.trim().split(RegExp(r'\s+'));
@@ -301,16 +297,17 @@ class _PageEducationScreenState extends State<PageEducationScreen>
 
   Future<void> _pauseSpeech() async {
     try {
-      await flutterTts.pause();
-      if (mounted) {
+      final result = await flutterTts.pause();
+      if (result == 1 && mounted) {
         setState(() {
           isPaused = true;
           isSpeaking = false;
         });
         _stopProgressTimer();
+      } else {
+        await _stopSpeech();
       }
     } catch (e) {
-      // Flutter TTS não suporta pause em algumas plataformas
       await _stopSpeech();
     }
   }
@@ -324,25 +321,27 @@ class _PageEducationScreenState extends State<PageEducationScreen>
         isSpeaking = true;
       });
 
-      // Retoma da palavra atual
       String remainingText;
       if (currentSpeechType == 'content') {
         final contentWords = widget.content.trim().split(RegExp(r'\s+'));
-        if (currentWordIndex < contentWords.length) {
-          remainingText = contentWords.skip(currentWordIndex).join(' ');
-        } else {
-          remainingText = widget.content;
-        }
+        remainingText = currentWordIndex < contentWords.length
+            ? contentWords.skip(currentWordIndex).join(' ')
+            : widget.content;
+      } else if (currentSpeechType == 'question') {
+        final questionWords = widget.highlightedQuestion?.trim().split(RegExp(r'\s+')) ?? [];
+        remainingText = currentWordIndex < questionWords.length
+            ? questionWords.skip(currentWordIndex).join(' ')
+            : widget.highlightedQuestion ?? '';
       } else {
-        if (currentWordIndex < words.length) {
-          remainingText = words.skip(currentWordIndex).join(' ');
-        } else {
-          remainingText = currentText;
-        }
+        remainingText = currentWordIndex < words.length
+            ? words.skip(currentWordIndex).join(' ')
+            : currentText;
       }
 
       if (remainingText.trim().isNotEmpty) {
         await flutterTts.speak(remainingText);
+      } else {
+        await _stopSpeech();
       }
     } catch (e) {
       _handleTtsError('Erro ao retomar áudio: ${e.toString()}');
@@ -352,32 +351,30 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   Future<void> _stopSpeech() async {
     try {
       await flutterTts.stop();
-      if (mounted) {
-        setState(() {
-          isSpeaking = false;
-          isPaused = false;
-          currentPosition = Duration.zero;
-          currentWordIndex = 0;
-          currentSpeechType = null;
-        });
-        _stopProgressTimer();
-        _progressController.reset();
-      }
+      if (!mounted) return;
+      setState(() {
+        isSpeaking = false;
+        isPaused = false;
+        currentPosition = Duration.zero;
+        currentWordIndex = 0;
+        currentSpeechType = null;
+      });
+      _stopProgressTimer();
+      _progressController.reset();
     } catch (e) {
       _handleTtsError('Erro ao parar áudio: ${e.toString()}');
     }
   }
 
   void _handleTtsError(String message) {
-    if (mounted) {
-      setState(() {
-        isSpeaking = false;
-        isPaused = false;
-        currentSpeechType = null;
-      });
-      _stopProgressTimer();
-      _showErrorMessage(message);
-    }
+    if (!mounted) return;
+    setState(() {
+      isSpeaking = false;
+      isPaused = false;
+      currentSpeechType = null;
+    });
+    _stopProgressTimer();
+    _showErrorMessage(message);
   }
 
   String _formatDuration(Duration duration) {
@@ -404,21 +401,19 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       ),
       child: Column(
         children: [
-          // Barra de progresso
           Row(
             children: [
               Text(
-                _formatDuration(Duration(
-                    milliseconds: words.isNotEmpty 
-                        ? (totalDuration.inMilliseconds * (currentWordIndex / words.length)).round()
-                        : 0)),
+                _formatDuration(currentPosition),
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: LinearProgressIndicator(
-                    value: words.isNotEmpty ? (currentWordIndex / words.length).clamp(0.0, 1.0) : 0,
+                    value: totalDuration.inMilliseconds > 0
+                        ? (currentPosition.inMilliseconds / totalDuration.inMilliseconds).clamp(0.0, 1.0)
+                        : 0.0,
                     backgroundColor: Colors.grey[300],
                     valueColor: AlwaysStoppedAnimation<Color>(AppColors.main),
                     minHeight: 4,
@@ -432,12 +427,9 @@ class _PageEducationScreenState extends State<PageEducationScreen>
             ],
           ),
           const SizedBox(height: 16),
-          
-          // Controles de áudio
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Botão Stop
               IconButton(
                 onPressed: (isSpeaking || isPaused) ? _stopSpeech : null,
                 icon: Icon(
@@ -446,8 +438,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                   size: 28,
                 ),
               ),
-              
-              // Botão Play/Pause principal
               Container(
                 decoration: BoxDecoration(
                   color: isInitialized ? AppColors.main : Colors.grey,
@@ -466,27 +456,35 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                   ),
                 ),
               ),
-              
-              // Indicador de velocidade
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${widget.speechRate}x',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                  ),
-                ),
+              // Dropdown para selecionar a velocidade
+              DropdownButton<double>(
+                value: speechRate,
+                items: speechRates.map((rate) {
+                  return DropdownMenuItem<double>(
+                    value: rate,
+                    child: Text('${rate}x'),
+                  );
+                }).toList(),
+                onChanged: (newRate) {
+                  if (newRate != null) {
+                    setState(() {
+                      speechRate = newRate;
+                      flutterTts.setSpeechRate(speechRate);
+                      // Recalcular a duração total com a nova taxa
+                      if (currentText.isNotEmpty) {
+                        totalDuration = _calculateEstimatedDuration(currentText);
+                      }
+                      // Se estiver reproduzindo, reiniciar com a nova taxa
+                      if (isSpeaking) {
+                        _stopSpeech();
+                        _startSpeech();
+                      }
+                    });
+                  }
+                },
               ),
             ],
           ),
-          
-          // Status do player
           if (isSpeaking || isPaused)
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -523,17 +521,15 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     
     try {
       await flutterTts.stop();
-      
-      if (mounted) {
-        setState(() {
-          currentWordIndex = 0;
-          words = widget.content.trim().split(RegExp(r'\s+'));
-          totalDuration = _calculateEstimatedDuration(widget.content);
-          currentSpeechType = 'content';
-          currentText = widget.content;
-        });
-      }
-      
+      if (!mounted) return;
+      setState(() {
+        currentWordIndex = 0;
+        words = widget.content.trim().split(RegExp(r'\s+'));
+        totalDuration = _calculateEstimatedDuration(widget.content);
+        currentSpeechType = 'content';
+        currentText = widget.content;
+        currentPosition = Duration.zero;
+      });
       await flutterTts.speak(widget.content);
     } catch (e) {
       _handleTtsError('Erro ao reproduzir conteúdo: ${e.toString()}');
@@ -541,25 +537,22 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   }
 
   Future<void> _speakOnlyQuestion() async {
-    if (widget.highlightedQuestion == null || 
-        widget.highlightedQuestion!.isEmpty || 
-        !isInitialized) {
+    if (widget.highlightedQuestion == null || widget.highlightedQuestion!.isEmpty || !isInitialized) {
+      _showErrorMessage('Sistema de áudio não inicializado ou pergunta ausente');
       return;
     }
-      
+    
     try {
       await flutterTts.stop();
-      
-      if (mounted) {
-        setState(() {
-          currentSpeechType = 'question';
-          words = widget.highlightedQuestion!.trim().split(RegExp(r'\s+'));
-          totalDuration = _calculateEstimatedDuration(widget.highlightedQuestion!);
-          currentWordIndex = 0;
-          currentText = widget.highlightedQuestion!;
-        });
-      }
-      
+      if (!mounted) return;
+      setState(() {
+        currentSpeechType = 'question';
+        words = widget.highlightedQuestion!.trim().split(RegExp(r'\s+'));
+        totalDuration = _calculateEstimatedDuration(widget.highlightedQuestion!);
+        currentWordIndex = 0;
+        currentText = widget.highlightedQuestion!;
+        currentPosition = Duration.zero;
+      });
       await flutterTts.speak(widget.highlightedQuestion!);
     } catch (e) {
       _handleTtsError('Erro ao reproduzir pergunta: ${e.toString()}');
@@ -567,20 +560,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   }
 
   Widget _buildHighlightedText() {
-    if (!isSpeaking && !isPaused) {
-      return Text(
-        widget.content,
-        style: widget.contentStyle ??
-            TextStyle(
-              fontSize: widget.contentFontSize ?? 16,
-              height: 1.6,
-              color: AppColors.invertMode,
-            ),
-      );
-    }
-
-    // Só destaca palavras se estiver reproduzindo o conteúdo
-    if (currentSpeechType != 'content') {
+    if (!isSpeaking && !isPaused || currentSpeechType != 'content') {
       return Text(
         widget.content,
         style: widget.contentStyle ??
@@ -622,13 +602,13 @@ class _PageEducationScreenState extends State<PageEducationScreen>
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: AppColors.themeColor,
+      backgroundColor: widget.backgroundColor,
       appBar: CustomAppBar(
         title: widget.appBarTitle,
         scaffoldKey: scaffoldKey,
         onBackPressed: widget.onBackPressed ??
             () {
-              _stopSpeech(); // Para o áudio ao sair
+              _stopSpeech();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const EducationScreen()),
@@ -642,13 +622,10 @@ class _PageEducationScreenState extends State<PageEducationScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Cabeçalho customizado
               if (widget.customHeader != null) ...[
                 widget.customHeader!,
                 const SizedBox(height: 20),
               ],
-              
-              // Título
               Text(
                 widget.title,
                 style: widget.titleStyle ??
@@ -659,12 +636,8 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                     ),
               ),
               const SizedBox(height: 20),
-              
-              // Player de áudio
               if (widget.showAudioButton) _buildAudioPlayer(),
               const SizedBox(height: 20),
-              
-              // Pergunta destacada
               if (widget.highlightedQuestion != null && widget.highlightedQuestion!.isNotEmpty) ...[
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -698,8 +671,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                 ),
                 const SizedBox(height: 16),
               ],
-              
-              // Conteúdo principal
               GestureDetector(
                 onTap: isInitialized ? _speakOnlyContent : null,
                 child: Container(
@@ -721,7 +692,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.mainGray
+                                color: AppColors.mainGray,
                               ),
                             ),
                           ),
@@ -737,8 +708,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                       ),
                       const SizedBox(height: 8),
                       _buildHighlightedText(),
-                      
-                      // Conteúdo adicional
                       if (widget.additionalContent != null) ...[
                         const SizedBox(height: 16),
                         ...widget.additionalContent!,
@@ -748,8 +717,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                 ),
               ),
               const SizedBox(height: 20),
-              
-              // Rodapé customizado ou botão de ação
               if (widget.customFooter != null)
                 widget.customFooter!
               else if (widget.showActionButton)

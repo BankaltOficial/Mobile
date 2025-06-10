@@ -27,19 +27,11 @@ bool _senhaVisivel = false;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  late Usuario? usuario;
+  //late Usuario? usuario;
 
   @override
   void initState() {
     super.initState();
-    usuario = Sessao.getUsuario();
-    final provider = Provider.of<ColorProvider>(context, listen: false);
-    if (usuario == null || usuario!.nome == "Usuário") {
-      provider.resetColors();
-    } else {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const InicialScreen()));
-    }
   }
 
   @override

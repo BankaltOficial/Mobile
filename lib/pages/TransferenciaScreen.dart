@@ -78,7 +78,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 ),
                                 child: ClipOval(
                                   child: Image.asset(
-                                    'assets/images/IgorSuracci.png',
+                                    '',
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
@@ -149,7 +149,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                 ),
                                 child: ClipOval(
                                   child: Image.asset(
-                                    'assets/images/gabriel_henrique.png',
+                                    '',
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(

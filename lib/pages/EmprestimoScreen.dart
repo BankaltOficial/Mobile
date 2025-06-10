@@ -329,6 +329,10 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                     color: AppColors.main,
                   ),
                 ),
+                collapsedBackgroundColor: AppColors.themeColor,
+                iconColor: AppColors.main,
+                collapsedIconColor: AppColors.main,
+                backgroundColor: AppColors.themeColor,
                 children: [
                   Container(
                     width: double.infinity,
@@ -409,7 +413,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
-                                } else{
+                                } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

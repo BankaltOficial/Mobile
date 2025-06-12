@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/pages/ConfiguracaoScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/DescricaoScreen.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: InicialScreen(),
+          home: ConfiguracaoScreen(),
         );
       },
     );

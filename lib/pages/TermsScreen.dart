@@ -33,7 +33,8 @@ class _TermsScreenState extends State<TermsScreen> {
         ),
         title: Text(
           'bankalt',
-          style: TextStyle(color: AppColors.mainWhite, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.mainWhite, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.main,
         centerTitle: true,
@@ -65,28 +66,30 @@ class _TermsScreenState extends State<TermsScreen> {
                       textAlign: TextAlign.center,
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 16,
-                          color: AppColors.mainWhite,
-                        ),
+                            fontSize: 16,
+                            color: AppColors.mainWhite,
+                            fontFamily: 'Poppins'),
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text:
                                 "Alertamos que ao criar uma nova conta você obrigatoriamente irá concordar com nossos ",
                           ),
                           TextSpan(
                             text: "Termos",
                             style: TextStyle(
-                                color: AppColors.mainYellow, fontWeight: FontWeight.bold),
+                                color: AppColors.mainYellow,
+                                fontWeight: FontWeight.bold),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: " e documentos relacionados com a ",
                           ),
                           TextSpan(
                             text: "Privacidade",
                             style: TextStyle(
-                                color: AppColors.mainYellow, fontWeight: FontWeight.bold),
+                                color: AppColors.mainYellow,
+                                fontWeight: FontWeight.bold),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: " de forma confidencial.",
                           ),
                         ],

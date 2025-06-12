@@ -8,17 +8,20 @@ class DescricaoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.main,
-      appBar: SimpleCustomAppBar(title: 'Descrição do Projeto', showBackButton: true, onBackPressed:() {
-        Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const WelcomeScreen(),
-              ),
-            );
-      },),
+      appBar: SimpleCustomAppBar(
+        title: 'Descrição do Projeto',
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const WelcomeScreen(),
+            ),
+          );
+        },
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -30,37 +33,38 @@ class DescricaoScreen extends StatelessWidget {
                 width: 150,
                 height: 150,
                 child: Image.asset('assets/images/Logo.png',
-                        height: 150, width: 150),
+                    height: 150, width: 150),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Título principal
-            Center(
+            const Center(
               child: Text(
                 'Bem Vindo ao BankAlt!',
                 style: TextStyle(
-                  color: AppColors.main,
+                  color: AppColors.mainWhite,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Primeiro parágrafo
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 style: TextStyle(
-                  color: AppColors.main,
-                  fontSize: 16,
-                  height: 1.5,
-                ),
-                children: const [
+                    color: AppColors.mainWhite,
+                    fontSize: 16,
+                    height: 1.5,
+                    fontFamily: 'Poppins'),
+                children: [
                   TextSpan(
-                    text: 'O nosso projeto propõe a criação de um banco inovador que tem o intuito de ensinar ',
+                    text:
+                        'O nosso projeto propõe a criação de um banco inovador que tem o intuito de ensinar ',
                   ),
                   TextSpan(
                     text: 'educação financeira',
@@ -70,7 +74,8 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ', bem como o auxílio na administração monetária familiar em casos no qual o diagnóstico de ',
+                    text:
+                        ', bem como o auxílio na administração monetária familiar em casos no qual o diagnóstico de ',
                   ),
                   TextSpan(
                     text: 'Transtorno do Espectro Autista (TEA)',
@@ -85,18 +90,18 @@ class DescricaoScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Segundo parágrafo
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 style: TextStyle(
-                  color: AppColors.main,
-                  fontSize: 16,
-                  height: 1.5,
-                ),
-                children: const [
+                    color: AppColors.mainWhite,
+                    fontSize: 16,
+                    height: 1.5,
+                    fontFamily: 'Poppins'),
+                children: [
                   TextSpan(
                     text: 'O ensino proporcionado em nosso projeto é ',
                   ),
@@ -141,7 +146,8 @@ class DescricaoScreen extends StatelessWidget {
                     text: ' por tópico que terão uma ',
                   ),
                   TextSpan(
-                    text: 'linguagem menos rebuscada e fácil para o melhor entendimento',
+                    text:
+                        'linguagem menos rebuscada e fácil para o melhor entendimento',
                     style: TextStyle(
                       color: AppColors.mainYellow, // Amarelo
                       fontWeight: FontWeight.bold,
@@ -158,7 +164,8 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ' estará disponível aos que preferirem, disponibilidade essa que pode servir como uma ',
+                    text:
+                        ' estará disponível aos que preferirem, disponibilidade essa que pode servir como uma ',
                   ),
                   TextSpan(
                     text: 'outra alternativa',
@@ -168,23 +175,24 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ' de tornar o estudo mais palpável e menos cansativo.',
+                    text:
+                        ' de tornar o estudo mais palpável e menos cansativo.',
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Terceiro parágrafo
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 style: TextStyle(
-                  color: AppColors.main,
-                  fontSize: 16,
-                  height: 1.5,
-                ),
-                children: const [
+                    color: AppColors.mainWhite,
+                    fontSize: 16,
+                    height: 1.5,
+                    fontFamily: 'Poppins'),
+                children: [
                   TextSpan(
                     text: 'A ',
                   ),
@@ -196,7 +204,8 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ' busca colocar tudo que o cliente aprendeu com as aulas em prática, definindo o ',
+                    text:
+                        ' busca colocar tudo que o cliente aprendeu com as aulas em prática, definindo o ',
                   ),
                   TextSpan(
                     text: 'perfil de investidor',
@@ -206,7 +215,8 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ', ajudando nas primeiras aplicações e etc. Com base na nossa proposta, o intuito é que todos consigam realizar seus ',
+                    text:
+                        ', ajudando nas primeiras aplicações e etc. Com base na nossa proposta, o intuito é que todos consigam realizar seus ',
                   ),
                   TextSpan(
                     text: 'investimentos da melhor forma possível',
@@ -216,12 +226,13 @@ class DescricaoScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ', tendo consciência dos prováveis riscos que sofrerá durante o processo.',
+                    text:
+                        ', tendo consciência dos prováveis riscos que sofrerá durante o processo.',
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 40),
           ],
         ),

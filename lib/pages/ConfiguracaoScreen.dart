@@ -17,9 +17,9 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
   int selectedColorIndex = 0;
   
   final List<Color> themeColors = [
-    Color(0xFF4C63D2), // Azul
-    Color(0xFF2196F3), // Azul claro
-    Color(0xFF4CAF50), // Verde
+    AppColors.main,
+    AppColors.secondary,
+    AppColors.tertiary,
   ];
 
   @override
@@ -28,7 +28,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
     final colors = Provider.of<ColorProvider>(context);
     
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
+      backgroundColor: AppColors.theme,
       appBar: CustomAppBar(
           title: 'Configurações',
           scaffoldKey: _scaffoldKey,
@@ -51,7 +51,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainPurple,
+                color: AppColors.main,
               ),
             ),
             SizedBox(height: 16),
@@ -62,9 +62,9 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                   child: Container(
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.mainWhite,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Color(0xFFE0E0E0), width: 1),
+                      border: Border.all(color: AppColors.invertModeGray, width: 1),
                     ),
                     child: Column(
                       children: [
@@ -73,7 +73,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.mainPurple,
+                            color: AppColors.main,
                           ),
                         ),
                         SizedBox(height: 12),
@@ -107,14 +107,13 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                 ),
                 SizedBox(width: 16),
                 
-                // Seletor de cores
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Color(0xFFE0E0E0), width: 1),
+                      border: Border.all(color: AppColors.invertModeGray, width: 1),
                     ),
                     child: Column(
                       children: [
@@ -123,7 +122,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF4C63D2),
+                            color: AppColors.main,
                           ),
                         ),
                         SizedBox(height: 12),
@@ -143,18 +142,8 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                                   color: themeColors[index],
                                   shape: BoxShape.circle,
                                   border: selectedColorIndex == index
-                                      ? Border.all(color: Colors.black, width: 2)
+                                      ? Border.all(color: AppColors.mainBlack, width: 2)
                                       : null,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '${index + 1}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
                                 ),
                               ),
                             );
@@ -176,14 +165,13 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
             ),
             SizedBox(height: 16),
             
-            // Tipo de Conta
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Color(0xFFE0E0E0), width: 1),
+                border: Border.all(color: AppColors.invertModeGray, width: 1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +181,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF4C63D2),
+                      color: AppColors.main,
                     ),
                   ),
                   SizedBox(height: 8),
@@ -202,7 +190,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF4C63D2),
+                      color: AppColors.main,
                     ),
                   ),
                   SizedBox(height: 4),
@@ -219,14 +207,13 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
             ),
             SizedBox(height: 16),
             
-            // Investimentos
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.mainWhite,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Color(0xFFE0E0E0), width: 1),
+                border: Border.all(color: AppColors.invertModeGray, width: 1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +223,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF4C63D2),
+                      color: AppColors.main,
                     ),
                   ),
                   SizedBox(height: 8),
@@ -245,7 +232,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF4C63D2),
+                      color: AppColors.main,
                     ),
                   ),
                   SizedBox(height: 4),

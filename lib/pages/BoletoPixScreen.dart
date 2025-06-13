@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/service/Boleto.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
 
 class BoletoPixScreen extends StatelessWidget {
   const BoletoPixScreen({super.key});
@@ -10,12 +12,20 @@ class BoletoPixScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    TextEditingController boletoController = TextEditingController();
+    int? codigo;
+    Boleto? boletoEncontrado;
+    double total = 0, valorPago = 0, valorRestante = 0;
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: CustomAppBar(title: 'Boleto - PIX', scaffoldKey: scaffoldKey, onBackPressed: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BoletoScreen()));
-      }),
+      appBar: CustomAppBar(
+          title: 'Boleto - PIX',
+          scaffoldKey: scaffoldKey,
+          onBackPressed: () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const BoletoScreen()));
+          }),
       drawer: const CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -113,13 +123,12 @@ class BoletoPixScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
+                controller: boletoController,
                 decoration: const InputDecoration(
                   hintText: '',
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   prefixIcon: Icon(
                     Icons.search,
                     color: AppColors.mainGray,
@@ -130,11 +139,63 @@ class BoletoPixScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+              onPressed: () {
+                final codigo = int.tryParse(boletoController.text);
+
+                if (codigo == null) {
+                  print('Código inválido. Digite um número.');
+                  return;
+                }
+
+                boletoEncontrado = buscarBoleto(codigo);
+                total = boletoEncontrado?.total ?? 0;
+                valorPago = boletoEncontrado?.valorPago ?? 0; 
+                valorRestante = total - valorPago;
+
+                if (boletoEncontrado != null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Boleto Encontrado'),
+                        content: Text(
+                          'Nome: ${boletoEncontrado!.nomePagante}\n'
+                          'CPF: ${boletoEncontrado!.cpfPagante}\n'
+                          'Código: ${boletoEncontrado!.codigo}\n'
+                          'Valor Total: R\$ ${boletoEncontrado!.total.toStringAsFixed(2)}',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  print('Boleto não encontrado.');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.main,
+              ),
+              child: const Text(
+                'Confirmar',
+                style: TextStyle(color: AppColors.mainWhite),
+              ),
+            ),
+              ],
+            ),
+            
+            const Spacer(),
             Center(
               child: TextButton.icon(
-                onPressed: () {
-                  // Ação de compartilhar
-                },
+                onPressed: () {},
                 icon: Icon(
                   Icons.share,
                   color: AppColors.main,

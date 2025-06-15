@@ -26,6 +26,14 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
   Usuario usuarioDestinatario =
       Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
   String cpfDestinatario = '';
+  bool _realizandoTransferencia = false;
+
+  final MoneyMaskedTextController valorController = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    initialValue: 0.0,
+    leftSymbol: 'R\$ ',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +41,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
 
     Usuario usuario = Sessao.getUsuario()!;
     String nome = usuario.nome;
-    final MoneyMaskedTextController valorController =
-        MoneyMaskedTextController(
-      decimalSeparator: ',',
-      thousandSeparator: '.',
-      initialValue: 0.0,
-      leftSymbol: 'R\$ ',
-    );
-    double valorTransferencia = 0.0;
 
     return Scaffold(
       backgroundColor: AppColors.theme,
@@ -206,7 +206,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         controller: cpfController,
                         inputFormatters: [cpfMask],
                         decoration: InputDecoration(
-                          hintText: '',
+                          hintText: '000.000.000-00',
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
@@ -214,12 +214,15 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           ),
                         ),
                         keyboardType: TextInputType.number,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           if (value.length == 14) {
                             cpfDestinatario = value;
+                            
+                            // Carregar usuários atualizados antes de buscar
+                            await UsuarioService.carregarUsuarios();
+                            
                             if (encontrarUsuarioPorCpf(cpfDestinatario)) {
-                              Usuario encontrado =
-                                  verificarUsuarioPorCpf(cpfDestinatario);
+                              Usuario encontrado = verificarUsuarioPorCpf(cpfDestinatario);
                               setState(() {
                                 usuarioDestinatario = encontrado;
                               });
@@ -266,7 +269,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                           } else if (value.length != 14) {
                             return "O CPF deve ter exatamente 11 dígitos";
                           }
-
                           return null;
                         },
                         style: TextStyle(
@@ -319,8 +321,6 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                           TextSelection.fromPosition(
                                         TextPosition(offset: cleaned.length),
                                       );
-                                      valorTransferencia =
-                                          valorController.numberValue;
                                     }
                                   },
                                   inputFormatters: [
@@ -365,70 +365,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Confirmar Transferência'),
-                        content: Text(
-                            'Deseja confirmar a transferência de R\$ $valorTransferencia para ${usuarioDestinatario.nome}'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (valorTransferencia > 0) {
-                                if (valorTransferencia > usuario.saldo) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Saldo insuficiente para transferência.'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-                                if (usuarioDestinatario.cpf == usuario.cpf) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Você não pode fazer uma transferência para mesma conta'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-                                usuario.transferir(
-                                    valorTransferencia, usuarioDestinatario);
-                                valorTransferencia =
-                                    valorController.numberValue;
-                                Sessao.atualizarUsuario(usuario);
-                                salvarSaldo(usuario.saldo);
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Transferência realizada com sucesso!'),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.main,
-                            ),
-                            child: Text(
-                              'Confirmar',
-                              style: TextStyle(color: AppColors.mainWhite),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                onPressed: _realizandoTransferencia ? null : () {
+                  _mostrarDialogoConfirmacao(context, usuario);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.main,
@@ -437,19 +375,165 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                   ),
                   elevation: 0,
                 ),
-                child: Text(
-                  'Confirmar',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.mainWhite,
-                  ),
-                ),
+                child: _realizandoTransferencia
+                    ? CircularProgressIndicator(
+                        color: AppColors.mainWhite,
+                        strokeWidth: 2,
+                      )
+                    : Text(
+                        'Confirmar',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainWhite,
+                        ),
+                      ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _mostrarDialogoConfirmacao(BuildContext context, Usuario usuario) {
+    // Obter o valor atual do controller aqui
+    double valorTransferencia = valorController.numberValue;
+
+    if (usuarioDestinatario.cpf.isEmpty || usuarioDestinatario.nome == "Destinatário") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Selecione um destinatário válido.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validar se o valor é maior que zero
+    if (valorTransferencia <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Digite um valor válido para transferência.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (valorTransferencia > usuario.saldo) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saldo insuficiente para transferência.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (usuarioDestinatario.cpf == usuario.cpf) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Você não pode fazer uma transferência para mesma conta'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar Transferência'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Destinatário: ${usuarioDestinatario.nome}'),
+              Text('CPF: ${usuarioDestinatario.cpf}'),
+              Text('Valor: R\$ ${valorTransferencia.toStringAsFixed(2).replaceAll('.', ',')}'),
+              SizedBox(height: 10),
+              Text('Deseja confirmar a transferência?'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                await _realizarTransferencia(usuario, valorTransferencia);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.main,
+              ),
+              child: Text(
+                'Confirmar',
+                style: TextStyle(color: AppColors.mainWhite),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _realizarTransferencia(Usuario usuario, double valorTransferencia) async {
+    setState(() {
+      _realizandoTransferencia = true;
+    });
+
+    try {
+      // Usar o UsuarioService para realizar a transferência
+      bool sucesso = await UsuarioService.realizarTransferencia(
+        remetente: usuario,
+        destinatario: usuarioDestinatario,
+        valor: valorTransferencia,
+      );
+
+      if (sucesso) {
+        // Atualizar o usuário na sessão com os dados mais recentes
+        List<Usuario> usuariosAtualizados = await UsuarioService.carregarUsuarios();
+        Usuario usuarioAtualizado = usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
+        Sessao.atualizarUsuario(usuarioAtualizado);
+
+        // Limpar campos
+        cpfController.clear();
+        valorController.text = 'R\$ 0,00';
+        setState(() {
+          usuarioDestinatario = Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
+          cpfDestinatario = '';
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Transferência realizada com sucesso!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao realizar transferência. Tente novamente.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro inesperado: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _realizandoTransferencia = false;
+      });
+    }
   }
 }

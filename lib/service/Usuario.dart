@@ -18,9 +18,9 @@ class Usuario {
   final String _cvv;
   final String _validadeCartao;
   String _chavePix;
-  String _corPrincipal; // = '#353DAB';
-  String _corSecundaria; //= '#027BD4';
-  String _corTerciaria; // = '#04A95C';
+  String _corPrincipal;
+  String _corSecundaria;
+  String _corTerciaria;
   bool _temaEscuro;
 
   Usuario(this._nome, this._email, this._cpf, this._rg, this._dataNascimento,
@@ -42,6 +42,29 @@ class Usuario {
         _chavePix = _email,
         _temaEscuro = temaEscuro;
 
+  // Construtor para criar usuário a partir de JSON
+  Usuario.fromJson(Map<String, dynamic> json)
+      : _id = json['id'],
+        _nome = json['nome'],
+        _email = json['email'],
+        _cpf = json['cpf'],
+        _rg = json['rg'],
+        _dataNascimento = json['dataNascimento'],
+        _telefone = json['telefone'],
+        _senha = json['senha'],
+        _saldo = json['saldo'].toDouble(),
+        _score = json['score'],
+        _ponto = json['ponto'],
+        _numeroCartao = json['numeroCartao'],
+        _cvv = json['cvv'],
+        _validadeCartao = json['validadeCartao'],
+        _chavePix = json['chavePix'],
+        _corPrincipal = json['corPrincipal'],
+        _corSecundaria = json['corSecundaria'],
+        _corTerciaria = json['corTerciaria'],
+        _temaEscuro = json['temaEscuro'];
+
+  // Getters
   int get id => _id;
   String get nome => _nome;
   String get email => _email;
@@ -62,6 +85,7 @@ class Usuario {
   String get corTerciaria => _corTerciaria;
   bool get temaEscuro => _temaEscuro;
 
+  // Setters
   set nome(String value) => _nome = value;
   set email(String value) => _email = value;
   set cpf(String value) => _cpf = value;
@@ -120,6 +144,31 @@ class Usuario {
       _saldo -= valor;
       _score += 5;
     }
+  }
+
+  // Converter usuário para JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': _id,
+      'nome': _nome,
+      'email': _email,
+      'cpf': _cpf,
+      'rg': _rg,
+      'dataNascimento': _dataNascimento,
+      'telefone': _telefone,
+      'senha': _senha,
+      'saldo': _saldo,
+      'score': _score,
+      'ponto': _ponto,
+      'numeroCartao': _numeroCartao,
+      'cvv': _cvv,
+      'validadeCartao': _validadeCartao,
+      'chavePix': _chavePix,
+      'corPrincipal': _corPrincipal,
+      'corSecundaria': _corSecundaria,
+      'corTerciaria': _corTerciaria,
+      'temaEscuro': _temaEscuro,
+    };
   }
 
   static String _gerarNumeroCartao() {

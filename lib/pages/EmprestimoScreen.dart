@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart'; // Adicione esta importação
 
 class EmprestimoScreen extends StatefulWidget {
   const EmprestimoScreen({super.key});
@@ -92,6 +93,60 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
           '${paymentDate.year}');
     }
     return dates;
+  }
+
+  // Método para processar o empréstimo com persistência
+  Future<void> _processarEmprestimo() async {
+    try {
+      // Obter o valor do empréstimo do controller ou usar o valor padrão
+      double valorEmprestimo = double.tryParse(
+        _loanAmountController.text.replaceAll(',', '.')
+      ) ?? loanAmount;
+
+      if (valorEmprestimo <= 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Valor do empréstimo deve ser maior que zero.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+
+      // Atualizar o saldo do usuário
+      double novoSaldo = usuario.saldo + valorEmprestimo;
+      
+      // Persistir a mudança usando o UsuarioService
+      await UsuarioService.salvarSaldoUsuario(usuario.id, novoSaldo);
+      
+      // Atualizar o objeto usuario local
+      usuario.saldo = novoSaldo;
+      
+      // Atualizar a sessão
+      Sessao.atualizarUsuario(usuario);
+
+      Navigator.pop(context); // Fechar o dialog
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Empréstimo de R\$ ${_formatCurrency(valorEmprestimo)} aprovado e creditado em sua conta!'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      
+    } catch (e) {
+      Navigator.pop(context); // Fechar o dialog em caso de erro
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao processar empréstimo: $e'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -386,6 +441,14 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                               Text(
                                   'Total: R\$ ${_formatCurrency(totalAmount)}'),
                               Text('Vencimento: todo dia $paymentDay'),
+                              SizedBox(height: 16),
+                              Text(
+                                'O valor será creditado imediatamente em sua conta.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.main,
+                                ),
+                              ),
                             ],
                           ),
                           actions: [
@@ -394,36 +457,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                               child: Text('Cancelar'),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                if (totalAmount > 0) {
-                                  usuario.depositar(_loanAmountController
-                                          .value.text.isNotEmpty
-                                      ? double.tryParse(_loanAmountController
-                                              .text
-                                              .replaceAll(',', '.')) ??
-                                          0.0
-                                      : 0.0);
-                                  Sessao.atualizarUsuario(usuario);
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Empréstimo solicitado com sucesso!'),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Valor do empréstimo deve ser maior que zero.'),
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                }
-                              },
+                              onPressed: _processarEmprestimo,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.main,
                               ),
@@ -463,7 +497,6 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
   Widget _buildInstallmentSelector() {
     List<int> options = [1, 3, 6, 12, 18, 24, 36, 48];
-    double totalValue = totalAmount;
 
     return Container(
       width: double.infinity,
@@ -477,8 +510,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
           value: installments,
           isExpanded: true,
           items: options.map((int value) {
-            double installmentValue =
-                totalValue / value; // Cálculo correto do valor da parcela
+            // Usar o installmentValue já calculado corretamente
             return DropdownMenuItem<int>(
               value: value,
               child: Text(

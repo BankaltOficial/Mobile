@@ -26,7 +26,7 @@ class InvestorProfileAnalyzer {
     
     switch (timeHorizon) {
       case 'Longo prazo':
-        score += 30;
+        score += 25;
         break;
       case 'Médio prazo':
         score += 20; 
@@ -39,7 +39,7 @@ class InvestorProfileAnalyzer {
    
     switch (riskTolerance) {
       case 'Alta':
-        score += 30; 
+        score += 35; 
         break;
       case 'Moderada':
         score += 20; 

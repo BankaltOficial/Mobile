@@ -28,6 +28,7 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
     final colors = Provider.of<ColorProvider>(context);
     
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: AppColors.theme,
       appBar: CustomAppBar(
           title: 'Configurações',

@@ -30,6 +30,7 @@ class _ResgateScreenState extends State<ResgateScreen> {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: scaffoldKey,
       appBar: CustomAppBar(
         title: 'Resgate',
@@ -48,11 +49,7 @@ class _ResgateScreenState extends State<ResgateScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InvestimentoScreen()),
-                  );
+                  
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 20),

@@ -200,6 +200,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: _scaffoldKey,
       appBar: CustomAppBar(
         title: 'Perfil de Investidor',

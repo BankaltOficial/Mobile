@@ -7,6 +7,7 @@ import 'package:flutter_application_1/components/FilterButton.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class RendafixaScreen extends StatefulWidget {
   const RendafixaScreen({super.key});
@@ -120,6 +121,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
     }).toList();
 
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: _scaffoldKey,
       appBar: CustomAppBar(
         title: 'Renda Fixa',

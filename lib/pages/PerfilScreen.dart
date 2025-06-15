@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/DadosPessoaisScreen.dart';
+import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
@@ -25,14 +26,16 @@ class _PerfilScreenState extends State<PerfilScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: AppColors.theme,
       appBar: CustomAppBar(
             title: 'Perfil',
             scaffoldKey: _scaffoldKey,
             onBackPressed: () {
-              Navigator.pop(
+              Navigator.pushReplacement(
                 context,
-              );
+                MaterialPageRoute(
+              builder: (context) => const InicialScreen()));
             }),
         drawer: const CustomDrawer(),
       body: SafeArea(
@@ -188,10 +191,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.grey[300],
-            image: const DecorationImage(
-              image: AssetImage('assets/images/profile_placeholder.png'), // Substitua pela sua imagem
-              fit: BoxFit.cover,
-            ),
           ),
           child: const Icon(
             Icons.person,
@@ -259,7 +258,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.theme,
+                    color: AppColors.mainWhite,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -267,7 +266,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   subtitle,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.white70,
+                    color: AppColors.mainWhite,
                   ),
                 ),
               ],

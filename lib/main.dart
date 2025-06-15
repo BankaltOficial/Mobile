@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: DadosPessoaisScreen(),
+          home: SplashScreen(),
         );
       },
     );

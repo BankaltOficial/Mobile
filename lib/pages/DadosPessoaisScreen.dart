@@ -111,7 +111,8 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5F5),
+        key: _scaffoldKey,
+        backgroundColor: AppColors.theme,
         appBar: CustomAppBar(
             title: 'Dados Pessoais',
             scaffoldKey: _scaffoldKey,
@@ -186,7 +187,6 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                     
                     const SizedBox(height: 32),
                     
-                    // Botão de salvar (versão alternativa)
                     if (hasChanges)
                       SizedBox(
                         width: double.infinity,

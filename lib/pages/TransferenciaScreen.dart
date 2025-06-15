@@ -43,6 +43,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
     double valorTransferencia = 0.0;
 
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: scaffoldKey,
       appBar: CustomAppBar(
         title: 'Transferência',

@@ -22,6 +22,7 @@ class _InvestirScreenState extends State<InvestirScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: _scaffoldKey,
       appBar: CustomAppBar(title: 'Investir', scaffoldKey: _scaffoldKey, onBackPressed: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InvestimentoScreen()));
@@ -125,33 +126,6 @@ class _InvestirScreenState extends State<InvestirScreen> {
                       Divider(),
                       Text(
                         "A renda variável inclui investimentos como ações e fundos imobiliários, com maior risco, mas potencial de ganhos superiores no longo prazo.",
-                        style: TextStyle(fontSize: 16, color: AppColors.mainWhite),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.main,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.all(20),
-                  child: const Column(
-                    children: [
-                      Text(
-                        "Fundo de investimentos",
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.mainWhite),
-                      ),
-                      Divider(),
-                      Text(
-                        "Os fundos de investimento juntam o dinheiro de várias pessoas e um gestor decide onde investir, facilitando a diversificação.",
                         style: TextStyle(fontSize: 16, color: AppColors.mainWhite),
                       )
                     ],

@@ -1,6 +1,8 @@
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
+import 'package:flutter_application_1/pages/ConfiguracaoScreen.dart';
+import 'package:flutter_application_1/pages/DadosPessoaisScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/DescricaoScreen.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/pages/MinhasChaves.dart';
 import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
+import 'package:flutter_application_1/pages/PerfilScreen.dart';
 import 'package:flutter_application_1/pages/PixPagarScreen.dart';
 import 'package:flutter_application_1/pages/PoupancaScreen.dart';
 import 'package:flutter_application_1/pages/ReceberPixScreen.dart';
@@ -64,7 +67,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: InicialScreen(),
+          home: SplashScreen(),
         );
       },
     );

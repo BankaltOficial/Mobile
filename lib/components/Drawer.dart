@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/ConfiguracaoScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
+import 'package:flutter_application_1/pages/PerfilScreen.dart';
 import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
@@ -193,7 +195,10 @@ class CustomDrawer extends StatelessWidget {
                       icon: Icons.settings_outlined,
                       title: 'Configurações',
                       onTap: () {
-                        // Navigator para configurações
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConfiguracaoScreen()));
                       },
                     ),
 
@@ -202,7 +207,10 @@ class CustomDrawer extends StatelessWidget {
                       icon: Icons.person_outline,
                       title: 'Perfil',
                       onTap: () {
-                        // Navigator para perfil
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PerfilScreen()));
                       },
                     ),
                   ],

@@ -7,6 +7,7 @@ import 'package:flutter_application_1/components/SubFilterButton.dart';
 import 'package:flutter_application_1/components/InvestCard.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Colors.dart';
 
 class RendavariavelScreen extends StatefulWidget {
   const RendavariavelScreen({super.key});
@@ -106,6 +107,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
     }).toList();
 
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: _scaffoldKey,
       appBar: CustomAppBar(
         title: 'Renda Variável',

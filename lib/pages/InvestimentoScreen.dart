@@ -22,6 +22,7 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+      backgroundColor: AppColors.theme,
       key: scaffoldKey,
       appBar: CustomAppBar(title: 'Investimento', scaffoldKey: scaffoldKey, onBackPressed: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));

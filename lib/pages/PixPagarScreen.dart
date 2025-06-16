@@ -155,7 +155,6 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
     });
 
     try {
-      // Usar o UsuarioService para realizar a transação com persistência
       bool sucesso = await UsuarioService.realizarPix(
         remetente: usuario,
         destinatario: destinatario,
@@ -163,14 +162,12 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
       );
 
       if (sucesso) {
-        // Atualizar o usuário na sessão com os dados mais recentes
         List<Usuario> usuariosAtualizados =
             await UsuarioService.carregarUsuarios();
         Usuario usuarioAtualizado =
             usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
         Sessao.atualizarUsuario(usuarioAtualizado);
 
-        // Atualizar o estado local
         setState(() {
           usuario = usuarioAtualizado;
         });
@@ -303,10 +300,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                 }
 
                                 try {
-                                  // Carregar usuários atualizados do storage
                                   await UsuarioService.carregarUsuarios();
-
-                                  // Verificar usuário baseado no tipo ou no formato da chave
                                   if (selectedType == 'CPF' ||
                                       (chavePix.length == 14 &&
                                           chavePix.contains('.'))) {
@@ -323,7 +317,6 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                         verificarUsuarioPorEmail(chavePix);
                                   }
 
-                                  // Mostrar diálogo de confirmação
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -366,7 +359,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                                         double.tryParse(
                                                             valorController
                                                                 .text);
-
+ 
                                                     if (valorTransferencia ==
                                                             null ||
                                                         valorTransferencia <=

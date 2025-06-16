@@ -39,22 +39,22 @@ class InvestorProfileAnalyzer {
    
     switch (riskTolerance) {
       case 'Alta':
-        score += 35; 
+        score += 40; 
         break;
       case 'Moderada':
         score += 20; 
         break;
       case 'Baixa':
-        score += 10;
+        score += 5;
         break;
     }
     
     switch (experience) {
       case 'Avançado':
-        score += 25;
+        score += 20;
         break;
       case 'Intermediário':
-        score += 18;
+        score += 15;
         break;
       case 'Iniciante':
         score += 10; 
@@ -63,7 +63,7 @@ class InvestorProfileAnalyzer {
     
     switch (liquidity) {
       case 'Pode manter investimentos por longos períodos':
-        score += 20; 
+        score += 15; 
         break;
       case 'Precisa de acesso rápido ao capital':
         score += 5; 

@@ -492,7 +492,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.analytics, size: 20),
+                            Icon(Icons.analytics, size: 20, color: AppColors.mainWhite),
                             SizedBox(width: 8),
                             Text(
                               'Analisar',

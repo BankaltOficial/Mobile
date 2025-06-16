@@ -99,9 +99,9 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
   Future<void> _processarEmprestimo() async {
     try {
       // Obter o valor do empréstimo do controller ou usar o valor padrão
-      double valorEmprestimo = double.tryParse(
-        _loanAmountController.text.replaceAll(',', '.')
-      ) ?? loanAmount;
+      double valorEmprestimo =
+          double.tryParse(_loanAmountController.text.replaceAll(',', '.')) ??
+              loanAmount;
 
       if (valorEmprestimo <= 0) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -116,29 +116,29 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
       // Atualizar o saldo do usuário
       double novoSaldo = usuario.saldo + valorEmprestimo;
-      
+
       // Persistir a mudança usando o UsuarioService
       await UsuarioService.salvarSaldoUsuario(usuario.id, novoSaldo);
-      
+
       // Atualizar o objeto usuario local
       usuario.saldo = novoSaldo;
-      
+
       // Atualizar a sessão
       Sessao.atualizarUsuario(usuario);
 
       Navigator.pop(context); // Fechar o dialog
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Empréstimo de R\$ ${_formatCurrency(valorEmprestimo)} aprovado e creditado em sua conta!'),
+          content: Text(
+              'Empréstimo de R\$ ${_formatCurrency(valorEmprestimo)} aprovado e creditado em sua conta!'),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 3),
         ),
       );
-      
     } catch (e) {
       Navigator.pop(context); // Fechar o dialog em caso de erro
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erro ao processar empréstimo: $e'),
@@ -187,9 +187,9 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.main,
+                              color: AppColors.invertModeMain,
                               decoration: TextDecoration.underline,
-                              decorationColor: AppColors.main,
+                              decorationColor: AppColors.invertModeMain,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -267,7 +267,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                               'Taxa = ${_formatCurrency(interestRate)}%',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AppColors.main,
+                                color: AppColors.invertModeMain,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -275,7 +275,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                             Icon(
                               Icons.edit,
                               size: 16,
-                              color: AppColors.main,
+                              color: AppColors.invertModeMain,
                             ),
                           ],
                         ),
@@ -381,12 +381,12 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.main,
+                    color: AppColors.invertModeMain,
                   ),
                 ),
                 collapsedBackgroundColor: AppColors.themeColor,
-                iconColor: AppColors.main,
-                collapsedIconColor: AppColors.main,
+                iconColor: AppColors.invertModeMain,
+                collapsedIconColor: AppColors.invertModeMain,
                 backgroundColor: AppColors.themeColor,
                 children: [
                   Container(

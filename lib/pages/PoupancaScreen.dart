@@ -49,19 +49,20 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
 
       // Garantir que a sessão está inicializada
       await Sessao.inicializar();
-      
+
       // Recarregar dados do usuário
       await Sessao.recarregarUsuario();
-      
+
       // Obter usuário da sessão
       Usuario? usuarioAtual = Sessao.getUsuario();
-      
+
       if (usuarioAtual != null) {
         setState(() {
           usuario = usuarioAtual;
           isLoading = false;
         });
-        print("Usuário carregado: ${usuarioAtual.nome}, Saldo: R\$ ${usuarioAtual.saldo}");
+        print(
+            "Usuário carregado: ${usuarioAtual.nome}, Saldo: R\$ ${usuarioAtual.saldo}");
       } else {
         // Se não há usuário logado, redirecionar para login
         print("Nenhum usuário logado encontrado");
@@ -286,7 +287,7 @@ class _PoupancaScreenState extends State<PoupancaScreen> {
                     Text(
                       'R\$ ${usuario!.saldo.toStringAsFixed(2).replaceAll('.', ',')}',
                       style: TextStyle(
-                        color: AppColors.main,
+                        color: AppColors.invertModeMain,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),

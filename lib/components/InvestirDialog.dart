@@ -34,11 +34,12 @@ class _InvestirDialogState extends State<InvestirDialog> {
     initialValue: 0.0,
     leftSymbol: 'R\$ ',
   );
-  
+
   bool _isLoading = false;
 
   double _getValorMinimo() {
-    String valor = widget.investimentoMinimo.replaceAll('R\$ ', '').replaceAll(',', '.');
+    String valor =
+        widget.investimentoMinimo.replaceAll('R\$ ', '').replaceAll(',', '.');
     return double.tryParse(valor) ?? 0.0;
   }
 
@@ -57,7 +58,8 @@ class _InvestirDialogState extends State<InvestirDialog> {
     if (valorInvestimento < valorMinimo) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Valor mínimo para investimento é ${widget.investimentoMinimo}'),
+          content: Text(
+              'Valor mínimo para investimento é ${widget.investimentoMinimo}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -194,14 +196,16 @@ class _InvestirDialogState extends State<InvestirDialog> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.main,
+                color: AppColors.invertModeMain,
               ),
             ),
             const SizedBox(height: 20),
@@ -233,7 +237,8 @@ class _InvestirDialogState extends State<InvestirDialog> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : const Text('Investir'),

@@ -207,6 +207,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         inputFormatters: [cpfMask],
                         decoration: InputDecoration(
                           hintText: '000.000.000-00',
+                          hintStyle: TextStyle(color: AppColors.mainGray),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
@@ -217,12 +218,13 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                         onChanged: (value) async {
                           if (value.length == 14) {
                             cpfDestinatario = value;
-                            
+
                             // Carregar usuários atualizados antes de buscar
                             await UsuarioService.carregarUsuarios();
-                            
+
                             if (encontrarUsuarioPorCpf(cpfDestinatario)) {
-                              Usuario encontrado = verificarUsuarioPorCpf(cpfDestinatario);
+                              Usuario encontrado =
+                                  verificarUsuarioPorCpf(cpfDestinatario);
                               setState(() {
                                 usuarioDestinatario = encontrado;
                               });
@@ -344,7 +346,7 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.main,
+                                    color: AppColors.invertModeMain,
                                   ),
                                 ),
                               ),
@@ -365,9 +367,11 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: _realizandoTransferencia ? null : () {
-                  _mostrarDialogoConfirmacao(context, usuario);
-                },
+                onPressed: _realizandoTransferencia
+                    ? null
+                    : () {
+                        _mostrarDialogoConfirmacao(context, usuario);
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.main,
                   shape: RoundedRectangleBorder(
@@ -400,7 +404,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
     // Obter o valor atual do controller aqui
     double valorTransferencia = valorController.numberValue;
 
-    if (usuarioDestinatario.cpf.isEmpty || usuarioDestinatario.nome == "Destinatário") {
+    if (usuarioDestinatario.cpf.isEmpty ||
+        usuarioDestinatario.nome == "Destinatário") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Selecione um destinatário válido.'),
@@ -434,7 +439,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
     if (usuarioDestinatario.cpf == usuario.cpf) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Você não pode fazer uma transferência para mesma conta'),
+          content:
+              Text('Você não pode fazer uma transferência para mesma conta'),
           backgroundColor: Colors.red,
         ),
       );
@@ -453,7 +459,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
             children: [
               Text('Destinatário: ${usuarioDestinatario.nome}'),
               Text('CPF: ${usuarioDestinatario.cpf}'),
-              Text('Valor: R\$ ${valorTransferencia.toStringAsFixed(2).replaceAll('.', ',')}'),
+              Text(
+                  'Valor: R\$ ${valorTransferencia.toStringAsFixed(2).replaceAll('.', ',')}'),
               SizedBox(height: 10),
               Text('Deseja confirmar a transferência?'),
             ],
@@ -482,7 +489,8 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
     );
   }
 
-  Future<void> _realizarTransferencia(Usuario usuario, double valorTransferencia) async {
+  Future<void> _realizarTransferencia(
+      Usuario usuario, double valorTransferencia) async {
     setState(() {
       _realizandoTransferencia = true;
     });
@@ -497,15 +505,18 @@ class _TransferenciaScreenState extends State<TransferenciaScreen> {
 
       if (sucesso) {
         // Atualizar o usuário na sessão com os dados mais recentes
-        List<Usuario> usuariosAtualizados = await UsuarioService.carregarUsuarios();
-        Usuario usuarioAtualizado = usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
+        List<Usuario> usuariosAtualizados =
+            await UsuarioService.carregarUsuarios();
+        Usuario usuarioAtualizado =
+            usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
         Sessao.atualizarUsuario(usuarioAtualizado);
 
         // Limpar campos
         cpfController.clear();
         valorController.text = 'R\$ 0,00';
         setState(() {
-          usuarioDestinatario = Usuario("Destinatário", "destinatario@gmail.com", "", "", "", "", "");
+          usuarioDestinatario = Usuario(
+              "Destinatário", "destinatario@gmail.com", "", "", "", "", "");
           cpfDestinatario = '';
         });
 

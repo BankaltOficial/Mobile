@@ -170,40 +170,69 @@ class _FormScreenState extends State<FormScreen> {
                         ),
                       ),
                       TextFormField(
-                          controller: dataController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                          inputFormatters: [dataNascimentoMask],
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(color: Colors.black),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Por favor, insira sua data de nascimento';
-                            }
-                            final parts = value.split('/');
-                            if (parts.length != 3) {
-                              return 'Formato inválido (dd/mm/aaaa)';
-                            }
-                            final day = int.tryParse(parts[0]);
-                            final month = int.tryParse(parts[1]);
-                            final year = int.tryParse(parts[2]);
-                            if (day == null || month == null || year == null) {
+                        controller: dataController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        inputFormatters: [dataNascimentoMask],
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(color: Colors.black),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Por favor, insira sua data de nascimento';
+                          }
+
+                          final parts = value.trim().split('/');
+                          if (parts.length != 3) {
+                            return 'Formato inválido (dd/mm/aaaa)';
+                          }
+
+                          final day = int.tryParse(parts[0]);
+                          final month = int.tryParse(parts[1]);
+                          final year = int.tryParse(parts[2]);
+
+                          if (day == null || month == null || year == null) {
+                            return 'Data inválida';
+                          }
+
+                          if (day < 1 || day > 31) {
+                            return 'Dia deve estar entre 1 e 31';
+                          }
+
+                          if (month < 1 || month > 12) {
+                            return 'Mês deve estar entre 1 e 12';
+                          }
+
+                          if (year < 1900 || year > DateTime.now().year) {
+                            return 'Ano deve estar entre 1900 e ${DateTime.now().year}';
+                          }
+
+                          try {
+                            final date = DateTime(year, month, day);
+
+                            if (date.day != day ||
+                                date.month != month ||
+                                date.year != year) {
                               return 'Data inválida';
                             }
 
-                            try {
-                              final date = DateTime(year, month, day);
-                              if (date.isAfter(DateTime.now())) {
-                                return 'Data no futuro é inválida';
-                              }
-                            } catch (_) {
-                              return 'Data inválida';
+                            if (date.isAfter(DateTime.now())) {
+                              return 'Data no futuro é inválida';
                             }
-                            return null;
-                          }),
+                            final age =
+                                DateTime.now().difference(date).inDays ~/ 365;
+                            if (age > 150) {
+                              return 'Idade muito alta, verifique a data';
+                            }
+                          } catch (e) {
+                            return 'Data inválida';
+                          }
+
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 20),
                       Text(
                         "CPF",
@@ -293,7 +322,7 @@ class _FormScreenState extends State<FormScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                        Text(
+                      Text(
                         "Senha",
                         style: TextStyle(
                           fontSize: 18,
@@ -301,43 +330,43 @@ class _FormScreenState extends State<FormScreen> {
                           color: AppColors.main,
                         ),
                       ),
-                        StatefulBuilder(
-                          builder: (context, setStateSB) {
-                            return TextFormField(
-                              controller: senhaController,
-                              obscureText: _obscureText,
-                              keyboardType: TextInputType.visiblePassword,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                filled: true,
-                                fillColor: Colors.white,
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscureText
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                    color: AppColors.main,
-                                  ),
-                                  onPressed: () {
-                                    setStateSB(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
+                      StatefulBuilder(
+                        builder: (context, setStateSB) {
+                          return TextFormField(
+                            controller: senhaController,
+                            obscureText: _obscureText,
+                            keyboardType: TextInputType.visiblePassword,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureText
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: AppColors.main,
                                 ),
+                                onPressed: () {
+                                  setStateSB(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
                               ),
-                              style: const TextStyle(color: Colors.black),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Por favor, insira sua senha';
-                                }
-                                if (value.length < 6) {
-                                  return 'A senha deve ter no mínimo 6 caracteres';
-                                }
-                                return null;
-                              },
-                            );
-                          },
-                        ),
+                            ),
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, insira sua senha';
+                              }
+                              if (value.length < 6) {
+                                return 'A senha deve ter no mínimo 6 caracteres';
+                              }
+                              return null;
+                            },
+                          );
+                        },
+                      ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {

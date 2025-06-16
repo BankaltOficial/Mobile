@@ -145,59 +145,75 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             if (_formKey.currentState!.validate()) {
                               String cpf = cpfController.text;
                               String senha = passwordController.text;
-                              Usuario usuario = verificarUsuarioPorCpf(cpf);
-                              if (usuario.senha == senha) {
-                                Sessao.limparUsuario();
-                                Sessao.salvarUsuario(usuario);
-                                String main = usuario.corPrincipal;
-                                Color mainColor = Color(int.parse(
-                                    'FF${main.replaceAll('#', '')}',
-                                    radix: 16));
+                              try {
+                                Usuario usuario = verificarUsuarioPorCpf(cpf);
 
-                                String secondary = usuario.corSecundaria;
-                                Color secondaryColor = Color(int.parse(
-                                    'FF${secondary.replaceAll('#', '')}',
-                                    radix: 16));
+                                if (usuario.senha == senha) {
+                                  Sessao.limparUsuario();
+                                  Sessao.salvarUsuario(usuario);
 
-                                String tertiary = usuario.corTerciaria;
-                                Color tertiaryColor = Color(int.parse(
-                                    'FF${tertiary.replaceAll('#', '')}',
-                                    radix: 16));
+                                  String main = usuario.corPrincipal;
+                                  Color mainColor = Color(int.parse(
+                                      'FF${main.replaceAll('#', '')}',
+                                      radix: 16));
 
-                                bool isDarkMode = usuario.temaEscuro;
-                                final provider = Provider.of<ColorProvider>(
-                                    context,
-                                    listen: false);
-                                provider.setColors(
-                                    mainColor, secondaryColor, tertiaryColor);
-                                provider.setTheme(isDarkMode);
-                                await ColorService.setTheme(isDarkMode);
-                                await ColorService.saveColors(
-                                    mainColor, secondaryColor, tertiaryColor);
-                                ColorProvider().toggleDarkMode(isDarkMode);
-                                await ColorService.saveTheme(isDarkMode);
-                                setState(() {
-                                  AppColors.isDarkMode = isDarkMode;
-                                  AppColors.main = mainColor;
-                                  AppColors.secondary = secondaryColor;
-                                  AppColors.tertiary = tertiaryColor;
-                                });
-                                cpfController.clear();
-                                passwordController.clear();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Login Feito com Sucesso')),
-                                );
-                                Navigator.push(
+                                  String secondary = usuario.corSecundaria;
+                                  Color secondaryColor = Color(int.parse(
+                                      'FF${secondary.replaceAll('#', '')}',
+                                      radix: 16));
+
+                                  String tertiary = usuario.corTerciaria;
+                                  Color tertiaryColor = Color(int.parse(
+                                      'FF${tertiary.replaceAll('#', '')}',
+                                      radix: 16));
+
+                                  bool isDarkMode = usuario.temaEscuro;
+                                  final provider = Provider.of<ColorProvider>(
+                                      context,
+                                      listen: false);
+                                  provider.setColors(
+                                      mainColor, secondaryColor, tertiaryColor);
+                                  provider.setTheme(isDarkMode);
+
+                                  await ColorService.setTheme(isDarkMode);
+                                  await ColorService.saveColors(
+                                      mainColor, secondaryColor, tertiaryColor);
+                                  ColorProvider().toggleDarkMode(isDarkMode);
+                                  await ColorService.saveTheme(isDarkMode);
+
+                                  setState(() {
+                                    AppColors.isDarkMode = isDarkMode;
+                                    AppColors.main = mainColor;
+                                    AppColors.secondary = secondaryColor;
+                                    AppColors.tertiary = tertiaryColor;
+                                  });
+
+                                  cpfController.clear();
+                                  passwordController.clear();
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Login Feito com Sucesso')),
+                                  );
+
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InicialScreen()));
-                              } else {
+                                        builder: (context) => InicialScreen()),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('CPF ou senha incorretos')),
+                                  );
+                                }
+                              } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('CPF ou senha incorretos')),
+                                  SnackBar(
+                                      content: Text('CPF ou Senha incorretos')),
                                 );
-                                return;
                               }
                             }
                           },

@@ -4,8 +4,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
+import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,6 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    final provider = Provider.of<ColorProvider>(context, listen: false);
+    provider.resetColors();
     /*usuario = Sessao.getUsuario();
     final provider = Provider.of<ColorProvider>(context, listen: false);
     if (usuario == null || usuario!.nome == "Usuário") {

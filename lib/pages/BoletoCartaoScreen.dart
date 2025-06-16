@@ -56,7 +56,7 @@ class _BoletoCartaoScreenState extends State<BoletoCartaoScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.mainGray,
+                        color: AppColors.mainBlack,
                       ),
                     ),
                     const SizedBox(height: 16),

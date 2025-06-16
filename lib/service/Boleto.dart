@@ -14,11 +14,11 @@ class Boleto {
   String get cpfPagante => this._cpfPagante;
   set cpfPagante(String value) => this._cpfPagante = value;
 
-  get codigo => this._codigo;
-  set codigo(value) => this._codigo = value;
+  int get codigo => this._codigo;
+  set codigo(int value) => this._codigo = value;
 
-  get total => this._total;
-  set total(value) => this._total = value;
+  double get total => this._total;
+  set total(double value) => this._total = value;
 
   double get valorPago => this._valorPago;
   set valorPago(double value) => this._valorPago = value;
@@ -55,8 +55,15 @@ class Boleto {
 
   // Método para obter o valor máximo que pode ser pago
   double get valorMaximoPagamento => this._total - this._valorPago;
+
+  // Método toString para debug
+  @override
+  String toString() {
+    return 'Boleto{nomePagante: $_nomePagante, cpfPagante: $_cpfPagante, codigo: $_codigo, valorPago: $_valorPago, total: $_total, valorRestante: $valorRestante, isQuitado: $isQuitado}';
+  }
 }
 
+// Lista global de boletos para simulação
 List<Boleto> boletos = [
   Boleto('Flakes', '555.555.555-55', 1234567890, 0, 1000),
   Boleto('Igor Suracci', '333.333.333-33', 2222222222, 150, 5000),
@@ -66,6 +73,7 @@ List<Boleto> boletos = [
   Boleto('Igor Suracci', '333.333.333-33', 6666666666, 200, 4000),
 ];
 
+// Função para buscar boleto por código
 Boleto buscarBoleto(int codigo) {
   try {
     return boletos.firstWhere((b) => b.codigo == codigo);
@@ -82,4 +90,19 @@ bool processarPagamento(int codigoBoleto, double valorPagamento) {
   } catch (e) {
     return false;
   }
+}
+
+// Função para atualizar boleto na lista (simula persistência)
+void atualizarBoleto(Boleto boletoAtualizado) {
+  for (int i = 0; i < boletos.length; i++) {
+    if (boletos[i].codigo == boletoAtualizado.codigo) {
+      boletos[i] = boletoAtualizado;
+      break;
+    }
+  }
+}
+
+// Função para listar todos os boletos (útil para debug)
+List<Boleto> listarTodosBoletos() {
+  return List.from(boletos);
 }

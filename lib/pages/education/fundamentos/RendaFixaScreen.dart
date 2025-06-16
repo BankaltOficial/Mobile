@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/RendaVariavelScreen.dart';
 
 class RendaFixaScreen extends StatefulWidget {
   const RendaFixaScreen({super.key});
@@ -34,7 +35,10 @@ Tipos de renda fixa:
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // Ação ao pressionar o botão "Próximo"
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RendaVariavelScreen()));
       },
     );
   }

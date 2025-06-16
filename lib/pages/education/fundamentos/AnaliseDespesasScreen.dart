@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/ReduzirDespesas.dart';
 
 class AnaliseDespesasScreen extends StatefulWidget {
   const AnaliseDespesasScreen({super.key});
@@ -40,7 +41,10 @@ Tomada de Decisão: As informações obtidas ajudam a definir estratégias de co
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação ao pressionar o botão
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ReduzirDespesasScreen()));
       },
     );
   }

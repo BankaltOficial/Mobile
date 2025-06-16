@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: BoletoPixScreen(),
+          home: EducationScreen(),
         );
       },
     );

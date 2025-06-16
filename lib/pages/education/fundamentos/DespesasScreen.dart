@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/AnaliseDespesasScreen.dart';
 
 class DespesasScreen extends StatefulWidget {
   const DespesasScreen({super.key});
@@ -37,7 +38,10 @@ Planejar as despesas é essencial para ter controle financeiro e prever gastos, 
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação ao pressionar o botão
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AnaliseDespesasScreen()));
       },
     );
   }

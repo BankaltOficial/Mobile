@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/ContaPoupancaScreen.dart';
 
 class OrcamentoScreen extends StatefulWidget {
   const OrcamentoScreen({super.key});
@@ -37,7 +38,10 @@ Planeje com antecedência: Sempre faça previsões de receitas e despesas para g
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+       Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ContaPoupancaScreen()));
       },
     );
   }

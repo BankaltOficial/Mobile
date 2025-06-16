@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/DespesasScreen.dart';
 
 class RendaVariavelScreen extends StatefulWidget {
   const RendaVariavelScreen({super.key});
@@ -26,7 +27,8 @@ Os fundos imobiliários funcionam de forma semelhante às ações, porém os rec
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação ao pressionar o botão
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const DespesasScreen()));
       },
     );
   }

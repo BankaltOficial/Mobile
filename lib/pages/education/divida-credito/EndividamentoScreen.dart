@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/CodigoConsumidorScreen.dart';
 
 class EndividamentoScreen extends StatefulWidget {
   const EndividamentoScreen({super.key});
@@ -52,7 +53,10 @@ Educação financeira: Investir no aprendizado de como administrar melhor o dinh
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CodigoConsumidorScreen()));
       },
     );
   }

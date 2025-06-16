@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/FinanciamentoScreen.dart';
 
 class EmprestimoScreen extends StatefulWidget {
   const EmprestimoScreen({super.key});
@@ -54,7 +55,10 @@ Na antecipação do salário, como o próprio nome já diz é uma solicitação 
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FinanciamentoScreen()));
       },
     );
   }

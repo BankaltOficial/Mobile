@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/EndividamentoScreen.dart';
 
 class HipotecaScreen extends StatefulWidget {
   const HipotecaScreen({super.key});
@@ -33,7 +34,10 @@ A hipoteca dificilmente acontece e é solicitada sem a autorização do devedor.
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EndividamentoScreen()));
       },
     );
   }

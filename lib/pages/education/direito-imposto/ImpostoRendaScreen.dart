@@ -13,31 +13,24 @@ class _ImpostoRendaScreenState extends State<ImpostoRendaScreen> {
   Widget build(BuildContext context) {
     return PageEducationScreen(
       appBarTitle: 'Educação Financeira',
-      title: 'Despesas',
-      highlightedQuestion: 'O que são as despesas?',
+      title: 'Imposto de Renda (IR)',
+      highlightedQuestion: 'O que é imposto de renda?',
       content: '''
-Despesas
-O que são as despesas?
-Despesas são todos os gastos que uma pessoa ou empresa tem ao utilizar recursos para manter o funcionamento de suas atividades ou o seu padrão de vida. Elas podem ser divididas em diferentes tipos, como as despesas fixas, variáveis e eventuais, que iremos comentar a seguir.
+O Imposto de Renda é um tipo de tributo que você paga ao governo com base na sua renda, ou seja, no dinheiro que você ganha. A ideia é que quanto mais você ganha, mais você deve contribuir. Esse imposto é uma das principais fontes de renda do governo federal e pagar o Imposto de Renda deveria ser uma maneira de contribuir para o funcionamento do país. Com esse dinheiro, o governo pode investir em coisas importantes para a sociedade. Além disso, declarar corretamente e pagar o imposto evita problemas legais e ajuda a manter tudo em ordem.
 
-Despesas fixas
-As despesas fixas são gastos que não mudam muito de um mês para o outro, o que ajuda a planejar melhor as finanças. Exemplos incluem aluguel, contas de água e luz, e mensalidades escolares. Esses gastos costumam representar uma boa parte do orçamento mensal, então é importante controlá-los para evitar surpresas, já que precisam ser pagos todo mês.
-Para gerenciar as despesas fixas, vale a pena revisar contratos e procurar melhores condições, como um aluguel mais barato ou um plano de telefone mais em conta. Como é mais difícil reduzir esses gastos do que as despesas variáveis, é fundamental cuidar bem deles para manter a estabilidade financeira.
+Quais são os tipos de Imposto de Renda?
 
-Despesas variáveis
-As despesas variáveis são gastos que mudam de um mês para o outro, dependendo do consumo e das necessidades. Exemplos incluem compras de supermercado, contas de água e luz, transporte e lazer. 
-Essas despesas oferecem mais flexibilidade, pois podem ser ajustadas facilmente se for necessário economizar. No entanto, é importante monitorá-las, pois pequenos gastos podem se acumular e impactar o orçamento. Fazer um planejamento mensal ajuda a prever esses gastos e manter a saúde financeira.
+Imposto de Renda Pessoa Física (IRPF)
 
-Despesas eventuais
-As despesas eventuais são gastos que ocorrem de forma incerta e não têm um padrão mensal fixo. Exemplos incluem consertos de carro, manutenção da casa, festas e compras de presentes. 
-Embora sejam imprevisíveis, é importante planejar uma reserva para esses gastos, pois podem impactar o orçamento quando surgem. Ter controle sobre essas despesas ajuda a evitar surpresas financeiras e a garantir que as despesas fixas e variáveis não sejam comprometidas.
+O IRPF é o imposto que as pessoas físicas (indivíduos) precisam pagar sobre a renda que recebem. Isso inclui salários, rendimentos de investimentos, aluguéis e outras fontes de receita. Qualquer pessoa que tenha uma renda acima de um determinado limite precisa pagar o IRPF.
 
-Importância de planejar as despesas
-Planejar as despesas é essencial para ter controle financeiro e prever gastos, evitando surpresas. Isso ajuda a reduzir desperdícios, alcançar metas financeiras, garantir segurança e criar uma reserva para emergências, tudo isso a fim de construir uma vida financeira saudável e tranquila.
+Imposto de Renda Pessoa Jurídica (IRPJ)
+
+O IRPJ é o imposto que empresas e outras entidades jurídicas (como associações e fundações) precisam pagar sobre seus lucros. Ele é uma forma de tributar a renda das pessoas jurídicas. Todas as empresas e organizações que têm fins lucrativos devem pagar o IRPJ. Isso inclui empresas individuais, sociedades, corporações e outras formas de negócios.
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação ao pressionar o botão
+        // ação para próxima tela ou função
       },
     );
   }

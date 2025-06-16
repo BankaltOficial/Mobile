@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/EducationScreen.dart';
 
 class TaxaJurosScreen extends StatefulWidget {
   const TaxaJurosScreen({super.key});
@@ -60,9 +61,12 @@ Suponha que sua fatura do cartão seja de R\$ 1.000,00 e você paga apenas R\$ 6
 Se a taxa de juros rotativos for de 10% ao mês, no próximo mês você terá que pagar 10% do valor que sobrou.
 Portanto, no segundo mês, você deverá R\$ 440,00 (R\$ 400,00 + R\$ 40,00 de juros rotativos).
 ''',
-      buttonText: 'Próximo',
+      buttonText: 'Terminar Educação Financeira',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EducationScreen()));
       },
     );
   }

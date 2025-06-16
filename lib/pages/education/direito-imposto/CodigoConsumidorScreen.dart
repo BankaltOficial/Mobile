@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/direito-imposto/Procon.dart';
 
 class CodigoConsumidorScreen extends StatefulWidget {
   const CodigoConsumidorScreen({super.key});
@@ -56,7 +57,10 @@ Facilidade de Acesso à Justiça: O consumidor pode recorrer aos Juizados Especi
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProconScreen()));
       },
     );
   }

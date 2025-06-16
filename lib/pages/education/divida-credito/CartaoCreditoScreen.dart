@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/EmprestimoScreen.dart';
 
 class CartaoCreditoScreen extends StatefulWidget {
   const CartaoCreditoScreen({super.key});
@@ -24,7 +25,10 @@ Para entender melhor o uso do cartão de crédito, podemos fazer um comparativo 
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EmprestimoScreen()));
       },
     );
   }

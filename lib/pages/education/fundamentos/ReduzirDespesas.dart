@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/OrcamentoScreen.dart';
 
 class ReduzirDespesasScreen extends StatefulWidget {
   const ReduzirDespesasScreen({super.key});
@@ -34,7 +35,10 @@ O cartão de crédito é uma ferramenta muito importante, mas somente para quem 
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação ao pressionar o botão
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OrcamentoScreen()));
       },
     );
   }

@@ -13,20 +13,32 @@ class _ProconScreenState extends State<ProconScreen> {
   Widget build(BuildContext context) {
     return PageEducationScreen(
       appBarTitle: 'Educação Financeira',
-      title: 'Imposto de Renda (IR)',
-      highlightedQuestion: 'O que é imposto de renda?',
+      title: 'PROCON',
+      highlightedQuestion: 'O que é o PROCON?',
       content: '''
-O Imposto de Renda é um tipo de tributo que você paga ao governo com base na sua renda, ou seja, no dinheiro que você ganha. A ideia é que quanto mais você ganha, mais você deve contribuir. Esse imposto é uma das principais fontes de renda do governo federal e pagar o Imposto de Renda deveria ser uma maneira de contribuir para o funcionamento do país. Com esse dinheiro, o governo pode investir em coisas importantes para a sociedade. Além disso, declarar corretamente e pagar o imposto evita problemas legais e ajuda a manter tudo em ordem.
+O PROCON (Programa de Proteção e Defesa do Consumidor) é um órgão responsável por proteger os direitos dos consumidores e promover relações de consumo mais justas.
 
-Quais são os tipos de Imposto de Renda?
+Origem
 
-Imposto de Renda Pessoa Física (IRPF)
+O PROCON foi criado no Brasil em 1976, inicialmente em São Paulo, como resposta à necessidade de um órgão que pudesse defender os direitos dos consumidores diante de abusos e práticas comerciais desleais. Com o passar do tempo, outros estados e municípios também instituíram seus próprios PROCONs, sempre procurando proteger o consumidor.
 
-O IRPF é o imposto que as pessoas físicas (indivíduos) precisam pagar sobre a renda que recebem. Isso inclui salários, rendimentos de investimentos, aluguéis e outras fontes de receita. Qualquer pessoa que tenha uma renda acima de um determinado limite precisa pagar o IRPF.
+Atuação
 
-Imposto de Renda Pessoa Jurídica (IRPJ)
+Fiscalização: O órgão monitora práticas comerciais, verificando se as empresas cumprem as normas do Código de Defesa do Consumidor (CDC) e coibindo abusos, como propaganda enganosa e preços indevidos.
 
-O IRPJ é o imposto que empresas e outras entidades jurídicas (como associações e fundações) precisam pagar sobre seus lucros. Ele é uma forma de tributar a renda das pessoas jurídicas. Todas as empresas e organizações que têm fins lucrativos devem pagar o IRPJ. Isso inclui empresas individuais, sociedades, corporações e outras formas de negócios.
+Atendimento ao consumidor: O PROCON oferece atendimento ao público para receber reclamações e orientações sobre direitos e deveres, ajudando os consumidores a resolverem conflitos com fornecedores.
+
+Educação e conscientização: O PROCON realiza campanhas educativas e informativas para promover a conscientização dos consumidores sobre seus direitos, ajudando a prevenir abusos.
+
+Mediação e conciliação: O órgão busca resolver conflitos entre consumidores e empresas por meio da mediação, ajudando as partes a chegarem a um acordo satisfatório.
+
+Assistência ao consumidor
+
+Orientação: Os consumidores podem obter informações sobre seus direitos e como agir em situações de desrespeito, além de dicas sobre consumo consciente.
+
+Registro de reclamações: O PROCON permite que os consumidores registrem suas queixas formalmente, o que pode levar a investigações e ações contra empresas infratoras.
+
+Acompanhamento de processos: O órgão acompanha o andamento das reclamações e mediações, garantindo que os consumidores recebam o devido suporte.
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {

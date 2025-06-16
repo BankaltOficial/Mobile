@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/PageEducation.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/CartaoCreditoScreen.dart';
 
 class ContaPoupancaScreen extends StatefulWidget {
   const ContaPoupancaScreen({super.key});
@@ -21,7 +22,10 @@ A conta poupança funciona permitindo que você deposite um dinheiro e ganhe ren
 ''',
       buttonText: 'Próximo',
       onActionPressed: () {
-        // ação para próxima tela ou função
+        Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CartaoCreditoScreen()));
       },
     );
   }

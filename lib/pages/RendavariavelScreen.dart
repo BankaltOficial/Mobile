@@ -1,13 +1,16 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/AppBar.dart';
+import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/components/FilterButton.dart';
 import 'package:flutter_application_1/pages/InvestirScreen.dart';
 import 'package:flutter_application_1/components/SubFilterButton.dart';
-import 'package:flutter_application_1/components/InvestCard.dart';
-import 'package:flutter_application_1/components/AppBar.dart';
-import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/components/InvestirCard.dart';
+import 'package:flutter_application_1/components/InvestirDialog.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
 
 class RendavariavelScreen extends StatefulWidget {
   const RendavariavelScreen({super.key});
@@ -19,8 +22,9 @@ class RendavariavelScreen extends StatefulWidget {
 class _RendavariavelScreenState extends State<RendavariavelScreen> {
   String selectedFilter = 'Ações';
   String selectedSubFilter = 'Todos';
+  Usuario? usuarioLogado;
 
-  List<Map<String, String>> allItems = [
+    List<Map<String, String>> allItems = [
     {
       'tipo': 'Ações',
       'title': 'Ação PETR4',
@@ -79,6 +83,22 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
     },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _carregarUsuarioLogado();
+  }
+
+  Future<void> _carregarUsuarioLogado() async {
+    int? usuarioId = await UsuarioService.carregarUsuarioLogado();
+    if (usuarioId != null) {
+      List<Usuario> usuarios = await UsuarioService.carregarUsuarios();
+      setState(() {
+        usuarioLogado = usuarios.firstWhere((u) => u.id == usuarioId);
+      });
+    }
+  }
+
   bool isResgateRapido(String resgate) {
     if (resgate.toLowerCase().contains('imediato')) return true;
     final regex = RegExp(r'(\d+)\s*dias');
@@ -88,6 +108,32 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
       return dias != null && dias <= 30;
     }
     return false;
+  }
+
+  void _mostrarDialogInvestimento(Map<String, String> item) {
+    if (usuarioLogado == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuário não encontrado. Faça login novamente.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => InvestirDialog(
+        nomeAtivo: item['title']!,
+        tipoAtivo: selectedFilter,
+        investimentoMinimo: item['invMin']!,
+        resgateDisponivel: item['resgate']!,
+        usuario: usuarioLogado!,
+        onInvestimentoRealizado: () {
+          _carregarUsuarioLogado(); // Recarrega os dados do usuário
+        },
+      ),
+    );
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -110,7 +156,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
       backgroundColor: AppColors.theme,
       key: _scaffoldKey,
       appBar: CustomAppBar(
-        title: 'Renda Variável',
+        title: 'Renda Variavel',
         scaffoldKey: _scaffoldKey,
         onBackPressed: () {
           Navigator.pushReplacement(
@@ -133,14 +179,14 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                   onTap: () => setState(() => selectedFilter = 'Ações'),
                 ),
                 FilterButton(
-                  text: 'ETF',
-                  isSelected: selectedFilter == 'ETF',
-                  onTap: () => setState(() => selectedFilter = 'ETF'),
-                ),
-                FilterButton(
                   text: 'BDR',
                   isSelected: selectedFilter == 'BDR',
                   onTap: () => setState(() => selectedFilter = 'BDR'),
+                ),
+                FilterButton(
+                  text: 'ETF',
+                  isSelected: selectedFilter == 'ETF',
+                  onTap: () => setState(() => selectedFilter = 'ETF'),
                 ),
                 FilterButton(
                   text: 'FII',
@@ -159,16 +205,58 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                     onTap: () => setState(() => selectedSubFilter = 'Todos'),
                   ),
                 ),
+                Expanded(
+                  child: SubFilterButton(
+                    text: 'Resgate rápido',
+                    isSelected: selectedSubFilter == 'Resgate rápido',
+                    onTap: () =>
+                        setState(() => selectedSubFilter = 'Resgate rápido'),
+                  ),
+                ),
               ],
             ),
+            if (usuarioLogado != null) ...[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.main.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Seu Saldo:',
+                        style: TextStyle(
+                          color: AppColors.invertMode,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'R\$ ${usuarioLogado!.saldo.toStringAsFixed(2).replaceAll('.', ',')}',
+                        style: TextStyle(
+                          color: AppColors.main,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
             Expanded(
               child: ListView(
                 children: filteredItems.map((item) {
-                  return InvestCard(
+                  return InvestirCard(
                     title: item['title']!,
                     invMin: item['invMin']!,
                     resgate: item['resgate']!,
                     ir: item['ir']!,
+                    tipoAtivo: selectedFilter,
+                    onTap: () => _mostrarDialogInvestimento(item),
                   );
                 }).toList(),
               ),

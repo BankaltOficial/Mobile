@@ -23,6 +23,7 @@ class Usuario {
   String _corTerciaria;
   bool _temaEscuro;
 
+  // Construtor principal
   Usuario(this._nome, this._email, this._cpf, this._rg, this._dataNascimento,
       this._telefone, this._senha,
       {String corPrincipal = '#353DAB',
@@ -42,27 +43,102 @@ class Usuario {
         _chavePix = _email,
         _temaEscuro = temaEscuro;
 
-  // Construtor para criar usuário a partir de JSON
-  Usuario.fromJson(Map<String, dynamic> json)
-      : _id = json['id'],
-        _nome = json['nome'],
-        _email = json['email'],
-        _cpf = json['cpf'],
-        _rg = json['rg'],
-        _dataNascimento = json['dataNascimento'],
-        _telefone = json['telefone'],
-        _senha = json['senha'],
-        _saldo = json['saldo'].toDouble(),
-        _score = json['score'],
-        _ponto = json['ponto'],
-        _numeroCartao = json['numeroCartao'],
-        _cvv = json['cvv'],
-        _validadeCartao = json['validadeCartao'],
-        _chavePix = json['chavePix'],
-        _corPrincipal = json['corPrincipal'],
-        _corSecundaria = json['corSecundaria'],
-        _corTerciaria = json['corTerciaria'],
-        _temaEscuro = json['temaEscuro'];
+  // Construtor privado para fromJson
+  Usuario._fromJson({
+    required int id,
+    required String nome,
+    required String email,
+    required String cpf,
+    required String rg,
+    required String dataNascimento,
+    required String telefone,
+    required String senha,
+    required double saldo,
+    required int score,
+    required int ponto,
+    required String numeroCartao,
+    required String cvv,
+    required String validadeCartao,
+    required String chavePix,
+    required String corPrincipal,
+    required String corSecundaria,
+    required String corTerciaria,
+    required bool temaEscuro,
+  })  : _id = id,
+        _nome = nome,
+        _email = email,
+        _cpf = cpf,
+        _rg = rg,
+        _dataNascimento = dataNascimento,
+        _telefone = telefone,
+        _senha = senha,
+        _saldo = saldo,
+        _score = score,
+        _ponto = ponto,
+        _numeroCartao = numeroCartao,
+        _cvv = cvv,
+        _validadeCartao = validadeCartao,
+        _chavePix = chavePix,
+        _corPrincipal = corPrincipal,
+        _corSecundaria = corSecundaria,
+        _corTerciaria = corTerciaria,
+        _temaEscuro = temaEscuro;
+
+  // Factory constructor para criar Usuario a partir de JSON
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    // Atualizar o _idCounter se necessário para evitar conflitos
+    int id = json['id'] as int;
+    if (id >= _idCounter) {
+      _idCounter = id + 1;
+    }
+
+    return Usuario._fromJson(
+      id: id,
+      nome: json['nome'] as String,
+      email: json['email'] as String,
+      cpf: json['cpf'] as String,
+      rg: json['rg'] as String,
+      dataNascimento: json['dataNascimento'] as String,
+      telefone: json['telefone'] as String,
+      senha: json['senha'] as String,
+      saldo: (json['saldo'] as num).toDouble(),
+      score: json['score'] as int,
+      ponto: json['ponto'] as int,
+      numeroCartao: json['numeroCartao'] as String,
+      cvv: json['cvv'] as String,
+      validadeCartao: json['validadeCartao'] as String,
+      chavePix: json['chavePix'] as String,
+      corPrincipal: json['corPrincipal'] as String? ?? '#353DAB',
+      corSecundaria: json['corSecundaria'] as String? ?? '#027BD4',
+      corTerciaria: json['corTerciaria'] as String? ?? '#04A95C',
+      temaEscuro: json['temaEscuro'] as bool? ?? false,
+    );
+  }
+
+  // Método para converter Usuario para JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': _id,
+      'nome': _nome,
+      'email': _email,
+      'cpf': _cpf,
+      'rg': _rg,
+      'dataNascimento': _dataNascimento,
+      'telefone': _telefone,
+      'senha': _senha,
+      'saldo': _saldo,
+      'score': _score,
+      'ponto': _ponto,
+      'numeroCartao': _numeroCartao,
+      'cvv': _cvv,
+      'validadeCartao': _validadeCartao,
+      'chavePix': _chavePix,
+      'corPrincipal': _corPrincipal,
+      'corSecundaria': _corSecundaria,
+      'corTerciaria': _corTerciaria,
+      'temaEscuro': _temaEscuro,
+    };
+  }
 
   // Getters
   int get id => _id;
@@ -102,6 +178,7 @@ class Usuario {
   set corTerciaria(String value) => _corTerciaria = value;
   set temaEscuro(bool value) => _temaEscuro = value;
 
+  // Métodos de transação
   void depositar(double valor) {
     if (valor > 0) {
       _saldo += valor;
@@ -146,31 +223,7 @@ class Usuario {
     }
   }
 
-  // Converter usuário para JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': _id,
-      'nome': _nome,
-      'email': _email,
-      'cpf': _cpf,
-      'rg': _rg,
-      'dataNascimento': _dataNascimento,
-      'telefone': _telefone,
-      'senha': _senha,
-      'saldo': _saldo,
-      'score': _score,
-      'ponto': _ponto,
-      'numeroCartao': _numeroCartao,
-      'cvv': _cvv,
-      'validadeCartao': _validadeCartao,
-      'chavePix': _chavePix,
-      'corPrincipal': _corPrincipal,
-      'corSecundaria': _corSecundaria,
-      'corTerciaria': _corTerciaria,
-      'temaEscuro': _temaEscuro,
-    };
-  }
-
+  // Métodos auxiliares para geração de dados do cartão
   static String _gerarNumeroCartao() {
     final random = Random();
     final numeros = List.generate(16, (_) => random.nextInt(10));
@@ -190,8 +243,14 @@ class Usuario {
     final ano = validade.year.toString();
     return '$mes/$ano';
   }
+
+  @override
+  String toString() {
+    return 'Usuario{id: $_id, nome: $_nome, email: $_email, cpf: $_cpf, saldo: $_saldo}';
+  }
 }
 
+// Função auxiliar para formatação de data
 String formatarData(DateTime data) {
   String dia = data.day.toString().padLeft(2, '0');
   String mes = data.month.toString().padLeft(2, '0');
@@ -199,6 +258,7 @@ String formatarData(DateTime data) {
   return '$dia/$mes/$ano';
 }
 
+// Lista de usuários padrão
 List<Usuario> usuarios = [
   Usuario(
     'Gabigol',
@@ -212,7 +272,7 @@ List<Usuario> usuarios = [
   Usuario(
     'Flakes',
     'flakes@email.com',
-    '555.555.555-55',
+    '965.511.320-57',
     '55.555.555-5',
     formatarData(DateTime(1995, 4, 10)),
     '(11) 91234-5625',
@@ -240,6 +300,7 @@ List<Usuario> usuarios = [
   ),
 ];
 
+// Funções auxiliares
 bool encontrarUsuarioPorCpf(String cpf) {
   return usuarios.any((u) => u.cpf == cpf);
 }

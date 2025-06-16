@@ -8,6 +8,8 @@ import 'InvestirScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/InvestimentoService.dart';
 
 class InvestimentoScreen extends StatefulWidget {
   const InvestimentoScreen({super.key});
@@ -17,6 +19,41 @@ class InvestimentoScreen extends StatefulWidget {
 }
 
 class _InvestimentoScreenState extends State<InvestimentoScreen> {
+  double totalInvestido = 0.0;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarTotalInvestido();
+  }
+
+  Future<void> _carregarTotalInvestido() async {
+    try {
+      // Verificar se há usuário logado
+      if (Sessao.isUsuarioLogado()) {
+        int usuarioId = Sessao.getUsuario()!.id;
+        double total = await InvestimentoService.calcularTotalInvestido(usuarioId);
+        
+        setState(() {
+          totalInvestido = total;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          totalInvestido = 0.0;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Erro ao carregar total investido: $e');
+      setState(() {
+        totalInvestido = 0.0;
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -24,9 +61,16 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
     return Scaffold(
       backgroundColor: AppColors.theme,
       key: scaffoldKey,
-      appBar: CustomAppBar(title: 'Investimento', scaffoldKey: scaffoldKey, onBackPressed: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InicialScreen()));
-      }),
+      appBar: CustomAppBar(
+        title: 'Investimento', 
+        scaffoldKey: scaffoldKey, 
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => const InicialScreen())
+          );
+        }
+      ),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
@@ -52,13 +96,17 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text(
-                      'R\$ 350,90',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: AppColors.invertMode
-                      ),
-                    ),
+                    isLoading 
+                      ? CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.invertMode),
+                        )
+                      : Text(
+                          'R\$ ${totalInvestido.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: AppColors.invertMode
+                          ),
+                        ),
                   ],
                 ),
               ),

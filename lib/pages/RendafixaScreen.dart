@@ -246,7 +246,7 @@ class _RendafixaScreenState extends State<RendafixaScreen> {
                       Text(
                         'R\$ ${usuarioLogado!.saldo.toStringAsFixed(2).replaceAll('.', ',')}',
                         style: TextStyle(
-                          color: AppColors.main,
+                          color: AppColors.invertModeMain,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

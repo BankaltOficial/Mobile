@@ -24,7 +24,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
   String selectedSubFilter = 'Todos';
   Usuario? usuarioLogado;
 
-    List<Map<String, String>> allItems = [
+  List<Map<String, String>> allItems = [
     {
       'tipo': 'Ações',
       'title': 'Ação PETR4',
@@ -237,7 +237,7 @@ class _RendavariavelScreenState extends State<RendavariavelScreen> {
                       Text(
                         'R\$ ${usuarioLogado!.saldo.toStringAsFixed(2).replaceAll('.', ',')}',
                         style: TextStyle(
-                          color: AppColors.main,
+                          color: AppColors.invertModeMain,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

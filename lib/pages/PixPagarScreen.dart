@@ -164,10 +164,12 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
 
       if (sucesso) {
         // Atualizar o usuário na sessão com os dados mais recentes
-        List<Usuario> usuariosAtualizados = await UsuarioService.carregarUsuarios();
-        Usuario usuarioAtualizado = usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
+        List<Usuario> usuariosAtualizados =
+            await UsuarioService.carregarUsuarios();
+        Usuario usuarioAtualizado =
+            usuariosAtualizados.firstWhere((u) => u.id == usuario.id);
         Sessao.atualizarUsuario(usuarioAtualizado);
-        
+
         // Atualizar o estado local
         setState(() {
           usuario = usuarioAtualizado;
@@ -206,7 +208,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: scaffoldKey,
+        key: scaffoldKey,
         appBar: CustomAppBar(
           title: 'Pagar com PIX',
           scaffoldKey: scaffoldKey,
@@ -230,7 +232,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                     Text(
                       'Digite ou cole a chave PIX',
                       style: TextStyle(
-                        color: AppColors.main,
+                        color: AppColors.invertModeMain,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -285,148 +287,175 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                     Container(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : () async {
-                          String chavePix = _pixController.text.trim();
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                String chavePix = _pixController.text.trim();
 
-                          if (chavePix.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Por favor, insira uma chave PIX válida.'),
-                              ),
-                            );
-                            return;
-                          }
+                                if (chavePix.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Por favor, insira uma chave PIX válida.'),
+                                    ),
+                                  );
+                                  return;
+                                }
 
-                          try {
-                            // Carregar usuários atualizados do storage
-                            await UsuarioService.carregarUsuarios();
-                            
-                            // Verificar usuário baseado no tipo ou no formato da chave
-                            if (selectedType == 'CPF' ||
-                                (chavePix.length == 14 &&
-                                    chavePix.contains('.'))) {
-                              usuarioDestinatario =
-                                  verificarUsuarioPorCpf(chavePix);
-                            } else if (selectedType == 'Telefone' ||
-                                (chavePix.length >= 10 &&
-                                    chavePix.contains('('))) {
-                              usuarioDestinatario =
-                                  verificarUsuarioPorTelefone(chavePix);
-                            } else if (selectedType == 'Email' ||
-                                chavePix.contains('@')) {
-                              usuarioDestinatario =
-                                  verificarUsuarioPorEmail(chavePix);
-                            }
+                                try {
+                                  // Carregar usuários atualizados do storage
+                                  await UsuarioService.carregarUsuarios();
 
-                            // Mostrar diálogo de confirmação
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                TextEditingController valorController =
-                                    TextEditingController();
+                                  // Verificar usuário baseado no tipo ou no formato da chave
+                                  if (selectedType == 'CPF' ||
+                                      (chavePix.length == 14 &&
+                                          chavePix.contains('.'))) {
+                                    usuarioDestinatario =
+                                        verificarUsuarioPorCpf(chavePix);
+                                  } else if (selectedType == 'Telefone' ||
+                                      (chavePix.length >= 10 &&
+                                          chavePix.contains('('))) {
+                                    usuarioDestinatario =
+                                        verificarUsuarioPorTelefone(chavePix);
+                                  } else if (selectedType == 'Email' ||
+                                      chavePix.contains('@')) {
+                                    usuarioDestinatario =
+                                        verificarUsuarioPorEmail(chavePix);
+                                  }
 
-                                return AlertDialog(
-                                  title: Text('Confirmar PIX'),
-                                  content: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text('Para: ${usuarioDestinatario.nome}'),
-                                      SizedBox(height: 16),
-                                      TextField(
-                                        controller: valorController,
-                                        decoration: InputDecoration(
-                                          labelText: 'Valor (R\$)',
-                                          border: OutlineInputBorder(),
+                                  // Mostrar diálogo de confirmação
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      TextEditingController valorController =
+                                          TextEditingController();
+
+                                      return AlertDialog(
+                                        title: Text('Confirmar PIX'),
+                                        content: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                                'Para: ${usuarioDestinatario.nome}'),
+                                            SizedBox(height: 16),
+                                            TextField(
+                                              controller: valorController,
+                                              decoration: InputDecoration(
+                                                labelText: 'Valor (R\$)',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(
+                                                      decimal: true),
+                                            ),
+                                          ],
                                         ),
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                                decimal: true),
-                                      ),
-                                    ],
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text('Cancelar'),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: _isLoading ? null : () async {
-                                        double? valorTransferencia =
-                                            double.tryParse(valorController.text);
-
-                                        if (valorTransferencia == null ||
-                                            valorTransferencia <= 0) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content:
-                                                  Text('Insira um valor válido.'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                          return;
-                                        }
-
-                                        if (valorTransferencia > usuario.saldo) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'Saldo insuficiente para PIX.'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                          return;
-                                        }
-
-                                        if (usuarioDestinatario.cpf ==
-                                            usuario.cpf) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'Você não pode fazer um PIX para a mesma conta'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                          return;
-                                        }
-
-                                        // Realizar PIX usando o UsuarioService
-                                        await _realizarPix(valorTransferencia, usuarioDestinatario);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                      ),
-                                      child: _isLoading 
-                                        ? SizedBox(
-                                            width: 20,
-                                            height: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                            ),
-                                          )
-                                        : Text(
-                                            'Confirmar',
-                                            style: TextStyle(color: Colors.white),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text('Cancelar'),
                                           ),
+                                          ElevatedButton(
+                                            onPressed: _isLoading
+                                                ? null
+                                                : () async {
+                                                    double? valorTransferencia =
+                                                        double.tryParse(
+                                                            valorController
+                                                                .text);
+
+                                                    if (valorTransferencia ==
+                                                            null ||
+                                                        valorTransferencia <=
+                                                            0) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Insira um valor válido.'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                      );
+                                                      return;
+                                                    }
+
+                                                    if (valorTransferencia >
+                                                        usuario.saldo) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Saldo insuficiente para PIX.'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                      );
+                                                      return;
+                                                    }
+
+                                                    if (usuarioDestinatario
+                                                            .cpf ==
+                                                        usuario.cpf) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Você não pode fazer um PIX para a mesma conta'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                      );
+                                                      return;
+                                                    }
+
+                                                    // Realizar PIX usando o UsuarioService
+                                                    await _realizarPix(
+                                                        valorTransferencia,
+                                                        usuarioDestinatario);
+                                                  },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors.main,
+                                            ),
+                                            child: _isLoading
+                                                ? SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                              Colors.white),
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    'Confirmar',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Usuário não encontrado: ${e.toString()}'),
+                                      backgroundColor: Colors.red,
                                     ),
-                                  ],
-                                );
+                                  );
+                                }
                               },
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Usuário não encontrado: ${e.toString()}'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.main,
                           padding: EdgeInsets.symmetric(vertical: 16),
@@ -436,22 +465,23 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                           elevation: 0,
                         ),
                         child: _isLoading
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                'Continuar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            )
-                          : Text(
-                              'Continuar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
                       ),
                     ),
                     SizedBox(height: 40),

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/BoletoPixScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/pages/ConfiguracaoScreen.dart';
 import 'package:flutter_application_1/pages/DadosPessoaisScreen.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: SplashScreen(),
+          home: BoletoPixScreen(),
         );
       },
     );

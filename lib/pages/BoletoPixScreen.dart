@@ -142,7 +142,6 @@ class _BoletoPixScreenState extends State<BoletoPixScreen> {
                       child: TextField(
                         controller: boletoController,
                         decoration: const InputDecoration(
-                          hintText: 'Digite o código do boleto',
                           border: InputBorder.none,
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 16),

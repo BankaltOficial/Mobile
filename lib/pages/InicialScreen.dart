@@ -209,7 +209,7 @@ class _InicialScreenState extends State<InicialScreen> {
                                         });
                                       },
                                       icon: Icon(iconVisibility.icon,
-                                          color: AppColors.main, size: 25)),
+                                          color: AppColors.invertModeMain, size: 25)),
                                 ],
                               ),
                               Text('R\$ $txtSaldo',

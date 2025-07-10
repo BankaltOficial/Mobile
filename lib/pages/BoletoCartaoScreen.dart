@@ -45,7 +45,7 @@ class _BoletoCartaoScreenState extends State<BoletoCartaoScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8E8F5),
+                  color: AppColors.mainWhite,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -63,10 +63,20 @@ class _BoletoCartaoScreenState extends State<BoletoCartaoScreen> {
                     TextField(
                       controller: boletoController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Digite o código do boleto',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search, color: AppColors.mainGray),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.main), // alterado para AppColors.main
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.main), // borda quando não está focado
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.main, width: 2), // borda quando focado
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      ),
+                      style: const TextStyle(fontSize: 16, color: AppColors.mainBlack),
                       maxLength: 10,
                     ),
                     const SizedBox(height: 16),

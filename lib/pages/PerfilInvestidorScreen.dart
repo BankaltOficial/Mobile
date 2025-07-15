@@ -175,22 +175,31 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.isDarkMode ? AppColors.darkMode : AppColors.mainWhite,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.main),
+        border: Border.all(color: AppColors.isDarkMode ? AppColors.mainGray : AppColors.main),
       ),
       child: RadioListTile<String>(
         title: Text(
           title,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.black87,
+            color: AppColors.isDarkMode ? AppColors.mainWhite : AppColors.mainBlack,
           ),
         ),
+        activeColor: groupValue == title
+            ? (AppColors.isDarkMode ? AppColors.mainWhite : AppColors.main)
+            : (AppColors.isDarkMode ? AppColors.mainGray : AppColors.mainGrayBlue),
+        fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.main;
+          }
+          return AppColors.isDarkMode ? AppColors.mainGray : AppColors.mainGrayBlue;
+        }),
         value: title,
         groupValue: groupValue,
         onChanged: onChanged,
-        activeColor: AppColors.main,
+        
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.symmetric(horizontal: 8),
       ),

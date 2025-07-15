@@ -73,16 +73,17 @@ class EducationScreen extends StatefulWidget {
   State<EducationScreen> createState() => _EducationScreenState();
 }
 
-class _EducationScreenState extends State<EducationScreen> with TickerProviderStateMixin {
+class _EducationScreenState extends State<EducationScreen>
+    with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
-  final ScrollController _filterScrollController = ScrollController();
+  // Removido: final ScrollController _filterScrollController = ScrollController();
   String _searchQuery = '';
   String _selectedFilter = 'todos';
   List<TopicSection> _sections = [];
   bool _isSearchFocused = false;
   late AnimationController _filterAnimationController;
   late Animation<double> _filterAnimation;
-  
+
   final List<FilterCategory> _filterCategories = [
     FilterCategory(
       name: 'todos',
@@ -136,44 +137,72 @@ class _EducationScreenState extends State<EducationScreen> with TickerProviderSt
         courses: [
           CourseItem(
             title: "Renda Fixa",
-            description: "Renda fixa é o valor que uma empresa ou indivíduo recebe de forma regular e previsível, independentemente das variações nas vendas ou na produção.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RendaFixaScreen())),
+            description:
+                "Renda fixa é o valor que uma empresa ou indivíduo recebe de forma regular e previsível, independentemente das variações nas vendas ou na produção.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RendaFixaScreen())),
             tags: ['investimento', 'renda', 'financas'],
           ),
           CourseItem(
             title: "Renda Variável",
-            description: "Diferente da renda fixa, a renda variável é um investimento inconstante, ou seja, não é um tipo de investimento que possa ser previsível no mercado financeiro.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RendaVariavelScreen())),
+            description:
+                "Diferente da renda fixa, a renda variável é um investimento inconstant, ou seja, não é um tipo de investimento que possa ser previsível no mercado financeiro.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RendaVariavelScreen())),
             tags: ['investimento', 'renda', 'financas'],
           ),
           CourseItem(
             title: "Despesas",
-            description: "Despesas são todos os gastos que uma pessoa ou empresa tem ao utilizar recursos para manter o funcionamento de suas atividades ou o seu padrão de vida.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DespesasScreen())),
+            description:
+                "Despesas são todos os gastos que uma pessoa ou empresa tem ao utilizar recursos para manter o funcionamento de suas atividades ou o seu padrão de vida.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DespesasScreen())),
             tags: ['orcamento', 'gastos', 'financas'],
           ),
           CourseItem(
             title: "Análise de Despesas",
-            description: "A análise de despesas é um dos pilares do controle financeiro, tanto pessoal quanto empresarial. Entender para onde vai seu dinheiro permite decisões mais conscientes e equilibradas.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AnaliseDespesasScreen())),
+            description:
+                "A análise de despesas é um dos pilares do controle financeiro, tanto pessoal quanto empresarial. Entender para onde vai seu dinheiro permite decisões mais conscientes e equilibradas.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AnaliseDespesasScreen())),
             tags: ['orcamento', 'analise', 'gastos'],
           ),
           CourseItem(
             title: "Reduzir Despesas",
-            description: "Reduzir despesas com lazer pode ser um desafio, mas com algumas estratégias simples, é possível se divertir sem comprometer o orçamento.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ReduzirDespesasScreen())),
+            description:
+                "Reduzir despesas com lazer pode ser um desafio, mas com algumas estratégias simples, é possível se divertir sem comprometer o orçamento.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ReduzirDespesasScreen())),
             tags: ['orcamento', 'economia', 'gastos'],
           ),
           CourseItem(
             title: "Orçamento",
-            description: "O orçamento pode ser dividido em três partes, que são o Orçamento pessoal e doméstico, público e empresarial, cada um com um olhar diferente, mas com a mesma pegada.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const OrcamentoScreen())),
+            description:
+                "O orçamento pode ser dividido em três partes, que são o Orçamento pessoal e doméstico, público e empresarial, cada um com um olhar diferente, mas com a mesma pegada.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OrcamentoScreen())),
             tags: ['orcamento', 'planejamento', 'financas'],
           ),
           CourseItem(
             title: "Conta Poupança",
-            description: "A conta poupança funciona permitindo que você deposite um dinheiro e ganhe rendimento em cima dessa verba.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ContaPoupancaScreen())),
+            description:
+                "A conta poupança funciona permitindo que você deposite um dinheiro e ganhe rendimento em cima dessa verba.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ContaPoupancaScreen())),
             tags: ['investimento', 'poupanca', 'banco'],
           ),
         ],
@@ -184,32 +213,52 @@ class _EducationScreenState extends State<EducationScreen> with TickerProviderSt
         courses: [
           CourseItem(
             title: "Cartão de Crédito",
-            description: "Cartão de crédito é um método de empréstimo extremamente utilizado devido ao seu poder de compra elevado",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CartaoCreditoScreen())),
+            description:
+                "Cartão de crédito é um método de empréstimo extremamente utilizado devido ao seu poder de compra elevado",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CartaoCreditoScreen())),
             tags: ['cartao', 'credito', 'divida'],
           ),
           CourseItem(
             title: "Empréstimo",
-            description: "É um acordo financeiro onde uma pessoa ou instituição empresta dinheiro a outra, que se compromete a pagar de volta com juros.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EmprestimoScreen())),
+            description:
+                "É um acordo financeiro onde uma pessoa ou instituição empresta dinheiro a outra, que se compromete a pagar de volta com juros.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EmprestimoScreen())),
             tags: ['emprestimo', 'credito', 'divida'],
           ),
           CourseItem(
             title: "Financiamento",
-            description: "É um empréstimo de longo prazo para comprar bens, como imóveis ou veículos, pago em parcelas com juros. O bem geralmente serve como garantia.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FinanciamentoScreen())),
+            description:
+                "É um empréstimo de longo prazo para comprar bens, como imóveis ou veículos, pago em parcelas com juros. O bem geralmente serve como garantia.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const FinanciamentoScreen())),
             tags: ['emprestimo', 'financiamento', 'divida'],
           ),
           CourseItem(
             title: "Hipoteca",
-            description: "Uma hipoteca é um tipo de empréstimo em que você usa um bem, geralmente um imóvel, como garantia para obter o crédito.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HipotecaScreen())),
+            description:
+                "Uma hipoteca é um tipo de empréstimo em que você usa um bem, geralmente um imóvel, como garantia para obter o crédito.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HipotecaScreen())),
             tags: ['emprestimo', 'hipoteca', 'imovel'],
           ),
           CourseItem(
             title: "Endividamento",
-            description: "O endividamento acontece quando os gastos superam a renda e a pessoa passa a depender de crédito para cobrir suas despesas. Com o tempo, isso pode se transformar em uma bola de neve difícil de controlar.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EndividamentoScreen())),
+            description:
+                "O endividamento acontece quando os gastos superam a renda e a pessoa passa a depender de crédito para cobrir suas despesas. Com o tempo, isso pode se transformar em uma bola de neve difícil de controlar.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EndividamentoScreen())),
             tags: ['emprestimo', 'divida', 'credito'],
           ),
         ],
@@ -220,26 +269,38 @@ class _EducationScreenState extends State<EducationScreen> with TickerProviderSt
         courses: [
           CourseItem(
             title: "Código do Consumidor (CDC)",
-            description: "O Código de Defesa do Consumidor, criado pela Lei nº 8.078 de 1990, é uma legislação brasileira que tem como principal objetivo proteger os direitos dos consumidores.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CodigoConsumidorScreen())),
+            description:
+                "O Código de Defesa do Consumidor, criado pela Lei nº 8.078 de 1990, é uma legislação brasileira que tem como principal objetivo proteger os direitos dos consumidores.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CodigoConsumidorScreen())),
             tags: ['direitos', 'consumidor', 'lei'],
           ),
           CourseItem(
             title: "PROCON",
-            description: "O PROCON (Programa de Proteção e Defesa do Consumidor) é um órgão responsável por proteger os direitos dos consumidores e promover relações de consumo mais justas.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProconScreen())),
+            description:
+                "O PROCON (Programa de Proteção e Defesa do Consumidor) é um órgão responsável por proteger os direitos dos consumidores e promover relações de consumo mais justas.",
+            onTap: () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const ProconScreen())),
             tags: ['direitos', 'consumidor', 'procon'],
           ),
           CourseItem(
             title: "Imposto de Renda (IR)",
-            description: "O Imposto de Renda é um tributo cobrado sobre os ganhos de pessoas e empresas, como salários e lucros.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ImpostoRendaScreen())),
+            description:
+                "O Imposto de Renda é um tributo cobrado sobre os ganhos de pessoas e empresas, como salários e lucros.",
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ImpostoRendaScreen())),
             tags: ['impostos', 'renda', 'tributo'],
           ),
           CourseItem(
             title: "Taxa de Juros",
-            description: "É o valor extra que você paga ou recebe pelo uso de dinheiro, sendo uma porcentagem do valor emprestado ou investido.",
-            onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TaxaJurosScreen())),
+            description:
+                "É o valor extra que você paga ou recebe pelo uso de dinheiro, sendo uma porcentagem do valor emprestado ou investido.",
+            onTap: () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TaxaJurosScreen())),
             tags: ['impostos', 'juros', 'financas'],
           ),
         ],
@@ -248,47 +309,46 @@ class _EducationScreenState extends State<EducationScreen> with TickerProviderSt
   }
 
   @override
-void initState() {
-  super.initState();
-  _initializeSections();
-  _filterAnimationController = AnimationController(
-    duration: const Duration(milliseconds: 300),
-    vsync: this,
-  );
-  _filterAnimation = Tween<double>(
-    begin: 0.0,
-    end: 1.0,
-  ).animate(CurvedAnimation(
-    parent: _filterAnimationController,
-    curve: Curves.easeInOut,
-  ));
-  _filterAnimationController.forward();
-  
-  // Listener para atualizar os indicadores de scroll
-  _filterScrollController.addListener(() {
-    if (mounted) {
-      setState(() {});
-    }
-  });
-}
+  void initState() {
+    super.initState();
+    _initializeSections();
+    _filterAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _filterAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _filterAnimationController,
+      curve: Curves.easeInOut,
+    ));
+    _filterAnimationController.forward();
+
+    // Removido: _filterScrollController.addListener(() { ... });
+  }
 
   List<TopicSection> _getFilteredSections() {
     List<TopicSection> filteredByCategory = _sections;
-    
+
     // Filtrar por categoria
     if (_selectedFilter != 'todos') {
-      filteredByCategory = _sections.map((section) {
-        final filteredCourses = section.courses.where((course) {
-          return course.tags.contains(_selectedFilter);
-        }).toList();
+      filteredByCategory = _sections
+          .map((section) {
+            final filteredCourses = section.courses.where((course) {
+              return course.tags.contains(_selectedFilter);
+            }).toList();
 
-        return TopicSection(
-          title: section.title,
-          color: section.color,
-          courses: filteredCourses,
-          isExpanded: filteredCourses.isNotEmpty ? true : section.isExpanded,
-        );
-      }).where((section) => section.courses.isNotEmpty).toList();
+            return TopicSection(
+              title: section.title,
+              color: section.color,
+              courses: filteredCourses,
+              isExpanded:
+                  filteredCourses.isNotEmpty ? true : section.isExpanded,
+            );
+          })
+          .where((section) => section.courses.isNotEmpty)
+          .toList();
     }
 
     // Filtrar por busca
@@ -296,20 +356,29 @@ void initState() {
       return filteredByCategory;
     }
 
-    return filteredByCategory.map((section) {
-      final filteredCourses = section.courses.where((course) {
-        return course.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            course.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            section.title.toLowerCase().contains(_searchQuery.toLowerCase());
-      }).toList();
+    return filteredByCategory
+        .map((section) {
+          final filteredCourses = section.courses.where((course) {
+            return course.title
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()) ||
+                course.description
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()) ||
+                section.title
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase());
+          }).toList();
 
-      return TopicSection(
-        title: section.title,
-        color: section.color,
-        courses: filteredCourses,
-        isExpanded: filteredCourses.isNotEmpty ? true : section.isExpanded,
-      );
-    }).where((section) => section.courses.isNotEmpty).toList();
+          return TopicSection(
+            title: section.title,
+            color: section.color,
+            courses: filteredCourses,
+            isExpanded: filteredCourses.isNotEmpty ? true : section.isExpanded,
+          );
+        })
+        .where((section) => section.courses.isNotEmpty)
+        .toList();
   }
 
   @override
@@ -345,16 +414,19 @@ void initState() {
                   color: _isSearchFocused ? Colors.white : Colors.grey[100],
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: _isSearchFocused ? AppColors.main : Colors.grey[300]!,
+                    color:
+                        _isSearchFocused ? AppColors.main : Colors.grey[300]!,
                     width: _isSearchFocused ? 2 : 1,
                   ),
-                  boxShadow: _isSearchFocused ? [
-                    BoxShadow(
-                      color: AppColors.main.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ] : [],
+                  boxShadow: _isSearchFocused
+                      ? [
+                          BoxShadow(
+                            color: AppColors.main.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : [],
                 ),
                 child: TextField(
                   controller: _searchController,
@@ -376,7 +448,8 @@ void initState() {
                     ),
                     prefixIcon: Icon(
                       Icons.search,
-                      color: _isSearchFocused ? AppColors.main : Colors.grey[400],
+                      color:
+                          _isSearchFocused ? AppColors.main : Colors.grey[400],
                     ),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? IconButton(
@@ -393,7 +466,8 @@ void initState() {
                           )
                         : null,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -404,7 +478,7 @@ void initState() {
               ),
               const SizedBox(height: 20),
 
-              // Filtros por categoria com animação
+              // Filtros por categoria com animação (usando Wrap)
               AnimatedBuilder(
                 animation: _filterAnimation,
                 builder: (context, child) {
@@ -412,110 +486,66 @@ void initState() {
                     offset: Offset(0, 20 * (1 - _filterAnimation.value)),
                     child: Opacity(
                       opacity: _filterAnimation.value,
-                      child: Container(
-                        height: 110,
-                        child: Stack(
-                          children: [
-                            // Lista de filtros
-                            ListView.builder(
-                              controller: _filterScrollController,
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: _filterCategories.length,
-                              itemBuilder: (context, index) {
-                                final category = _filterCategories[index];
-                                final isSelected = _selectedFilter == category.name;
-                                
-                                return Container(
-                                  width: 85,
-                                  margin: EdgeInsets.only(
-                                    left: index == 0 ? 4 : 0,
-                                    right: index == _filterCategories.length - 1 ? 4 : 12,
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _selectedFilter = category.name;
-                                      });
-                                      _scrollToSelectedFilter(index);
-                                    },
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
-                                      decoration: BoxDecoration(
-                                        color: isSelected ? category.color : Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: isSelected ? category.color : Colors.grey[300]!,
-                                          width: isSelected ? 2 : 1,
+                      child: Wrap( // Usando Wrap para quebrar em múltiplas linhas
+                        spacing: 8.0, // Espaçamento horizontal entre os chips
+                        runSpacing: 8.0, // Espaçamento vertical entre as linhas
+                        children: _filterCategories.map((category) {
+                          final isSelected = _selectedFilter == category.name;
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedFilter = category.name;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                color: isSelected ? category.color : Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isSelected ? category.color : Colors.grey[300]!,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: category.color.withOpacity(0.3),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
                                         ),
-                                        boxShadow: isSelected ? [
-                                          BoxShadow(
-                                            color: category.color.withOpacity(0.3),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ] : [],
-                                      ),
-                                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          AnimatedScale(
-                                            scale: isSelected ? 1.1 : 1.0,
-                                            duration: const Duration(milliseconds: 200),
-                                            child: Icon(
-                                              category.icon,
-                                              size: 24,
-                                              color: isSelected ? Colors.white : category.color,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            category.displayName,
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                              color: isSelected ? Colors.white : Colors.grey[700],
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
+                                      ]
+                                    : [],
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min, // Para que o Column não ocupe toda a largura
+                                children: [
+                                  AnimatedScale(
+                                    scale: isSelected ? 1.1 : 1.0,
+                                    duration: const Duration(milliseconds: 200),
+                                    child: Icon(
+                                      category.icon,
+                                      size: 24,
+                                      color: isSelected ? Colors.white : category.color,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                            // Indicadores de scroll
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              bottom: 0,
-                              child: Container(
-                                width: 20,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Colors.white.withOpacity(0.0),
-                                      Colors.white.withOpacity(0.8),
-                                    ],
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    category.displayName,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                      color: isSelected ? Colors.white : Colors.grey[700],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 12,
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   );
@@ -531,26 +561,44 @@ void initState() {
                   if (_selectedFilter != 'todos')
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).color.withOpacity(0.1),
+                        color: _filterCategories
+                            .firstWhere((cat) => cat.name == _selectedFilter)
+                            .color
+                            .withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).color.withOpacity(0.3)),
+                        border: Border.all(
+                            color: _filterCategories
+                                .firstWhere(
+                                    (cat) => cat.name == _selectedFilter)
+                                .color
+                                .withOpacity(0.3)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).icon,
+                            _filterCategories
+                                .firstWhere(
+                                    (cat) => cat.name == _selectedFilter)
+                                .icon,
                             size: 16,
-                            color: _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).color,
+                            color: _filterCategories
+                                .firstWhere(
+                                    (cat) => cat.name == _selectedFilter)
+                                .color,
                           ),
                           const SizedBox(width: 6),
                           Text(
                             'Filtro: ${_filterCategories.firstWhere((cat) => cat.name == _selectedFilter).displayName}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).color,
+                              color: _filterCategories
+                                  .firstWhere(
+                                      (cat) => cat.name == _selectedFilter)
+                                  .color,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -564,7 +612,10 @@ void initState() {
                             child: Icon(
                               Icons.close,
                               size: 16,
-                              color: _filterCategories.firstWhere((cat) => cat.name == _selectedFilter).color,
+                              color: _filterCategories
+                                  .firstWhere(
+                                      (cat) => cat.name == _selectedFilter)
+                                  .color,
                             ),
                           ),
                         ],
@@ -573,7 +624,8 @@ void initState() {
                   // Contador de resultados
                   if (filteredSections.isNotEmpty)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(12),
@@ -600,7 +652,8 @@ void initState() {
                     ),
                 ],
               ),
-              if (_selectedFilter != 'todos' || filteredSections.isNotEmpty) const SizedBox(height: 20),
+              if (_selectedFilter != 'todos' || filteredSections.isNotEmpty)
+                const SizedBox(height: 20),
 
               // Seções de tópicos com animação
               ...filteredSections.asMap().entries.map((entry) {
@@ -619,11 +672,15 @@ void initState() {
                             _buildTopicHeader(section),
                             const SizedBox(height: 10),
                             if (section.isExpanded) ...[
-                              ...section.courses.asMap().entries.map((courseEntry) {
+                              ...section.courses
+                                  .asMap()
+                                  .entries
+                                  .map((courseEntry) {
                                 final courseIndex = courseEntry.key;
                                 final course = courseEntry.value;
                                 return TweenAnimationBuilder<double>(
-                                  duration: Duration(milliseconds: 200 + (courseIndex * 50)),
+                                  duration: Duration(
+                                      milliseconds: 200 + (courseIndex * 50)),
                                   tween: Tween(begin: 0.0, end: 1.0),
                                   builder: (context, courseValue, child) {
                                     return Transform.translate(
@@ -672,7 +729,9 @@ void initState() {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  _searchQuery.isNotEmpty ? Icons.search_off : Icons.filter_list_off,
+                                  _searchQuery.isNotEmpty
+                                      ? Icons.search_off
+                                      : Icons.filter_list_off,
                                   size: 60,
                                   color: Colors.grey[400],
                                 ),
@@ -688,9 +747,9 @@ void initState() {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                _searchQuery.isNotEmpty 
-                                  ? 'Tente pesquisar com outras palavras-chave'
-                                  : 'Tente selecionar outro filtro',
+                                _searchQuery.isNotEmpty
+                                    ? 'Tente pesquisar com outras palavras-chave'
+                                    : 'Tente selecionar outro filtro',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey[500],
@@ -698,7 +757,8 @@ void initState() {
                               ),
                               const SizedBox(height: 20),
                               // Botão para limpar filtros
-                              if (_searchQuery.isNotEmpty || _selectedFilter != 'todos')
+                              if (_searchQuery.isNotEmpty ||
+                                  _selectedFilter != 'todos')
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     setState(() {
@@ -731,14 +791,7 @@ void initState() {
     );
   }
 
-  void _scrollToSelectedFilter(int index) {
-    final scrollPosition = (index * 97.0) - (MediaQuery.of(context).size.width / 2) + 42.5;
-    _filterScrollController.animateTo(
-      scrollPosition.clamp(0.0, _filterScrollController.position.maxScrollExtent),
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
+  // Removido: void _scrollToSelectedFilter(int index) { ... }
 
   Widget _buildTopicHeader(TopicSection section) {
     return InkWell(
@@ -845,7 +898,8 @@ void initState() {
                             // Tags visuais
                             if (course.tags.isNotEmpty)
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: AppColors.main.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
@@ -898,7 +952,7 @@ void initState() {
   @override
   void dispose() {
     _searchController.dispose();
-    _filterScrollController.dispose();
+    // Removido: _filterScrollController.dispose();
     _filterAnimationController.dispose();
     super.dispose();
   }

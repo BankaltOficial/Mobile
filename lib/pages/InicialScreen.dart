@@ -6,6 +6,7 @@ import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/CardsScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
+import 'package:flutter_application_1/pages/ExtratoScreen.dart';
 import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PersonalizedScreen.dart';
 import 'package:flutter_application_1/pages/PixScreen.dart';
@@ -226,7 +227,7 @@ class _InicialScreenState extends State<InicialScreen> {
                         final result = await Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PixScreen()));
+                                builder: (context) => ExtratoScreen()));
                         // Atualizar saldo quando retornar
                         if (result == true) {
                           _atualizarSaldo();

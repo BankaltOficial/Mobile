@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/ConsultaInvestimentoScreen.dart';
 import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
 import 'package:flutter_application_1/pages/ResgateScreen.dart';
 import 'InicialScreen.dart';
@@ -225,6 +226,49 @@ class _InvestimentoScreenState extends State<InvestimentoScreen> {
                         SizedBox(height: 10),
                         Text(
                           "Retirar o valor investido de forma rápida e \nfácil, diretamente para a sua conta.",
+                          style: TextStyle(fontSize: 14, color: AppColors.invertMode),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConsultaInvestimentoScreen()),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: AppColors.main,
+                      radius: 45,
+                      child: Icon(
+                        Icons.search,
+                        color: AppColors.mainWhite,
+                        size: 50,
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Consulta de investimentos",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.invertMode),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Acompanhe o desempenho\ndos seus investimentos, visualizando\ninformações detalhadas sobre cada um.",
                           style: TextStyle(fontSize: 14, color: AppColors.invertMode),
                         )
                       ],

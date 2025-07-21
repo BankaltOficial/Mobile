@@ -1,39 +1,28 @@
-// ignore_for_file: unused_import, prefer_const_constructors
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/BoletoPixScreen.dart';
-import 'package:flutter_application_1/pages/BoletoScreen.dart';
-import 'package:flutter_application_1/pages/ConfiguracaoScreen.dart';
-import 'package:flutter_application_1/pages/ConsultaInvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/DadosPessoaisScreen.dart';
-import 'package:flutter_application_1/pages/EmprestimoScreen.dart';
-import 'package:flutter_application_1/pages/CardsScreen.dart';
-import 'package:flutter_application_1/pages/DescricaoScreen.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
-import 'package:flutter_application_1/pages/FormScreen.dart';
-import 'package:flutter_application_1/pages/InvestimentoScreen.dart';
-import 'package:flutter_application_1/pages/InvestirScreen.dart';
-import 'package:flutter_application_1/pages/MinhasChaves.dart';
-import 'package:flutter_application_1/pages/PerfilInvestidorScreen.dart';
-import 'package:flutter_application_1/pages/PerfilScreen.dart';
-import 'package:flutter_application_1/pages/PixPagarScreen.dart';
-import 'package:flutter_application_1/pages/PoupancaScreen.dart';
-import 'package:flutter_application_1/pages/ReceberPixScreen.dart';
-import 'package:flutter_application_1/pages/RendaFixaScreen.dart';
-import 'package:flutter_application_1/pages/RendavariavelScreen.dart';
-import 'package:flutter_application_1/pages/ResgateScreen.dart';
-import 'package:flutter_application_1/pages/SplashScreen.dart';
-import 'package:flutter_application_1/pages/TermsScreen.dart';
-import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
-import 'package:flutter_application_1/pages/WelcomeScreen.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
-import 'package:flutter_application_1/pages/PixScreen.dart';
+import 'package:flutter_application_1/pages/education/divida-credito/FinanciamentoScreen.dart';
+import 'package:flutter_application_1/pages/education/fundamentos/AnaliseDespesasScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
-import 'package:flutter_application_1/service/ColorsService.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/components/PageEducation.dart'; // Ensure this import matches your project structure
+import 'package:flutter_application_1/pages/education/fundamentos/ReduzirDespesas.dart';
+import 'package:flutter_application_1/service/ColorsService.dart'; // Adjust import based on your file structure
+import 'package:flutter_application_1/service/ColorsService.dart'; // Adjust import based on your file structure
 
 void main() async {
+  // Ensure WidgetsFlutterBinding is initialized before any async operations
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize WebView platform for Android
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    WebViewPlatform.instance = AndroidWebViewPlatform(); // Corrected class name
+  }
+
+  // Load colors asynchronously
   await ColorService.loadColors();
 
   runApp(
@@ -49,27 +38,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorProvider = Provider.of<ColorProvider>(context);
-
     return Consumer<ColorProvider>(
-      builder: (context, colors, _) {
+      builder: (context, colorProvider, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Bankalt',
           theme: ThemeData(
             fontFamily: 'Poppins',
             scaffoldBackgroundColor: colorProvider.theme,
-            primaryColor: colors.main,
+            primaryColor: colorProvider.main, // Use colorProvider instead of colors
             colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: colors.main,
-              secondary: colors.secondary,
+              primary: colorProvider.main,
+              secondary: colorProvider.secondary,
             ),
             appBarTheme: AppBarTheme(
-              backgroundColor: colors.main,
+              backgroundColor: colorProvider.main,
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: InicialScreen(),
+          home: const EducationScreen(), // Ensure const constructor is valid
         );
       },
     );

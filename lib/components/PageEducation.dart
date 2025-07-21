@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 
 class PageEducationScreen extends StatefulWidget {
   // Propriedades obrigatórias
@@ -39,18 +42,24 @@ class PageEducationScreen extends StatefulWidget {
   final double pitch;
   final double volume;
 
-  // Configurações de vídeo
-  final String? videoUrl;
-  final String? videoAssetPath;
+  // Configurações de YouTube
+  final String? youtubeVideoId;
+  final String? youtubeVideoUrl;
   final bool autoPlayVideo;
   final bool loopVideo;
   final bool showVideoControls;
+  final bool enableCaptions;
+  final bool showFullscreenButton;
 
   // Configurações visuais dinâmicas
   final List<Color>? gradientColors;
   final String? backgroundImageUrl;
   final String? iconUrl;
   final List<String>? tags;
+
+  // Configurações de Markdown
+  final bool enableMarkdown;
+  final MarkdownStyleSheet? markdownStyleSheet;
 
   const PageEducationScreen({
     Key? key,
@@ -79,15 +88,19 @@ class PageEducationScreen extends StatefulWidget {
     this.speechRate = 1,
     this.pitch = 1.8,
     this.volume = 1,
-    this.videoUrl,
-    this.videoAssetPath,
+    this.youtubeVideoId,
+    this.youtubeVideoUrl,
     this.autoPlayVideo = false,
     this.loopVideo = false,
     this.showVideoControls = true,
+    this.enableCaptions = false,
+    this.showFullscreenButton = true,
     this.gradientColors,
     this.backgroundImageUrl,
     this.iconUrl,
     this.tags,
+    this.enableMarkdown = true,
+    this.markdownStyleSheet,
   }) : super(key: key);
 
   @override
@@ -99,7 +112,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   late FlutterTts flutterTts;
   bool isSpeaking = false;
   bool isInitialized = false;
-  VideoPlayerController? _videoController;
+  YoutubePlayerController? _youtubeController;
   bool isVideoInitialized = false;
 
   // Animações
@@ -114,14 +127,14 @@ class _PageEducationScreenState extends State<PageEducationScreen>
   void initState() {
     super.initState();
     _initializeTts();
-    _initializeVideo();
+    _initializeYouTubeVideo();
     _initializeAnimations();
   }
 
   @override
   void dispose() {
     flutterTts.stop();
-    _videoController?.dispose();
+    _youtubeController?.dispose();
     _fadeController.dispose();
     _slideController.dispose();
     _bounceController.dispose();
@@ -173,24 +186,33 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     _bounceController.forward();
   }
 
-  // Inicializar vídeo
-  Future<void> _initializeVideo() async {
-    if (widget.videoUrl != null || widget.videoAssetPath != null) {
-      if (widget.videoUrl != null) {
-        _videoController = VideoPlayerController.network(widget.videoUrl!);
-      } else {
-        _videoController = VideoPlayerController.asset(widget.videoAssetPath!);
-      }
+  // Inicializar vídeo do YouTube
+  Future<void> _initializeYouTubeVideo() async {
+    String? videoId;
 
-      await _videoController!.initialize();
-      
-      if (widget.loopVideo) {
-        _videoController!.setLooping(true);
-      }
+    if (widget.youtubeVideoId != null) {
+      videoId = widget.youtubeVideoId!;
+    } else if (widget.youtubeVideoUrl != null) {
+      videoId = YoutubePlayer.convertUrlToId(widget.youtubeVideoUrl!);
+    }
 
-      if (widget.autoPlayVideo) {
-        _videoController!.play();
-      }
+    if (videoId != null) {
+      _youtubeController = YoutubePlayerController(
+        initialVideoId: videoId,
+        flags: YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,
+          loop: widget.loopVideo,
+          enableCaption: widget.enableCaptions,
+          showLiveFullscreenButton: widget.showFullscreenButton,
+          controlsVisibleAtStart: widget.showVideoControls,
+          hideControls: !widget.showVideoControls,
+          disableDragSeek: false,
+          isLive: false,
+          forceHD: false,
+          startAt: 0,
+        ),
+      );
 
       setState(() {
         isVideoInitialized = true;
@@ -231,7 +253,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     });
   }
 
-  // Função para falar o texto
+  // Função para falar o texto (remove markdown)
   Future<void> _speakText() async {
     if (!isInitialized) return;
 
@@ -242,15 +264,130 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       });
     } else {
       String textToSpeak = widget.title;
-      
+
       if (widget.highlightedQuestion != null) {
         textToSpeak += ". ${widget.highlightedQuestion}";
       }
-      
-      textToSpeak += ". ${widget.content}";
+
+      // Remove markdown formatting for TTS
+      String cleanContent = _removeMarkdownFormatting(widget.content);
+      textToSpeak += ". $cleanContent";
 
       await flutterTts.speak(textToSpeak);
     }
+  }
+
+  Widget _buildAdditionalContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        ...widget.additionalContent!,
+      ],
+    );
+  }
+
+  // Ações padrão
+  void _defaultActionButtonAction() {
+    debugPrint('Botão de ação pressionado para: ${widget.title}');
+  }
+
+  // Método para construir a seção do footer
+  Widget _buildFooterSection() {
+    if (widget.customFooter != null) {
+      return widget.customFooter!;
+    }
+
+    if (widget.showActionButton) {
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.main, AppColors.main.withOpacity(0.8)],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.main.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: ElevatedButton(
+          onPressed: widget.onActionPressed ?? _defaultActionButtonAction,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.buttonText ?? 'Próxima Lição',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+
+  // Construir botão flutuante
+  Widget _buildFloatingActionButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        // Scroll para o topo
+        // ou qualquer outra ação
+      },
+      backgroundColor: AppColors.main,
+      child: const Icon(
+        Icons.keyboard_arrow_up,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  // Método padrão para ação de voltar
+  void _defaultBackAction(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const EducationScreen()),
+    );
+  }
+
+  // Função para remover formatação markdown do texto
+  String _removeMarkdownFormatting(String text) {
+    // Remove código markdown comum
+    return text
+        .replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1') // Bold
+        .replaceAll(RegExp(r'\*(.*?)\*'), r'$1') // Italic
+        .replaceAll(RegExp(r'`(.*?)`'), r'$1') // Code
+        .replaceAll(RegExp(r'#{1,6}\s*'), '') // Headers
+        .replaceAll(RegExp(r'\[(.*?)\]\(.*?\)'), r'$1') // Links
+        .replaceAll(RegExp(r'!\[(.*?)\]\(.*?\)'), r'$1') // Images
+        .replaceAll(RegExp(r'^[\s]*[-*+]\s+', multiLine: true), '') // Lists
+        .replaceAll(RegExp(r'^\d+\.\s+', multiLine: true), '') // Numbered lists
+        .replaceAll(RegExp(r'^>\s+', multiLine: true), '') // Blockquotes
+        .replaceAll(RegExp(r'\n+'), ' ') // Multiple newlines
+        .trim();
   }
 
   @override
@@ -263,7 +400,8 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       appBar: CustomAppBar(
         title: widget.appBarTitle,
         scaffoldKey: scaffoldKey,
-        onBackPressed: widget.onBackPressed ?? () => _defaultBackAction(context),
+        onBackPressed:
+            widget.onBackPressed ?? () => _defaultBackAction(context),
       ),
       drawer: const CustomDrawer(),
       body: Container(
@@ -273,10 +411,11 @@ class _PageEducationScreenState extends State<PageEducationScreen>
             opacity: _fadeAnimation,
             child: Column(
               children: [
-                // Vídeo opcional no início
-                if (widget.videoUrl != null || widget.videoAssetPath != null)
-                  _buildVideoSection(),
-                
+                // YouTube Player no início
+                if (widget.youtubeVideoId != null ||
+                    widget.youtubeVideoUrl != null)
+                  _buildYouTubePlayerSection(),
+
                 // Header customizável
                 if (widget.customHeader != null) ...[
                   SlideTransition(
@@ -285,7 +424,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                   ),
                   const SizedBox(height: 16),
                 ],
-                
+
                 Padding(
                   padding: widget.contentPadding,
                   child: Column(
@@ -296,20 +435,20 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                         scale: _bounceAnimation,
                         child: _buildTitleSection(),
                       ),
-                      
+
                       const SizedBox(height: 24),
 
                       // Tags dinâmicas
                       if (widget.tags != null) _buildTagsSection(),
 
                       // Pergunta em destaque (opcional)
-                      if (widget.highlightedQuestion != null) 
+                      if (widget.highlightedQuestion != null)
                         SlideTransition(
                           position: _slideAnimation,
                           child: _buildHighlightedQuestion(),
                         ),
 
-                      // Conteúdo principal
+                      // Conteúdo principal (Markdown)
                       SlideTransition(
                         position: _slideAnimation,
                         child: _buildMainContent(),
@@ -319,7 +458,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
                       _buildStatsSection(),
 
                       // Conteúdo adicional (opcional)
-                      if (widget.additionalContent != null) 
+                      if (widget.additionalContent != null)
                         _buildAdditionalContent(),
 
                       const SizedBox(height: 24),
@@ -351,7 +490,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
         ),
       );
     }
-    
+
     if (widget.backgroundImageUrl != null) {
       return BoxDecoration(
         image: DecorationImage(
@@ -364,13 +503,13 @@ class _PageEducationScreenState extends State<PageEducationScreen>
         ),
       );
     }
-    
+
     return const BoxDecoration();
   }
 
-  // Construir seção de vídeo
-  Widget _buildVideoSection() {
-    if (!isVideoInitialized) {
+  // Construir seção do YouTube Player
+  Widget _buildYouTubePlayerSection() {
+    if (!isVideoInitialized || _youtubeController == null) {
       return Container(
         height: 200,
         margin: const EdgeInsets.all(16),
@@ -385,7 +524,6 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     }
 
     return Container(
-      height: 200,
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -399,83 +537,93 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            AspectRatio(
-              aspectRatio: _videoController!.value.aspectRatio,
-              child: VideoPlayer(_videoController!),
-            ),
-            if (widget.showVideoControls)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: _buildVideoControls(),
+        child: YoutubePlayerBuilder(
+          onExitFullScreen: () {
+            SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+          },
+          player: YoutubePlayer(
+            controller: _youtubeController!,
+            showVideoProgressIndicator: true,
+            progressIndicatorColor: AppColors.main,
+            topActions: <Widget>[
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Text(
+                  _youtubeController!.metadata.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Construir controles de vídeo
-  Widget _buildVideoControls() {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(0.7),
-          ],
-        ),
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _videoController!.value.isPlaying
-                    ? _videoController!.pause()
-                    : _videoController!.play();
-              });
-            },
-            icon: Icon(
-              _videoController!.value.isPlaying
-                  ? Icons.pause
-                  : Icons.play_arrow,
-              color: Colors.white,
-            ),
-          ),
-          Expanded(
-            child: VideoProgressIndicator(
-              _videoController!,
-              allowScrubbing: true,
-              colors: const VideoProgressColors(
-                playedColor: Colors.white,
-                bufferedColor: Colors.white60,
-                backgroundColor: Colors.white30,
+              IconButton(
+                icon: const Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                  size: 25.0,
+                ),
+                onPressed: () {
+                  // Configurações do vídeo
+                },
               ),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _videoController!.setVolume(
-                  _videoController!.value.volume == 0 ? 1 : 0,
-                );
-              });
+            ],
+            onReady: () {
+              debugPrint('YouTube Player is ready.');
             },
-            icon: Icon(
-              _videoController!.value.volume == 0
-                  ? Icons.volume_off
-                  : Icons.volume_up,
-              color: Colors.white,
-            ),
+            onEnded: (data) {
+              // Quando o vídeo terminar
+              debugPrint('Video ended');
+            },
           ),
-        ],
+          builder: (context, player) => Column(
+            children: [
+              // Player
+              player,
+              // Informações adicionais do vídeo (opcional)
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.play_circle_outline,
+                      color: AppColors.main,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _youtubeController!.metadata.title.isNotEmpty
+                            ? _youtubeController!.metadata.title
+                            : 'Vídeo Educacional',
+                        style: TextStyle(
+                          color: AppColors.invertMode,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      _youtubeController!.metadata.duration.toString(),
+                      style: TextStyle(
+                        color: AppColors.invertMode.withOpacity(0.7),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -529,12 +677,14 @@ class _PageEducationScreenState extends State<PageEducationScreen>
           _buildStatItem(
             icon: Icons.schedule,
             label: "Tempo",
-            value: "${(widget.content.length / 200).ceil()} min",
+            value:
+                "${(_removeMarkdownFormatting(widget.content).length / 200).ceil()} min",
           ),
           _buildStatItem(
             icon: Icons.text_fields,
             label: "Palavras",
-            value: "${widget.content.split(' ').length}",
+            value:
+                "${_removeMarkdownFormatting(widget.content).split(' ').length}",
           ),
           _buildStatItem(
             icon: Icons.lightbulb,
@@ -649,7 +799,9 @@ class _PageEducationScreenState extends State<PageEducationScreen>
           if (widget.showAudioButton)
             Container(
               decoration: BoxDecoration(
-                color: isSpeaking ? Colors.red.withOpacity(0.1) : AppColors.main.withOpacity(0.1),
+                color: isSpeaking
+                    ? Colors.red.withOpacity(0.1)
+                    : AppColors.main.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: IconButton(
@@ -737,7 +889,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     );
   }
 
-  // Método para construir o conteúdo principal
+  // Método para construir o conteúdo principal com Markdown
   Widget _buildMainContent() {
     return Container(
       width: double.infinity,
@@ -784,7 +936,8 @@ class _PageEducationScreenState extends State<PageEducationScreen>
               GestureDetector(
                 onTap: () => _speakOnlyContent(),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.main.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -813,17 +966,93 @@ class _PageEducationScreenState extends State<PageEducationScreen>
             ],
           ),
           const SizedBox(height: 16),
-          Text(
-            widget.content,
-            style: widget.contentStyle ??
-                TextStyle(
-                  fontSize: widget.contentFontSize ?? 16,
-                  height: 1.6,
-                  color: AppColors.invertMode,
-                ),
-            textAlign: TextAlign.justify,
-          ),
+          // Conteúdo com Markdown
+          if (widget.enableMarkdown)
+            MarkdownBody(
+              data: widget.content,
+              styleSheet:
+                  widget.markdownStyleSheet ?? _getDefaultMarkdownStyleSheet(),
+              selectable: true,
+              onTapLink: (text, href, title) {
+                // Ação quando um link é clicado
+                debugPrint('Link clicado: $href');
+              },
+            )
+          else
+            Text(
+              widget.content,
+              style: widget.contentStyle ??
+                  TextStyle(
+                    fontSize: widget.contentFontSize ?? 16,
+                    height: 1.6,
+                    color: AppColors.invertMode,
+                  ),
+              textAlign: TextAlign.justify,
+            ),
         ],
+      ),
+    );
+  }
+
+  // Estilo padrão para Markdown
+  MarkdownStyleSheet _getDefaultMarkdownStyleSheet() {
+    return MarkdownStyleSheet(
+      h1: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: AppColors.main,
+      ),
+      h2: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: AppColors.main,
+      ),
+      h3: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: AppColors.main,
+      ),
+      p: TextStyle(
+        fontSize: widget.contentFontSize ?? 16,
+        height: 1.6,
+        color: AppColors.invertMode,
+      ),
+      strong: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: AppColors.main,
+      ),
+      em: TextStyle(
+        fontStyle: FontStyle.italic,
+        color: AppColors.invertMode,
+      ),
+      code: TextStyle(
+        fontFamily: 'monospace',
+        backgroundColor: Colors.grey[200],
+        color: const Color(0xFF2563EB),
+      ),
+      codeblockDecoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      blockquote: TextStyle(
+        fontStyle: FontStyle.italic,
+        color: AppColors.invertMode.withOpacity(0.8),
+      ),
+      blockquoteDecoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: AppColors.main,
+            width: 4,
+          ),
+        ),
+      ),
+      listBullet: TextStyle(
+        color: AppColors.main,
+      ),
+      a: TextStyle(
+        color: const Color(0xFF2563EB),
+        decoration: TextDecoration.underline,
       ),
     );
   }
@@ -837,102 +1066,13 @@ class _PageEducationScreenState extends State<PageEducationScreen>
 
   // Função para falar apenas o conteúdo
   Future<void> _speakOnlyContent() async {
-    await flutterTts.speak(widget.content);
-  }
+    String cleanContent = _removeMarkdownFormatting(widget.content);
 
-  // Método para construir conteúdo adicional
-  Widget _buildAdditionalContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        ...widget.additionalContent!,
-      ],
-    );
-  }
-
-  // Método para construir a seção do footer
-  Widget _buildFooterSection() {
-    if (widget.customFooter != null) {
-      return widget.customFooter!;
+    // Função para falar apenas o conteúdo
+    Future<void> _speakOnlyContent() async {
+      await flutterTts.speak(widget.content);
     }
-    
-    if (widget.showActionButton) {
-      return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.main, AppColors.main.withOpacity(0.8)],
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.main.withOpacity(0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: widget.onActionPressed ?? _defaultActionButtonAction,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.buttonText ?? 'Próxima Lição',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-                size: 20,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    
-    return const SizedBox.shrink();
-  }
 
-  // Construir botão flutuante
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {
-        // Scroll para o topo
-        // ou qualquer outra ação
-      },
-      backgroundColor: AppColors.main,
-      child: const Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  // Ações padrão
-  void _defaultBackAction(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const EducationScreen()),
-    );
-  }
-
-  void _defaultActionButtonAction() {
-    debugPrint('Botão de ação pressionado para: ${widget.title}');
+    // Método para construir conteúdo adicional
   }
 }

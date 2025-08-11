@@ -698,5 +698,54 @@ class UsuarioService {
     }
   }
 
+  static final UsuarioService _instance = UsuarioService._internal();
+  factory UsuarioService() => _instance;
+  UsuarioService._internal();
+
+  Usuario? _usuarioAtual;
+
+  // Getter para o usuário atual
+  Usuario? get usuarioAtual => _usuarioAtual;
+
+  // Método para fazer login
+  void fazerLogin(Usuario usuario) {
+    _usuarioAtual = usuario;
+  }
+
+  // Método para fazer logout
+  void fazerLogout() {
+    _usuarioAtual = null;
+  }
+
+  // Método para verificar se há um usuário logado
+  bool get isLogado => _usuarioAtual != null;
+
+  // Método para salvar alterações nos dados pessoais
+  void salvarDadosPessoais(String novoNome, String novaData) {
+    if (_usuarioAtual != null) {
+      _usuarioAtual!.nome = novoNome;
+      _usuarioAtual!.dataNascimento = novaData;
+    }
+  }
+
+  // Método para buscar usuário por ID na lista global
+  Usuario? buscarUsuarioPorId(int id) {
+    try {
+      return usuarios.firstWhere((u) => u.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Método para sincronizar com a lista global de usuários
+  void sincronizarComListaGlobal() {
+    if (_usuarioAtual != null) {
+      int index = usuarios.indexWhere((u) => u.id == _usuarioAtual!.id);
+      if (index != -1) {
+        usuarios[index] = _usuarioAtual!;
+      }
+    }
+  }
+
   static isSessionValid() {}
 }

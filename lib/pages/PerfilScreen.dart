@@ -8,6 +8,7 @@ import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:provider/provider.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
   String userName = 'Igor Suracci';
   String userHandle = '@suracci';
   bool isLoading = false;
+  Usuario? usuarioAtual;
+  Usuario? usuario = Sessao.getUsuario();
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
     Navigator.pushReplacement(
       context,
        MaterialPageRoute(
-         builder: (context) => const DadosPessoaisScreen()));
+         builder: (context) => DadosPessoaisScreen(usuario: usuarioAtual!)));
 
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {

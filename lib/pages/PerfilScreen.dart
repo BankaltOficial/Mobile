@@ -9,6 +9,8 @@ import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
   String userName = 'Igor Suracci';
   String userHandle = '@suracci';
   bool isLoading = false;
+  Usuario? usuarioAtual;
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +64,11 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       subtitle: 'Edite dados sobre investimento.',
                       onTap: () => _handleDadosInvestidor(),
                     ),
-                    
-                    const SizedBox(height: 16),
-                    
-                    _buildConfigCard(
-                      title: 'Acessibilidade',
-                      subtitle: 'Edite dados sobre investimento.',
-                      onTap: () => _handleAcessibilidade(),
-                    ),
                   ],
                 ),
-              ),
+              ),     
+                    const SizedBox(height: 16),
+                 
               
               _buildExitButton(),
             ],
@@ -81,15 +78,23 @@ class _PerfilScreenState extends State<PerfilScreen> {
     );
   }
 
-  void _handleDadosPessoais() {
-    setState(() {
-      isLoading = true;
-    });
-    
-    Navigator.pushReplacement(
-      context,
-       MaterialPageRoute(
-         builder: (context) => const DadosPessoaisScreen()));
+ void _handleDadosPessoais() async {
+  if (usuarioAtual == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Erro: Nenhum usuário logado encontrado'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) => DadosPessoaisScreen(usuario: usuarioAtual!),
+    ),
+  );
 
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
@@ -173,15 +178,16 @@ class _PerfilScreenState extends State<PerfilScreen> {
     _loadUserData();
   }
 
-  void _loadUserData() {
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      setState(() {
-        userName = 'Igor Suracci';
-        userHandle = '@suracci';
-      });
+void _loadUserData() async {
+  usuarioAtual = await UsuarioService.obterUsuarioLogado();
+  
+  if (usuarioAtual != null) {
+    setState(() {
+      userName = usuarioAtual!.nome;
+      userHandle = '@${usuarioAtual!.nome.toLowerCase().replaceAll(' ', '')}';
     });
   }
-
+}
   Widget _buildHeader() {
     return Row(
       children: [

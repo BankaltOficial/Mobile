@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/pages/SplashScreen.dart';
 import 'package:flutter_application_1/pages/education/divida-credito/FinanciamentoScreen.dart';
 import 'package:flutter_application_1/pages/education/fundamentos/AnaliseDespesasScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Poppins',
             scaffoldBackgroundColor: colorProvider.theme,
-            primaryColor: colorProvider.main, // Use colorProvider instead of colors
+            primaryColor: colorProvider.main,
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: colorProvider.main,
               secondary: colorProvider.secondary,
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: const EducationScreen(), // Ensure const constructor is valid
+          home: SplashScreen(),
         );
       },
     );

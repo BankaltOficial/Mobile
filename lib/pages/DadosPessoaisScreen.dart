@@ -3,9 +3,13 @@ import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/PerfilScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart'; // Usar seu UsuarioService existente
 
 class DadosPessoaisScreen extends StatefulWidget {
-  const DadosPessoaisScreen({Key? key}) : super(key: key);
+  final Usuario usuario; // Recebe o usuário atual
+
+  const DadosPessoaisScreen({Key? key, required this.usuario}) : super(key: key);
 
   @override
   State<DadosPessoaisScreen> createState() => _DadosPessoaisScreenState();
@@ -14,10 +18,18 @@ class DadosPessoaisScreen extends StatefulWidget {
 class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _dataController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _telefoneController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool isLoading = false;
   bool hasChanges = false;
+
+  // Valores originais para comparação
+  String _nomeOriginal = '';
+  String _dataOriginal = '';
+  String _telefoneOriginal = '';
+  String _emailOriginal = '';
 
   @override
   void initState() {
@@ -27,34 +39,53 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     // Listeners para detectar mudanças
     _nomeController.addListener(_onTextChanged);
     _dataController.addListener(_onTextChanged);
+    _emailController.addListener(_onTextChanged);
+    _telefoneController.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
     _nomeController.dispose();
     _dataController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
     super.dispose();
   }
 
   void _loadUserData() {
-    // Simular carregamento dos dados existentes
+    // Carregar dados do usuário atual
     setState(() {
       isLoading = true;
     });
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
-        _nomeController.text = 'Igor Suracci';
-        _dataController.text = '16/05/2007';
+        _nomeController.text = widget.usuario.nome;
+        _dataController.text = widget.usuario.dataNascimento;
+        _telefoneController.text = widget.usuario.telefone;
+        _emailController.text = widget.usuario.email;
+        
+        // Salvar valores originais
+        _nomeOriginal = widget.usuario.nome;
+        _dataOriginal = widget.usuario.dataNascimento;
+        _emailOriginal = widget.usuario.email;
+        _telefoneOriginal = widget.usuario.telefone;
+        
         isLoading = false;
       });
     });
   }
 
   void _onTextChanged() {
-    if (!hasChanges) {
+    // Verificar se houve mudanças comparando com os valores originais
+    bool temMudancas = _nomeController.text != _nomeOriginal || 
+                       _dataController.text != _dataOriginal;
+                       _emailController.text != _emailOriginal;
+                       _telefoneController.text != _telefoneOriginal;
+    
+    if (hasChanges != temMudancas) {
       setState(() {
-        hasChanges = true;
+        hasChanges = temMudancas;
       });
     }
   }
@@ -65,7 +96,22 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     });
 
     // Simular salvamento
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    // Salvar as alterações no objeto Usuario
+    widget.usuario.nome = _nomeController.text.trim();
+    widget.usuario.dataNascimento = _dataController.text;
+    widget.usuario.email = _emailController.text;
+    widget.usuario.telefone = _telefoneController.text;
+
+    // Salvar no SharedPreferences usando seu UsuarioService
+    await UsuarioService.atualizarUsuario(widget.usuario);
+
+    // Atualizar valores originais
+    _nomeOriginal = widget.usuario.nome;
+    _dataOriginal = widget.usuario.dataNascimento;
+    _emailOriginal = widget.usuario.email;
+    _telefoneOriginal = widget.usuario.telefone;
 
     setState(() {
       isLoading = false;
@@ -75,9 +121,16 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     // Mostrar feedback de sucesso
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Dados salvos com sucesso!'),
+        SnackBar(
+          content: const Text('Dados salvos com sucesso!'),
           backgroundColor: Colors.green,
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
         ),
       );
     }
@@ -97,7 +150,10 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Descartar'),
+              child: const Text(
+                'Descartar',
+                style: TextStyle(color: Colors.red),
+              ),
             ),
           ],
         ),
@@ -117,16 +173,29 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
             title: 'Dados Pessoais',
             scaffoldKey: _scaffoldKey,
             onBackPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PerfilScreen(),
-                ),
-              );
+              if (hasChanges) {
+                _onWillPop().then((canPop) {
+                  if (canPop) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PerfilScreen(),
+                      ),
+                    );
+                  }
+                });
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PerfilScreen(),
+                  ),
+                );
+              }
             }),
         drawer: const CustomDrawer(),
         body: isLoading && _nomeController.text.isEmpty
-            ?  Center(
+            ? Center(
                 child: CircularProgressIndicator(
                   color: AppColors.main,
                 ),
@@ -154,21 +223,41 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.person_outline,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'Dados Pessoais',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            
+                            const SizedBox(height: 8),
                             Text(
-                              'Dados Pessoais',
+                              'Atualize suas informações pessoais',
                               style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                fontSize: 14,
+                                color: Colors.white70,
                               ),
                             ),
                             
                             const SizedBox(height: 24),
                             
                             _buildInputField(
-                              label: 'Nome',
+                              label: 'Nome Completo',
                               controller: _nomeController,
                               enabled: !isLoading,
+                              icon: Icons.person,
                             ),
                             
                             const SizedBox(height: 20),
@@ -179,6 +268,27 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                               enabled: !isLoading,
                               keyboardType: TextInputType.datetime,
                               onTap: () => _selectDate(context),
+                              icon: Icons.cake_outlined,
+                            ),
+
+                            const SizedBox(height: 24),
+                            
+                            _buildInputField(
+                              label: 'Email',
+                              controller: _nomeController,
+                              enabled: !isLoading,
+                              keyboardType: TextInputType.emailAddress,
+                              icon: Icons.email,
+                            ),
+
+                            const SizedBox(height: 24),
+                            
+                            _buildInputField(
+                              label: 'Telefone',
+                              controller: _telefoneController,
+                              enabled: !isLoading,
+                              keyboardType: TextInputType.phone,
+                              icon: Icons.phone,
                             ),
                           ],
                         ),
@@ -187,7 +297,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                     
                     const SizedBox(height: 32),
                     
-                    if (hasChanges)
+                    if (hasChanges) ...[
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -210,15 +320,55 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                   ),
                                 )
-                              : const Text(
-                                  'Salvar Alterações',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.save, size: 20),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      'Salvar Alterações',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.orange.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.orange,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Você tem alterações não salvas',
+                                style: TextStyle(
+                                  color: Colors.orange.shade700,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -232,17 +382,26 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     bool enabled = true,
     TextInputType keyboardType = TextInputType.text,
     VoidCallback? onTap,
+    IconData? icon,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.white70,
-          ),
+        Row(
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: Colors.white70, size: 16),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white70,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         Container(
@@ -296,16 +455,31 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    // Tentar converter a data atual do controller
+    DateTime initialDate = DateTime.now();
+    try {
+      List<String> dateParts = _dataController.text.split('/');
+      if (dateParts.length == 3) {
+        int day = int.parse(dateParts[0]);
+        int month = int.parse(dateParts[1]);
+        int year = int.parse(dateParts[2]);
+        initialDate = DateTime(year, month, day);
+      }
+    } catch (e) {
+      // Se não conseguir converter, usa a data atual
+      initialDate = DateTime(2000, 1, 1);
+    }
+
     DateTime? selectedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(2007, 5, 16),
+      initialDate: initialDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF4F46E5),
+            colorScheme: ColorScheme.light(
+              primary: AppColors.main,
             ),
           ),
           child: child!,
@@ -322,9 +496,11 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
   }
 }
 
-// Exemplo de como navegar para esta tela
+// Exemplo de como navegar para esta tela passando o usuário
 class NavigationExample extends StatelessWidget {
-  const NavigationExample({Key? key}) : super(key: key);
+  final Usuario usuario;
+  
+  const NavigationExample({Key? key, required this.usuario}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -336,7 +512,7 @@ class NavigationExample extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const DadosPessoaisScreen(),
+                builder: (context) => DadosPessoaisScreen(usuario: usuario),
               ),
             );
           },

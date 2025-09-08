@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Poppins',
             scaffoldBackgroundColor: colorProvider.theme,
-            primaryColor: colorProvider.main, // Use colorProvider instead of colors
+            primaryColor: colorProvider.main,
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: colorProvider.main,
               secondary: colorProvider.secondary,

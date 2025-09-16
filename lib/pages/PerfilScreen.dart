@@ -58,17 +58,10 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     ),
                     
                     const SizedBox(height: 16),
-                    
-                    _buildConfigCard(
-                      title: 'Dados de Investidor',
-                      subtitle: 'Edite dados sobre investimento.',
-                      onTap: () => _handleDadosInvestidor(),
-                    ),
                   ],
                 ),
               ),     
                     const SizedBox(height: 16),
-                 
               
               _buildExitButton(),
             ],

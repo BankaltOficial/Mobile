@@ -275,7 +275,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                             
                             _buildInputField(
                               label: 'Email',
-                              controller: _nomeController,
+                              controller: _emailController,
                               enabled: !isLoading,
                               keyboardType: TextInputType.emailAddress,
                               icon: Icons.email,

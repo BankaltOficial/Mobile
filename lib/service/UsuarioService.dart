@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'Usuario.dart';
+import 'package:http/http.dart' as http;
 
 class UsuarioService {
   static const String _usuariosKey = 'usuarios_lista';
@@ -9,30 +10,32 @@ class UsuarioService {
   // Salvar todos os usuários no SharedPreferences
   static Future<void> salvarUsuarios(List<Usuario> usuarios) async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     // Converter lista de usuários para JSON
-    List<Map<String, dynamic>> usuariosJson = usuarios.map((usuario) => {
-      'id': usuario.id,
-      'nome': usuario.nome,
-      'email': usuario.email,
-      'cpf': usuario.cpf,
-      'rg': usuario.rg,
-      'dataNascimento': usuario.dataNascimento,
-      'telefone': usuario.telefone,
-      'senha': usuario.senha,
-      'saldo': usuario.saldo,
-      'score': usuario.score,
-      'ponto': usuario.ponto,
-      'numeroCartao': usuario.numeroCartao,
-      'cvv': usuario.cvv,
-      'validadeCartao': usuario.validadeCartao,
-      'chavePix': usuario.chavePix,
-      'corPrincipal': usuario.corPrincipal,
-      'corSecundaria': usuario.corSecundaria,
-      'corTerciaria': usuario.corTerciaria,
-      'temaEscuro': usuario.temaEscuro,
-    }).toList();
-    
+    List<Map<String, dynamic>> usuariosJson = usuarios
+        .map((usuario) => {
+              'id': usuario.id,
+              'nome': usuario.nome,
+              'email': usuario.email,
+              'cpf': usuario.cpf,
+              'rg': usuario.rg,
+              'dataNascimento': usuario.dataNascimento,
+              'telefone': usuario.telefone,
+              'senha': usuario.senha,
+              'saldo': usuario.saldo,
+              'score': usuario.score,
+              'ponto': usuario.ponto,
+              'numeroCartao': usuario.numeroCartao,
+              'cvv': usuario.cvv,
+              'validadeCartao': usuario.validadeCartao,
+              'chavePix': usuario.chavePix,
+              'corPrincipal': usuario.corPrincipal,
+              'corSecundaria': usuario.corSecundaria,
+              'corTerciaria': usuario.corTerciaria,
+              'temaEscuro': usuario.temaEscuro,
+            })
+        .toList();
+
     String jsonString = jsonEncode(usuariosJson);
     await prefs.setString(_usuariosKey, jsonString);
     print('Usuários salvos: ${usuarios.length} usuários');
@@ -42,24 +45,24 @@ class UsuarioService {
   static Future<List<Usuario>> carregarUsuarios() async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString(_usuariosKey);
-    
+
     if (jsonString == null) {
       // Se não há dados salvos, retorna a lista padrão e salva
       print('Nenhum usuário salvo encontrado, carregando lista padrão');
       await salvarUsuarios(usuarios);
       return usuarios;
     }
-    
+
     try {
       List<dynamic> jsonList = jsonDecode(jsonString);
-      List<Usuario> usuariosCarregados = jsonList.map((json) => 
-        Usuario.fromJson(json as Map<String, dynamic>)
-      ).toList();
-      
+      List<Usuario> usuariosCarregados = jsonList
+          .map((json) => Usuario.fromJson(json as Map<String, dynamic>))
+          .toList();
+
       // Atualiza a lista global
       usuarios.clear();
       usuarios.addAll(usuariosCarregados);
-      
+
       print('Usuários carregados: ${usuariosCarregados.length} usuários');
       return usuariosCarregados;
     } catch (e) {
@@ -73,20 +76,38 @@ class UsuarioService {
   // Autenticar usuário (login)
   static Future<Usuario?> autenticarUsuario(String cpf, String senha) async {
     try {
-      List<Usuario> todosUsuarios = await carregarUsuarios();
-      
-      for (Usuario usuario in todosUsuarios) {
-        if (usuario.cpf == cpf && usuario.senha == senha) {
-          await salvarUsuarioLogado(usuario.id);
-          print('Login realizado com sucesso: ${usuario.nome}');
-          return usuario;
-        }
+      Usuario? usuario = await buscarPorCpfApi(cpf);
+
+      if (usuario != null && usuario.senha == senha) {
+        await salvarUsuarioLogado(usuario.id);
+        print('✅ Login realizado com sucesso: ${usuario.nome}');
+        return usuario;
+      } else {
+        print('❌ Credenciais inválidas para CPF: $cpf');
+        return null;
       }
-      
-      print('Credenciais inválidas para CPF: $cpf');
-      return null;
     } catch (e) {
-      print('Erro na autenticação: $e');
+      print('⚠️ Erro na autenticação: $e');
+      return null;
+    }
+  }
+
+  static Future<Usuario?> buscarPorCpfApi(String cpf) async {
+    try {
+      final url =
+          Uri.parse('http://localhost:8080/apiCliente/buscarporcpf/$cpf');
+      // 57471634006
+      // ⚠️ se rodar no emulador Android use http://10.0.2.2:8080
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return Usuario.fromJson(jsonDecode(response.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Erro ao buscar usuário: $e');
       return null;
     }
   }
@@ -95,13 +116,13 @@ class UsuarioService {
   static Future<bool> cpfJaExiste(String cpf) async {
     try {
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.cpf == cpf) {
           return true;
         }
       }
-      
+
       return false;
     } catch (e) {
       print('Erro ao verificar CPF: $e');
@@ -113,13 +134,13 @@ class UsuarioService {
   static Future<bool> emailJaExiste(String email) async {
     try {
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.email.toLowerCase() == email.toLowerCase()) {
           return true;
         }
       }
-      
+
       return false;
     } catch (e) {
       print('Erro ao verificar email: $e');
@@ -135,21 +156,20 @@ class UsuarioService {
         print('Erro: CPF já cadastrado');
         return false;
       }
-      
+
       if (await emailJaExiste(novoUsuario.email)) {
         print('Erro: Email já cadastrado');
         return false;
       }
 
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       // Gerar ID único
-      if (todosUsuarios.isNotEmpty) {
-      }
-      
+      if (todosUsuarios.isNotEmpty) {}
+
       todosUsuarios.add(novoUsuario);
       await salvarUsuarios(todosUsuarios);
-      
+
       print('Usuário adicionado com sucesso: ${novoUsuario.nome}');
       return true;
     } catch (e) {
@@ -162,14 +182,14 @@ class UsuarioService {
   static Future<Usuario?> buscarUsuarioPorChavePix(String chavePix) async {
     try {
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.chavePix == chavePix) {
           print('Usuário encontrado por chave PIX: ${usuario.nome}');
           return usuario;
         }
       }
-      
+
       print('Usuário não encontrado para chave PIX: $chavePix');
       return null;
     } catch (e) {
@@ -181,13 +201,13 @@ class UsuarioService {
   // Obter saldo de um usuário específico
   static Future<double> obterSaldoUsuario(int usuarioId) async {
     List<Usuario> todosUsuarios = await carregarUsuarios();
-    
+
     for (Usuario usuario in todosUsuarios) {
       if (usuario.id == usuarioId) {
         return usuario.saldo;
       }
     }
-    
+
     // Se não encontrar o usuário, retorna 0.0
     return 0.0;
   }
@@ -196,14 +216,14 @@ class UsuarioService {
   static Future<Usuario?> obterUsuarioPorId(int usuarioId) async {
     try {
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.id == usuarioId) {
           print('Usuário encontrado por ID $usuarioId: ${usuario.nome}');
           return usuario;
         }
       }
-      
+
       print('Usuário com ID $usuarioId não encontrado');
       return null;
     } catch (e) {
@@ -212,10 +232,29 @@ class UsuarioService {
     }
   }
 
+  /*Future<void> obterClienteApi(String cpf) async {
+    final url = Uri.parse("http://localhost:8080/apiCliente/buscarporcpf/$cpf");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final dados = jsonDecode(response.body);
+
+      setState(() {
+        mensagem = "Cliente encontrado!";
+        usu // se a API devolver no mesmo formato
+      });
+    } else {
+      setState(() {
+        mensagem = "Erro na requisição: ${response.statusCode}";
+      });
+    }
+  }*/
+
   // Salvar saldo de um usuário específico
-  static Future<void> salvarSaldoUsuario(int usuarioId, double novoSaldo) async {
+  static Future<void> salvarSaldoUsuario(
+      int usuarioId, double novoSaldo) async {
     List<Usuario> todosUsuarios = await carregarUsuarios();
-    
+
     // Encontrar e atualizar o usuário
     for (Usuario usuario in todosUsuarios) {
       if (usuario.id == usuarioId) {
@@ -224,7 +263,7 @@ class UsuarioService {
         break;
       }
     }
-    
+
     // Salvar a lista atualizada
     await salvarUsuarios(todosUsuarios);
   }
@@ -232,7 +271,7 @@ class UsuarioService {
   // Salvar score de um usuário específico
   static Future<void> salvarScoreUsuario(int usuarioId, int novoScore) async {
     List<Usuario> todosUsuarios = await carregarUsuarios();
-    
+
     // Encontrar e atualizar o usuário
     for (Usuario usuario in todosUsuarios) {
       if (usuario.id == usuarioId) {
@@ -241,7 +280,7 @@ class UsuarioService {
         break;
       }
     }
-    
+
     // Salvar a lista atualizada
     await salvarUsuarios(todosUsuarios);
   }
@@ -249,7 +288,7 @@ class UsuarioService {
   // Atualizar usuário completo
   static Future<void> atualizarUsuario(Usuario usuarioAtualizado) async {
     List<Usuario> todosUsuarios = await carregarUsuarios();
-    
+
     // Encontrar e substituir o usuário
     for (int i = 0; i < todosUsuarios.length; i++) {
       if (todosUsuarios[i].id == usuarioAtualizado.id) {
@@ -258,7 +297,7 @@ class UsuarioService {
         break;
       }
     }
-    
+
     // Salvar a lista atualizada
     await salvarUsuarios(todosUsuarios);
   }
@@ -286,11 +325,11 @@ class UsuarioService {
     try {
       // Carregar usuários atualizados
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       // Encontrar usuários na lista carregada
       Usuario? remetenteAtualizado;
       Usuario? destinatarioAtualizado;
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.id == remetente.id) {
           remetenteAtualizado = usuario;
@@ -299,22 +338,23 @@ class UsuarioService {
           destinatarioAtualizado = usuario;
         }
       }
-      
+
       if (remetenteAtualizado == null || destinatarioAtualizado == null) {
         print('Erro: Usuários não encontrados para transferência');
         return false;
       }
-      
+
       // Realizar a transferência
       remetenteAtualizado.saldo -= valor;
       destinatarioAtualizado.saldo += valor;
       remetenteAtualizado.score += 1;
-      
-      print('Transferência realizada: R\$ $valor de ${remetenteAtualizado.nome} para ${destinatarioAtualizado.nome}');
-      
+
+      print(
+          'Transferência realizada: R\$ $valor de ${remetenteAtualizado.nome} para ${destinatarioAtualizado.nome}');
+
       // Salvar mudanças
       await salvarUsuarios(todosUsuarios);
-      
+
       return true;
     } catch (e) {
       print('Erro na transferência: $e');
@@ -345,11 +385,11 @@ class UsuarioService {
     try {
       // Carregar usuários atualizados
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       // Encontrar usuários na lista carregada
       Usuario? remetenteAtualizado;
       Usuario? destinatarioAtualizado;
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.id == remetente.id) {
           remetenteAtualizado = usuario;
@@ -358,22 +398,23 @@ class UsuarioService {
           destinatarioAtualizado = usuario;
         }
       }
-      
+
       if (remetenteAtualizado == null || destinatarioAtualizado == null) {
         print('Erro: Usuários não encontrados para PIX');
         return false;
       }
-      
+
       // Realizar o PIX
       remetenteAtualizado.saldo -= valor;
       destinatarioAtualizado.saldo += valor;
       remetenteAtualizado.score += 10;
-      
-      print('PIX realizado: R\$ $valor de ${remetenteAtualizado.nome} para ${destinatarioAtualizado.nome}');
-      
+
+      print(
+          'PIX realizado: R\$ $valor de ${remetenteAtualizado.nome} para ${destinatarioAtualizado.nome}');
+
       // Salvar mudanças
       await salvarUsuarios(todosUsuarios);
-      
+
       return true;
     } catch (e) {
       print('Erro no PIX: $e');
@@ -390,7 +431,7 @@ class UsuarioService {
 
     try {
       List<Usuario> todosUsuarios = await carregarUsuarios();
-      
+
       for (Usuario usuario in todosUsuarios) {
         if (usuario.id == usuarioId) {
           usuario.saldo += valor;
@@ -398,7 +439,7 @@ class UsuarioService {
           break;
         }
       }
-      
+
       await salvarUsuarios(todosUsuarios);
       return true;
     } catch (e) {
@@ -439,14 +480,14 @@ class UsuarioService {
         print('Nenhum usuário logado');
         return null;
       }
-      
+
       Usuario? usuario = await obterUsuarioPorId(usuarioId);
       if (usuario != null) {
         print('Usuário logado obtido: ${usuario.nome}');
       } else {
         print('Usuário logado não encontrado na lista');
       }
-      
+
       return usuario;
     } catch (e) {
       print('Erro ao obter usuário logado: $e');
@@ -473,27 +514,27 @@ class UsuarioService {
   // Método para debug - verificar estado do usuário logado
   static Future<void> debugUsuarioLogado() async {
     print('=== DEBUG USUÁRIO LOGADO ===');
-    
+
     try {
       // Verificar se há ID salvo
       int? usuarioId = await carregarUsuarioLogado();
       print('ID do usuário logado: $usuarioId');
-      
+
       if (usuarioId == null) {
         print('PROBLEMA: Nenhum usuário logado salvo');
         return;
       }
-      
+
       // Verificar se o usuário existe na lista
       List<Usuario> usuarios = await carregarUsuarios();
       print('Total de usuários na lista: ${usuarios.length}');
-      
+
       // Mostrar todos os IDs disponíveis
       print('IDs disponíveis:');
       for (Usuario u in usuarios) {
         print('  - ID: ${u.id}, Nome: ${u.nome}');
       }
-      
+
       // Tentar encontrar o usuário
       Usuario? usuarioEncontrado = await obterUsuarioPorId(usuarioId);
       if (usuarioEncontrado != null) {
@@ -503,11 +544,10 @@ class UsuarioService {
       } else {
         print('❌ PROBLEMA: Usuário com ID $usuarioId não encontrado');
       }
-      
     } catch (e) {
       print('❌ ERRO no debug: $e');
     }
-    
+
     print('=== FIM DEBUG ===');
   }
 
@@ -516,7 +556,7 @@ class UsuarioService {
     try {
       print('Tentando login forçado com CPF: $cpf');
       List<Usuario> usuarios = await carregarUsuarios();
-      
+
       Usuario? usuario;
       for (Usuario u in usuarios) {
         if (u.cpf == cpf && u.senha == senha) {
@@ -524,12 +564,12 @@ class UsuarioService {
           break;
         }
       }
-      
+
       if (usuario == null) {
         print('❌ Usuário não encontrado para login forçado');
         return false;
       }
-      
+
       await salvarUsuarioLogado(usuario.id);
       print('✅ Login forçado realizado para: ${usuario.nome}');
       return true;
@@ -545,10 +585,10 @@ class UsuarioService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_usuariosKey);
       await prefs.remove(_usuarioLogadoKey);
-      
+
       // Recarregar lista padrão
       await carregarUsuarios();
-      
+
       print('✅ Dados resetados com sucesso');
     } catch (e) {
       print('❌ Erro ao resetar dados: $e');
@@ -558,17 +598,17 @@ class UsuarioService {
   // Método para verificar integridade dos dados
   static Future<void> verificarIntegridade() async {
     print('=== VERIFICAÇÃO DE INTEGRIDADE ===');
-    
+
     try {
       // Verificar SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       String? usuariosJson = prefs.getString(_usuariosKey);
       int? usuarioLogadoId = prefs.getInt(_usuarioLogadoKey);
-      
+
       print('SharedPreferences:');
       print('  - Usuários salvos: ${usuariosJson != null ? 'SIM' : 'NÃO'}');
       print('  - Usuário logado: ${usuarioLogadoId ?? 'NENHUM'}');
-      
+
       // Verificar lista de usuários
       List<Usuario> usuarios = await carregarUsuarios();
       print('Lista de usuários:');
@@ -576,7 +616,7 @@ class UsuarioService {
       for (Usuario u in usuarios) {
         print('  - ${u.id}: ${u.nome} (CPF: ${u.cpf}, Saldo: R\$ ${u.saldo})');
       }
-      
+
       // Verificar consistência do usuário logado
       if (usuarioLogadoId != null) {
         Usuario? usuarioLogado = await obterUsuarioPorId(usuarioLogadoId);
@@ -586,7 +626,7 @@ class UsuarioService {
           print('❌ PROBLEMA: ID do usuário logado não existe na lista');
         }
       }
-      
+
       // Verificar duplicatas de CPF
       Set<String> cpfs = {};
       List<String> cpfsDuplicados = [];
@@ -596,13 +636,13 @@ class UsuarioService {
         }
         cpfs.add(u.cpf);
       }
-      
+
       if (cpfsDuplicados.isNotEmpty) {
         print('❌ PROBLEMA: CPFs duplicados encontrados: $cpfsDuplicados');
       } else {
         print('✅ Todos os CPFs são únicos');
       }
-      
+
       // Verificar duplicatas de email
       Set<String> emails = {};
       List<String> emailsDuplicados = [];
@@ -613,19 +653,18 @@ class UsuarioService {
         }
         emails.add(emailLower);
       }
-      
+
       if (emailsDuplicados.isNotEmpty) {
         print('❌ PROBLEMA: Emails duplicados encontrados: $emailsDuplicados');
       } else {
         print('✅ Todos os emails são únicos');
       }
-      
+
       print('✅ Verificação de integridade concluída');
-      
     } catch (e) {
       print('❌ ERRO na verificação de integridade: $e');
     }
-    
+
     print('=== FIM VERIFICAÇÃO ===');
   }
 
@@ -633,7 +672,7 @@ class UsuarioService {
   static Future<Map<String, dynamic>> obterEstatisticas() async {
     try {
       List<Usuario> usuarios = await carregarUsuarios();
-      
+
       if (usuarios.isEmpty) {
         return {
           'totalUsuarios': 0,
@@ -646,14 +685,17 @@ class UsuarioService {
           'usuarioMaiorScore': null,
         };
       }
-      
+
       double saldoTotal = usuarios.fold(0.0, (sum, u) => sum + u.saldo);
       int scoreTotal = usuarios.fold(0, (sum, u) => sum + u.score);
-      
-      Usuario usuarioMaiorSaldo = usuarios.reduce((a, b) => a.saldo > b.saldo ? a : b);
-      Usuario usuarioMenorSaldo = usuarios.reduce((a, b) => a.saldo < b.saldo ? a : b);
-      Usuario usuarioMaiorScore = usuarios.reduce((a, b) => a.score > b.score ? a : b);
-      
+
+      Usuario usuarioMaiorSaldo =
+          usuarios.reduce((a, b) => a.saldo > b.saldo ? a : b);
+      Usuario usuarioMenorSaldo =
+          usuarios.reduce((a, b) => a.saldo < b.saldo ? a : b);
+      Usuario usuarioMaiorScore =
+          usuarios.reduce((a, b) => a.score > b.score ? a : b);
+
       return {
         'totalUsuarios': usuarios.length,
         'saldoTotal': saldoTotal,
@@ -679,7 +721,7 @@ class UsuarioService {
       List<Usuario> usuarios = await carregarUsuarios();
       print('=== LISTA COMPLETA DE USUÁRIOS ===');
       print('Total: ${usuarios.length} usuários');
-      
+
       for (int i = 0; i < usuarios.length; i++) {
         Usuario u = usuarios[i];
         print('${i + 1}. ${u.nome}');
@@ -691,7 +733,7 @@ class UsuarioService {
         print('   Chave PIX: ${u.chavePix}');
         print('   ---');
       }
-      
+
       print('=== FIM DA LISTA ===');
     } catch (e) {
       print('Erro ao listar usuários: $e');

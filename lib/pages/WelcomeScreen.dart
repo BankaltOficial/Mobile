@@ -11,6 +11,7 @@ import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -143,31 +144,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              String cpf = cpfController.text;
+                              // Remove pontos e traço do CPF
+                              String cpf = cpfController.text
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
                               String senha = passwordController.text;
-                              try {
-                                Usuario usuario = verificarUsuarioPorCpf(cpf);
 
-                                if (usuario.senha == senha) {
+                              try {
+                                // Chama a API para buscar o usuário pelo CPF
+                                Usuario? usuario =
+                                    await UsuarioService.buscarPorCpfApi(cpf);
+
+                                // Verifica se o usuário existe e se a senha está correta
+                                if (usuario != null && usuario.senha == senha) {
                                   Sessao.limparUsuario();
                                   Sessao.salvarUsuario(usuario);
 
+                                  // Atualiza cores/tema
                                   String main = usuario.corPrincipal;
                                   Color mainColor = Color(int.parse(
                                       'FF${main.replaceAll('#', '')}',
                                       radix: 16));
-
                                   String secondary = usuario.corSecundaria;
                                   Color secondaryColor = Color(int.parse(
                                       'FF${secondary.replaceAll('#', '')}',
                                       radix: 16));
-
                                   String tertiary = usuario.corTerciaria;
                                   Color tertiaryColor = Color(int.parse(
                                       'FF${tertiary.replaceAll('#', '')}',
                                       radix: 16));
-
                                   bool isDarkMode = usuario.temaEscuro;
+
                                   final provider = Provider.of<ColorProvider>(
                                       context,
                                       listen: false);
@@ -204,15 +210,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('CPF ou senha incorretos')),
+                                    SnackBar(
+                                        content: Text(
+                                            'CPF ou senha incorretos, $usuario')),
                                   );
                                 }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      content: Text('CPF ou Senha incorretos')),
+                                      content: Text('Erro ao autenticar: $e')),
                                 );
                               }
                             }

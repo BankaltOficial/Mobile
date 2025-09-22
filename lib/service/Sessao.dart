@@ -38,7 +38,7 @@ class Sessao {
   static Future<void> atualizarUsuario(Usuario usuario) async {
     if (usuarioAtual != null && usuarioAtual!.id == usuario.id) {
       usuarioAtual = usuario;
-      await UsuarioService.atualizarUsuario(usuario);
+      await UsuarioService().atualizarUsuario(usuario);
       print("Usuário atualizado na sessão: ${usuario.nome}");
     }
   }
@@ -47,10 +47,12 @@ class Sessao {
   static Future<void> recarregarUsuario() async {
     if (usuarioAtual != null) {
       try {
-        Usuario? usuarioAtualizado = await UsuarioService.obterUsuarioPorId(usuarioAtual!.id);
+        Usuario? usuarioAtualizado =
+            await UsuarioService.obterUsuarioPorId(usuarioAtual!.id);
         if (usuarioAtualizado != null) {
           usuarioAtual = usuarioAtualizado;
-          print("Usuário recarregado: ${usuarioAtualizado.nome}, Saldo: R\$ ${usuarioAtualizado.saldo}");
+          print(
+              "Usuário recarregado: ${usuarioAtualizado.nome}, Saldo: R\$ ${usuarioAtualizado.saldo}");
         }
       } catch (e) {
         print("Erro ao recarregar usuário: $e");
@@ -115,10 +117,10 @@ class Sessao {
   static Future<void> debugSessao() async {
     print("=== DEBUG SESSÃO ===");
     print("Usuário em memória: ${usuarioAtual?.nome ?? 'NENHUM'}");
-    
+
     int? usuarioIdSalvo = await UsuarioService.carregarUsuarioLogado();
     print("ID salvo no SharedPreferences: ${usuarioIdSalvo ?? 'NENHUM'}");
-    
+
     if (usuarioAtual != null) {
       print("Dados do usuário atual:");
       print("  - ID: ${usuarioAtual!.id}");
@@ -127,7 +129,9 @@ class Sessao {
       print("  - Saldo: R\$ ${usuarioAtual!.saldo}");
       print("  - Score: ${usuarioAtual!.score}");
     }
-    
+
     print("=== FIM DEBUG ===");
   }
+
+  static void setUsuario(Usuario usuario) {}
 }

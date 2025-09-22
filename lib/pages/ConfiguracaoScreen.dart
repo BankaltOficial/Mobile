@@ -6,6 +6,8 @@ import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:provider/provider.dart';
 
 class ConfiguracaoScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class ConfiguracaoScreen extends StatefulWidget {
 
 class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
   int selectedColorIndex = 0;
-  
+
   final List<Color> themeColors = [
     AppColors.main,
     AppColors.secondary,
@@ -26,7 +28,8 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final colors = Provider.of<ColorProvider>(context);
-    
+    Usuario? usuario = Sessao.getUsuario();
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.theme,
@@ -41,25 +44,24 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
               ),
             );
           }),
-          drawer: CustomDrawer(),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Configurações de @suracci',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.invertMode,
+              alignment: Alignment.center,
+              child: Text(
+                'Configurações',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.invertMode,
+                ),
               ),
             ),
-            ),
             SizedBox(height: 16),
-            
             Row(
               children: [
                 Expanded(
@@ -68,7 +70,8 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.mainWhite,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.invertModeGray, width: 1),
+                      border:
+                          Border.all(color: AppColors.invertModeGray, width: 1),
                     ),
                     child: Column(
                       children: [
@@ -110,14 +113,14 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                   ),
                 ),
                 SizedBox(width: 16),
-                
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.mainWhite,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.invertModeGray, width: 1),
+                      border:
+                          Border.all(color: AppColors.invertModeGray, width: 1),
                     ),
                     child: Column(
                       children: [
@@ -146,7 +149,8 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
                                   color: themeColors[index],
                                   shape: BoxShape.circle,
                                   border: selectedColorIndex == index
-                                      ? Border.all(color: AppColors.mainBlack, width: 2)
+                                      ? Border.all(
+                                          color: AppColors.mainBlack, width: 2)
                                       : null,
                                 ),
                               ),
@@ -168,7 +172,6 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
               ],
             ),
             SizedBox(height: 16),
-            
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
@@ -210,7 +213,6 @@ class _ConfiguracaoScreenState extends State<ConfiguracaoScreen> {
               ),
             ),
             SizedBox(height: 16),
-            
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),

@@ -1,3 +1,4 @@
+import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'Usuario.dart';
@@ -6,6 +7,8 @@ import 'package:http/http.dart' as http;
 class UsuarioService {
   static const String _usuariosKey = 'usuarios_lista';
   static const String _usuarioLogadoKey = 'usuario_logado_id';
+  static const String _baseUrl = 'http://localhost:8080/';
+  static const List tiposUrl = ["apiCliente/", "apiPix/"];
 
   // Salvar todos os usuários no SharedPreferences
   static Future<void> salvarUsuarios(List<Usuario> usuarios) async {
@@ -112,6 +115,66 @@ class UsuarioService {
     }
   }
 
+  Future<Usuario?> atualizarUsuario(Usuario usuario) async {
+    try {
+      final url = Uri.parse('http://localhost:8080/apiCliente/atualizar');
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(usuario.toJson()),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        // Sucesso na atualização, pode retornar o usuário atualizado
+        final data = jsonDecode(response.body);
+        return Usuario.fromJson(data);
+      } else {
+        print('Erro ao atualizar usuário: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Erro na requisição: $e');
+      return null;
+    }
+  }
+
+  Future<bool> atualizarChavePix(String chave, String tipo) async {
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) {
+      print("Usuário não logado");
+      return false;
+    }
+
+    try {
+      final url = Uri.parse(
+          'http://localhost:8080/apiPix/atualizar/${usuario.id}'); // endpoint de criar/atualizar Pix
+      final body = {
+        "clienteId": usuario.id, // ID do usuário logado
+        "chave": chave, // ex: "ana.clara@gmail.com"
+        "tipo": tipo, // ex: "email"
+      };
+
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Chave Pix atualizada/criada com sucesso!");
+        return true;
+      } else {
+        print("Falha ao atualizar chave Pix: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("Erro na requisição Pix: $e");
+      return false;
+    }
+  }
+
   // Verificar se CPF já existe
   static Future<bool> cpfJaExiste(String cpf) async {
     try {
@@ -178,20 +241,22 @@ class UsuarioService {
     }
   }
 
-  // Buscar usuário por chave PIX
+  // Buscar usuário por chave PI
   static Future<Usuario?> buscarUsuarioPorChavePix(String chavePix) async {
     try {
-      List<Usuario> todosUsuarios = await carregarUsuarios();
+      final url =
+          Uri.parse('http://localhost:8080/apiPix/buscarPorChave/$chavePix');
+      final response = await http.get(url);
 
-      for (Usuario usuario in todosUsuarios) {
-        if (usuario.chavePix == chavePix) {
-          print('Usuário encontrado por chave PIX: ${usuario.nome}');
-          return usuario;
-        }
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        Usuario usuario = Usuario.fromJson(data);
+        print('Usuário encontrado por chave PIX: ${usuario.nome}');
+        return usuario;
+      } else {
+        print('Usuário não encontrado para chave PIX: $chavePix');
+        return null;
       }
-
-      print('Usuário não encontrado para chave PIX: $chavePix');
-      return null;
     } catch (e) {
       print('Erro ao buscar usuário por chave PIX: $e');
       return null;
@@ -286,7 +351,7 @@ class UsuarioService {
   }
 
   // Atualizar usuário completo
-  static Future<void> atualizarUsuario(Usuario usuarioAtualizado) async {
+  static Future<void> atualizarUsuario1(Usuario usuarioAtualizado) async {
     List<Usuario> todosUsuarios = await carregarUsuarios();
 
     // Encontrar e substituir o usuário

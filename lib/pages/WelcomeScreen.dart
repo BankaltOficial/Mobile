@@ -1,6 +1,8 @@
 // ignore: file_names
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, duplicate_ignore
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
+import 'package:http/http.dart' as http;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -269,8 +272,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       style: TextStyle(
                                           color: AppColors.invertModeGray),
                                     )),
-                              )
+                              ),
                             ]),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Preenche os campos automaticamente
+                            cpfController.text = "574.716.340-06";
+                            passwordController.text = "aninha123";
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("Preencher Automático (Teste)"),
+                        ),
                       ])),
             ),
             Container(

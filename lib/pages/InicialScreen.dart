@@ -31,6 +31,7 @@ class _InicialScreenState extends State<InicialScreen> {
       Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 
   Icon iconVisibility = Icon(Icons.visibility);
+  String nome = "";
   String txtSaldo = '';
   bool isLoading = true;
 
@@ -45,7 +46,7 @@ class _InicialScreenState extends State<InicialScreen> {
     try {
       // Inicializar o UsuarioService
       await UsuarioService.inicializar();
-      
+
       // Carregar dados atualizados do usuário
       await _carregarDadosUsuario();
     } catch (e) {
@@ -61,24 +62,24 @@ class _InicialScreenState extends State<InicialScreen> {
   Future<void> _carregarDadosUsuario() async {
     try {
       // Carregar lista atualizada de usuários
-      List<Usuario> usuariosAtualizados = await UsuarioService.carregarUsuarios();
-      
+      List<Usuario> usuariosAtualizados =
+          await UsuarioService.carregarUsuarios();
+
       // Encontrar o usuário atual na lista atualizada
       Usuario? usuarioAtualizado = usuariosAtualizados.firstWhere(
         (u) => u.id == usuario.id,
         orElse: () => usuario,
       );
-      
+
       setState(() {
         usuario = usuarioAtualizado;
         txtSaldo = usuario.saldo.toStringAsFixed(2).replaceAll('.', ',');
-        
+
         // Se o saldo estiver oculto, manter oculto
         if (iconVisibility.icon == Icons.visibility_off) {
           txtSaldo = '**********';
         }
       });
-      
     } catch (e) {
       print('Erro ao carregar dados do usuário: $e');
     }
@@ -91,9 +92,6 @@ class _InicialScreenState extends State<InicialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String nome = usuario.nome;
-    double saldo = usuario.saldo;
-
     if (isLoading) {
       return Scaffold(
         backgroundColor: AppColors.themeColor,
@@ -133,32 +131,34 @@ class _InicialScreenState extends State<InicialScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('Olá, $nome', style: TextStyle(fontSize: 27, color: AppColors.invertMode)),
+                      Text('Olá, ${usuario.nome}',
+                          style: TextStyle(
+                              fontSize: 27, color: AppColors.invertMode)),
                       SizedBox(width: 15),
                       Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.grey[300],
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[300],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            '',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                child: Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.grey[600],
                                 ),
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    '',
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: Colors.grey[300],
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 50,
-                                          color: Colors.grey[600],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 25),
@@ -185,36 +185,41 @@ class _InicialScreenState extends State<InicialScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Saldo',
                                       style: TextStyle(
                                           fontSize: 18,
-                                          fontWeight: FontWeight.bold, 
+                                          fontWeight: FontWeight.bold,
                                           color: AppColors.invertMode)),
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          iconVisibility = iconVisibility.icon ==
-                                                  Icons.visibility
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility);
+                                          iconVisibility =
+                                              iconVisibility.icon ==
+                                                      Icons.visibility
+                                                  ? Icon(Icons.visibility_off)
+                                                  : Icon(Icons.visibility);
                                           if (iconVisibility.icon ==
                                               Icons.visibility_off) {
                                             txtSaldo = '**********';
                                           } else {
-                                            txtSaldo = saldo
+                                            txtSaldo = usuario.saldo
                                                 .toStringAsFixed(2)
                                                 .replaceAll('.', ',');
                                           }
                                         });
                                       },
                                       icon: Icon(iconVisibility.icon,
-                                          color: AppColors.invertModeMain, size: 25)),
+                                          color: AppColors.invertModeMain,
+                                          size: 25)),
                                 ],
                               ),
                               Text('R\$ $txtSaldo',
-                                  style: TextStyle(fontSize: 24, color: AppColors.invertMode)),
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: AppColors.invertMode)),
                             ],
                           ),
                         ),
@@ -250,11 +255,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const PixScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PixScreen()));
                                       // Atualizar saldo quando retornar
                                       if (result == true) {
                                         _atualizarSaldo();
@@ -285,11 +291,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const CardsScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CardsScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }
@@ -299,8 +306,10 @@ class _InicialScreenState extends State<InicialScreen> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10))),
-                                    child: Image.asset("assets/icons/Cartoes.png",
-                                        width: 50, height: 50),
+                                    child: Image.asset(
+                                        "assets/icons/Cartoes.png",
+                                        width: 50,
+                                        height: 50),
                                   ))),
                           SizedBox(height: 5),
                           Text("Cartões",
@@ -319,11 +328,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const BoletoScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const BoletoScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }
@@ -333,8 +343,10 @@ class _InicialScreenState extends State<InicialScreen> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10))),
-                                    child: Image.asset("assets/icons/Boleto.png",
-                                        width: 50, height: 50),
+                                    child: Image.asset(
+                                        "assets/icons/Boleto.png",
+                                        width: 50,
+                                        height: 50),
                                   ))),
                           SizedBox(height: 5),
                           Text("Boleto",
@@ -359,11 +371,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const InvestimentoScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const InvestimentoScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }
@@ -395,11 +408,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const TransferenciaScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const TransferenciaScreen()));
                                       // Atualizar saldo quando retornar da transferência
                                       if (result == true) {
                                         _atualizarSaldo();
@@ -432,11 +446,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const EmprestimoScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const EmprestimoScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }
@@ -473,11 +488,12 @@ class _InicialScreenState extends State<InicialScreen> {
                               height: 75,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final result = await Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EducationScreen()));
+                                  final result =
+                                      await Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EducationScreen()));
                                   if (result == true) {
                                     _atualizarSaldo();
                                   }
@@ -485,7 +501,8 @@ class _InicialScreenState extends State<InicialScreen> {
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.main,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10))),
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
                                 child: Image.asset("assets/icons/Estudos.png",
                                     width: 50, height: 50),
                               ),
@@ -508,11 +525,12 @@ class _InicialScreenState extends State<InicialScreen> {
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const PersonalizedScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PersonalizedScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }

@@ -76,6 +76,151 @@ class UsuarioService {
     }
   }
 
+  static Map<String, dynamic> _usuarioParaClienteApi(Usuario usuario) {
+  return {
+    'nome': usuario.nome,
+    'cpf': usuario.cpf,
+    'rg': usuario.rg,
+    'estadoCivil': 'Solteiro', // Você pode adicionar este campo no formulário depois
+    'datanascimento1': usuario.dataNascimento,
+    'sexo': usuario.sexo,
+    'email': usuario.email,
+    'telefone': usuario.telefone, // Caso tenha telefone fixo
+    'celular': usuario.telefone, // Usando o telefone como celular por enquanto
+    'nivelSuporte': usuario.possuiTEA ? usuario.nivelSuporteTEA : null,
+    'comorbidade': usuario.possuiComorbidade ? usuario.comorbidades : null,
+    // Campos extras que você pode adicionar no seu backend depois:
+    'estado': usuario.estado,
+    'cidade': usuario.cidade,
+    'endereco': usuario.endereco,
+  };
+}
+
+// Função para cadastrar usuário na API Spring Boot
+static Future<Map<String, dynamic>> cadastrarUsuarioNaApi(Usuario usuario) async {
+  try {
+    const String baseUrl = 'http://localhost:8080/apiCliente';
+    // Se estiver usando emulador Android, mude para: 'http://10.0.2.2:8080/apiCliente'
+    
+    print('Enviando dados para API: $baseUrl/cadastrar');
+    
+    final Map<String, dynamic> dadosApi = _usuarioParaClienteApi(usuario);
+    print('Dados enviados: ${jsonEncode(dadosApi)}');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/cadastrar'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(dadosApi),
+    );
+
+    print('Status da resposta: ${response.statusCode}');
+    print('Resposta da API: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return {
+        'success': true,
+        'message': 'Usuário cadastrado com sucesso na API!',
+        'data': response.body.isNotEmpty ? response.body : null
+      };
+    } else {
+      return {
+        'success': false,
+        'message': 'Erro na API: ${response.statusCode}',
+        'error': response.body
+      };
+    }
+  } catch (e) {
+    print('Erro ao cadastrar na API: $e');
+    return {
+      'success': false,
+      'message': 'Erro de conexão com a API: ${e.toString()}',
+      'error': e.toString()
+    };
+  }
+}
+
+// Função para verificar se CPF já existe na API
+static Future<bool> verificarCpfExisteNaApi(String cpf) async {
+  try {
+    final usuario = await buscarPorCpfApi(cpf);
+    return usuario != null;
+  } catch (e) {
+    print('Erro ao verificar CPF na API: $e');
+    return false;
+  }
+}
+
+// Função completa para cadastrar usuário (local + API)
+static Future<Map<String, dynamic>> cadastrarUsuarioCompleto(Usuario usuario) async {
+  try {
+    print('Iniciando cadastro completo do usuário...');
+    
+    // 1. Verificar se CPF já existe na API
+    bool cpfExisteApi = await verificarCpfExisteNaApi(usuario.cpf);
+    if (cpfExisteApi) {
+      return {
+        'success': false,
+        'message': 'CPF já cadastrado no sistema',
+        'error': 'CPF_DUPLICADO'
+      };
+    }
+    
+    // 2. Verificar se CPF já existe localmente
+    bool cpfExisteLocal = await cpfJaExiste(usuario.cpf);
+    if (cpfExisteLocal) {
+      return {
+        'success': false,
+        'message': 'CPF já cadastrado localmente',
+        'error': 'CPF_LOCAL_DUPLICADO'
+      };
+    }
+    
+    // 3. Verificar se email já existe localmente
+    bool emailExisteLocal = await emailJaExiste(usuario.email);
+    if (emailExisteLocal) {
+      return {
+        'success': false,
+        'message': 'Email já cadastrado localmente',
+        'error': 'EMAIL_LOCAL_DUPLICADO'
+      };
+    }
+    
+    // 4. Cadastrar na API primeiro
+    Map<String, dynamic> resultadoApi = await cadastrarUsuarioNaApi(usuario);
+    if (!resultadoApi['success']) {
+      return resultadoApi;
+    }
+    
+    // 5. Se API deu certo, cadastrar localmente
+    bool sucessoLocal = await adicionarUsuario(usuario);
+    if (!sucessoLocal) {
+      return {
+        'success': false,
+        'message': 'Erro ao salvar localmente (API cadastrou com sucesso)',
+        'error': 'ERRO_LOCAL'
+      };
+    }
+    
+    print('Usuário cadastrado com sucesso na API e localmente!');
+    return {
+      'success': true,
+      'message': 'Usuário cadastrado com sucesso!',
+      'data': null
+    };
+    
+  } catch (e) {
+    print('Erro no cadastro completo: $e');
+    return {
+      'success': false,
+      'message': 'Erro inesperado: ${e.toString()}',
+      'error': e.toString()
+    };
+  }
+}
+
   // Autenticar usuário (login)
   static Future<Usuario?> autenticarUsuario(String cpf, String senha) async {
     try {
@@ -807,3 +952,4 @@ class UsuarioService {
 
   static isSessionValid() {}
 }
+

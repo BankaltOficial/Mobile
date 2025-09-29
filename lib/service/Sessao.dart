@@ -1,3 +1,4 @@
+import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
 
@@ -64,6 +65,7 @@ class Sessao {
   static Future<void> logout() async {
     usuarioAtual = null;
     await UsuarioService.logout();
+    ColorProvider().resetColors();
     print("Usuário deslogado");
   }
 

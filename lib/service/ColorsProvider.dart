@@ -40,7 +40,7 @@ class ColorProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetColors() {
+  Future<void> resetColors() async {
     _main = AppColors.defaultMain;
     _secondary = AppColors.defaultSecondary;
     _tertiary = AppColors.defaultTertiary;
@@ -53,13 +53,18 @@ class ColorProvider with ChangeNotifier {
     AppColors.isDarkMode = false;
     AppColors.themeColor = AppColors.lightMode;
 
-    ColorService.saveColors(_main, _secondary, _tertiary);
-    ColorService.setTheme(false);
+    // salvar cores e tema
+    await ColorService.saveColors(_main, _secondary, _tertiary);
+    await ColorService.setTheme(false);
+
+    // também salvar no SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', false);
 
     notifyListeners();
   }
 
-  void toggleDarkMode(bool isDark) async {
+  Future<void> toggleDarkMode(bool isDark) async {
     _isDarkMode = isDark;
     _theme = isDark ? AppColors.darkMode : AppColors.lightMode;
 

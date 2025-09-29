@@ -31,11 +31,18 @@ bool _senhaVisivel = false;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  //late Usuario? usuario;
 
   @override
   void initState() {
     super.initState();
+    // Limpa a sessão ao entrar na tela de login
+    _limparSessao();
+  }
+
+  // Método para limpar sessão ao entrar no WelcomeScreen
+  Future<void> _limparSessao() async {
+    await Sessao.logout();
+    ColorProvider().resetColors();
   }
 
   @override
@@ -50,6 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           title: Image.asset('assets/images/LogoTitulo.png',
               height: 200, width: 200),
           centerTitle: true,
+          automaticallyImplyLeading: false, // Remove o botão de voltar
         ),
         body: ListView(children: [
           Column(children: [
@@ -116,7 +124,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Preencha todos os campos antes de continuar";
-                            } // voltar novamente quando for validar a senha
+                            }
 
                             return null;
                           },
@@ -159,8 +167,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                                 // Verifica se o usuário existe e se a senha está correta
                                 if (usuario != null && usuario.senha == senha) {
-                                  Sessao.limparUsuario();
-                                  Sessao.salvarUsuario(usuario);
+                                  // Limpa sessão anterior e salva novo usuário
+                                  await Sessao.logout();
+                                  await Sessao.salvarUsuario(usuario);
 
                                   // Atualiza cores/tema
                                   String main = usuario.corPrincipal;
@@ -206,16 +215,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             Text('Login Feito com Sucesso')),
                                   );
 
-                                  Navigator.push(
+                                  // Usa pushAndRemoveUntil para remover todas as rotas anteriores
+                                  Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => InicialScreen()),
+                                    (route) => false, // Remove todas as rotas
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text(
-                                            'CPF ou senha incorretos, $usuario')),
+                                        content: Text('CPF ou senha incorretos')),
                                   );
                                 }
                               } catch (e) {

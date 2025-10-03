@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/pages/FormScreen.dart';
 import 'package:flutter_application_1/pages/SplashScreen.dart';
+import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/education/divida-credito/FinanciamentoScreen.dart';
 import 'package:flutter_application_1/pages/education/fundamentos/AnaliseDespesasScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: AppColors.mainWhite,
             ),
           ),
-          home: SplashScreen(),
+          home: WelcomeScreen(),
         );
       },
     );

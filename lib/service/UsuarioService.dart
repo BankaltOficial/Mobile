@@ -77,23 +77,27 @@ class UsuarioService {
   }
 
   static Map<String, dynamic> _usuarioParaClienteApi(Usuario usuario) {
-  return {
-    'nome': usuario.nome,
-    'cpf': usuario.cpf,
-    'rg': usuario.rg,
-    'estadoCivil': 'Solteiro', // Você pode adicionar este campo no formulário depois
-    'datanascimento1': usuario.dataNascimento,
-    'sexo': usuario.sexo,
-    'email': usuario.email,
-    'telefone': usuario.telefone, // Caso tenha telefone fixo
-    'celular': usuario.telefone, // Usando o telefone como celular por enquanto
-    'nivelSuporte': usuario.possuiTEA ? usuario.nivelSuporteTEA : null,
-    'comorbidade': usuario.possuiComorbidade ? usuario.comorbidades : null,
-    // Campos extras que você pode adicionar no seu backend depois:
-    'estado': usuario.estado,
-    'cidade': usuario.cidade,
-    'endereco': usuario.endereco,
-  };
+      return {
+      'nome': usuario.nome,
+      'cpf': usuario.cpf,
+      'rg': usuario.rg,
+      'estadoCivil': 'Solteiro', // Você pode adicionar este campo no formulário depois
+      'datanascimento1': usuario.dataNascimento,
+      'sexo': usuario.sexo,
+      'email': usuario.email,
+      'telefone': usuario.telefone, // Caso tenha telefone fixo
+      'celular': usuario.telefone, // Usando o telefone como celular por enquanto
+      'nivelSuporte': usuario.possuiTEA ? usuario.nivelSuporteTEA : null,
+      'comorbidade': usuario.possuiComorbidade ? usuario.comorbidades : null,
+      // Campos de endereço separados (alinhados com o Usuario.dart)
+      'estado': usuario.estado,
+      'cidade': usuario.cidade,
+      'rua': usuario.rua,
+      'numero': usuario.numero,
+      'bairro': usuario.bairro,
+      'cep': usuario.cep,
+      'complemento': usuario.complemento,
+    };
 }
 
 // Função para cadastrar usuário na API Spring Boot

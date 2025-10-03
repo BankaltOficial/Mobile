@@ -25,11 +25,18 @@ class Usuario {
   String _corTerciaria;
   bool _temaEscuro;
   
-  // Novos campos adicionados
-  String _sexo;
+  // Campos de endereço separados (alinhados com EnderecoModel)
+  String _rua;
   String _estado;
+  String _numero;
   String _cidade;
-  String _endereco;
+  String _bairro;
+  String _cep;
+  String _complemento;
+  
+  // Campos do cliente
+  String _sexo;
+  String _estadoCivil;
   bool _possuiComorbidade;
   String _comorbidades;
   bool _possuiTEA;
@@ -45,9 +52,14 @@ class Usuario {
     this._rg,
     this._senha, {
     String sexo = '',
+    String estadoCivil = '',
+    String rua = '',
     String estado = '',
+    String numero = '',
     String cidade = '',
-    String endereco = '',
+    String bairro = '',
+    String cep = '',
+    String complemento = '',
     bool possuiComorbidade = false,
     String comorbidades = '',
     bool possuiTEA = false,
@@ -61,9 +73,14 @@ class Usuario {
         _score = 0,
         _ponto = 0,
         _sexo = sexo,
+        _estadoCivil = estadoCivil,
+        _rua = rua,
         _estado = estado,
+        _numero = numero,
         _cidade = cidade,
-        _endereco = endereco,
+        _bairro = bairro,
+        _cep = cep,
+        _complemento = complemento,
         _possuiComorbidade = possuiComorbidade,
         _comorbidades = comorbidades,
         _possuiTEA = possuiTEA,
@@ -99,9 +116,14 @@ class Usuario {
     required String corTerciaria,
     required bool temaEscuro,
     required String sexo,
+    required String estadoCivil,
+    required String rua,
     required String estado,
+    required String numero,
     required String cidade,
-    required String endereco,
+    required String bairro,
+    required String cep,
+    required String complemento,
     required bool possuiComorbidade,
     required String comorbidades,
     required bool possuiTEA,
@@ -126,9 +148,14 @@ class Usuario {
         _corTerciaria = corTerciaria,
         _temaEscuro = temaEscuro,
         _sexo = sexo,
+        _estadoCivil = estadoCivil,
+        _rua = rua,
         _estado = estado,
+        _numero = numero,
         _cidade = cidade,
-        _endereco = endereco,
+        _bairro = bairro,
+        _cep = cep,
+        _complemento = complemento,
         _possuiComorbidade = possuiComorbidade,
         _comorbidades = comorbidades,
         _possuiTEA = possuiTEA,
@@ -142,6 +169,9 @@ class Usuario {
       _idCounter = id + 1;
     }
 
+    // Extrair dados do endereço se existir
+    Map<String, dynamic>? endereco = json['endereco'];
+    
     return Usuario._fromJson(
       id: id,
       nome: json['nome'] ?? '',
@@ -174,17 +204,22 @@ class Usuario {
       corTerciaria: json['corTerciaria'] ?? '#04A95C',
       temaEscuro: (json['modo'] as String?)?.toLowerCase() == 'dark',
       sexo: json['sexo'] ?? '',
-      estado: json['estado'] ?? '',
-      cidade: json['cidade'] ?? '',
-      endereco: json['endereco'] ?? '',
-      possuiComorbidade: json['possuiComorbidade'] ?? false,
-      comorbidades: json['comorbidades'] ?? '',
-      possuiTEA: json['possuiTEA'] ?? false,
-      nivelSuporteTEA: json['nivelSuporteTEA'] ?? '',
+      estadoCivil: json['estadoCivil'] ?? '',
+      rua: endereco?['rua'] ?? '',
+      estado: endereco?['estado'] ?? '',
+      numero: endereco?['numero'] ?? '',
+      cidade: endereco?['cidade'] ?? '',
+      bairro: endereco?['bairro'] ?? '',
+      cep: endereco?['cep'] ?? '',
+      complemento: endereco?['complemento'] ?? '',
+      possuiComorbidade: json['comorbidade'] != null && json['comorbidade'] != '',
+      comorbidades: json['comorbidade'] ?? '',
+      possuiTEA: json['nivelSuporte'] != null && json['nivelSuporte'] != '',
+      nivelSuporteTEA: json['nivelSuporte'] ?? '',
     );
   }
 
-  // Método para converter Usuario para JSON
+  // Método para converter Usuario para JSON (formato da API)
   Map<String, dynamic> toJson() {
     return {
       'id': _id,
@@ -192,28 +227,42 @@ class Usuario {
       'email': _email,
       'cpf': _cpf,
       'rg': _rg,
-      'dataNascimento': _dataNascimento,
+      'datanascimento1': _dataNascimento,
       'telefone': _telefone,
+      'celular': _telefone, // Usando telefone também como celular
       'senha': _senha,
-      'saldo': _saldo,
-      'score': _score,
-      'ponto': _ponto,
-      'numeroCartao': _numeroCartao,
-      'cvv': _cvv,
-      'validadeCartao': _validadeCartao,
-      'chavePix': _chavePix,
-      'corPrincipal': _corPrincipal,
+      'sexo': _sexo,
+      'estadoCivil': _estadoCivil,
+      'modo': _temaEscuro ? 'dark' : 'light',
+      'comorbidade': _possuiComorbidade ? _comorbidades : '',
+      'nivelSuporte': _possuiTEA ? _nivelSuporteTEA : '',
+      'corPrimaria': _corPrincipal,
       'corSecundaria': _corSecundaria,
       'corTerciaria': _corTerciaria,
-      'temaEscuro': _temaEscuro,
-      'sexo': _sexo,
-      'estado': _estado,
-      'cidade': _cidade,
-      'endereco': _endereco,
-      'possuiComorbidade': _possuiComorbidade,
-      'comorbidades': _comorbidades,
-      'possuiTEA': _possuiTEA,
-      'nivelSuporteTEA': _nivelSuporteTEA,
+      'endereco': {
+        'rua': _rua,
+        'estado': _estado,
+        'numero': _numero,
+        'cidade': _cidade,
+        'bairro': _bairro,
+        'cep': _cep,
+        'complemento': _complemento,
+      },
+      'rendaInvestimento': {
+        'saldo': _saldo,
+      },
+      'cartaoModel': [
+        {
+          'numero': _numeroCartao,
+          'cvv': _cvv,
+          'datavalidade': _validadeCartao,
+        }
+      ],
+      'pix': [
+        {
+          'chave': _chavePix,
+        }
+      ],
     };
   }
 
@@ -238,11 +287,30 @@ class Usuario {
   String get corTerciaria => _corTerciaria;
   bool get temaEscuro => _temaEscuro;
 
-  // Novos getters
-  String get sexo => _sexo;
+  // Getters para campos de endereço
+  String get rua => _rua;
   String get estado => _estado;
+  String get numero => _numero;
   String get cidade => _cidade;
-  String get endereco => _endereco;
+  String get bairro => _bairro;
+  String get cep => _cep;
+  String get complemento => _complemento;
+  
+  // Getter para endereço completo
+  String get enderecoCompleto {
+    List<String> partes = [];
+    if (_rua.isNotEmpty) partes.add(_rua);
+    if (_numero.isNotEmpty) partes.add(_numero);
+    if (_bairro.isNotEmpty) partes.add(_bairro);
+    if (_cidade.isNotEmpty) partes.add(_cidade);
+    if (_estado.isNotEmpty) partes.add(_estado);
+    if (_cep.isNotEmpty) partes.add('CEP: $_cep');
+    return partes.join(', ');
+  }
+
+  // Getters para campos do cliente
+  String get sexo => _sexo;
+  String get estadoCivil => _estadoCivil;
   bool get possuiComorbidade => _possuiComorbidade;
   String get comorbidades => _comorbidades;
   bool get possuiTEA => _possuiTEA;
@@ -265,11 +333,18 @@ class Usuario {
   set corTerciaria(String value) => _corTerciaria = value;
   set temaEscuro(bool value) => _temaEscuro = value;
 
-  // Novos setters
-  set sexo(String value) => _sexo = value;
+  // Setters para campos de endereço
+  set rua(String value) => _rua = value;
   set estado(String value) => _estado = value;
+  set numero(String value) => _numero = value;
   set cidade(String value) => _cidade = value;
-  set endereco(String value) => _endereco = value;
+  set bairro(String value) => _bairro = value;
+  set cep(String value) => _cep = value;
+  set complemento(String value) => _complemento = value;
+
+  // Setters para campos do cliente
+  set sexo(String value) => _sexo = value;
+  set estadoCivil(String value) => _estadoCivil = value;
   set possuiComorbidade(bool value) => _possuiComorbidade = value;
   set comorbidades(String value) => _comorbidades = value;
   set possuiTEA(bool value) => _possuiTEA = value;
@@ -366,9 +441,12 @@ List<Usuario> usuarios = [
     '12.345.678-9',
     '123',
     sexo: 'Masculino',
-    estado: 'SP - São Paulo',
+    estado: 'SP',
     cidade: 'São Paulo',
-    endereco: 'Rua das Flores, 123',
+    rua: 'Rua das Flores',
+    numero: '123',
+    bairro: 'Jardins',
+    cep: '01234-567',
   ),
   Usuario(
     'Flakes',
@@ -379,9 +457,12 @@ List<Usuario> usuarios = [
     '55.555.555-5',
     '123',
     sexo: 'Masculino',
-    estado: 'RJ - Rio de Janeiro',
+    estado: 'RJ',
     cidade: 'Rio de Janeiro',
-    endereco: 'Av. Copacabana, 456',
+    rua: 'Av. Copacabana',
+    numero: '456',
+    bairro: 'Copacabana',
+    cep: '22070-011',
   ),
   Usuario(
     'João',
@@ -392,9 +473,12 @@ List<Usuario> usuarios = [
     '11.111.111-1',
     'senha123',
     sexo: 'Masculino',
-    estado: 'MG - Minas Gerais',
+    estado: 'MG',
     cidade: 'Belo Horizonte',
-    endereco: 'Rua dos Inconfidentes, 789',
+    rua: 'Rua dos Inconfidentes',
+    numero: '789',
+    bairro: 'Centro',
+    cep: '30140-120',
     temaEscuro: false,
   ),
   Usuario(
@@ -406,9 +490,12 @@ List<Usuario> usuarios = [
     '45.678.912-3',
     '23',
     sexo: 'Masculino',
-    estado: 'MG - Minas Gerais',
+    estado: 'MG',
     cidade: 'Belo Horizonte',
-    endereco: 'Av. Afonso Pena, 1010',
+    rua: 'Av. Afonso Pena',
+    numero: '1010',
+    bairro: 'Centro',
+    cep: '30130-001',
     temaEscuro: true,
   ),
 ];

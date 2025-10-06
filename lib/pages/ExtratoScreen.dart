@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/TransferenciaExtrato.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
@@ -88,7 +89,11 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
         title: 'Extrato',
         scaffoldKey: scaffoldKey,
         onBackPressed: () {
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InicialScreen()),
+          );
         },
       ),
       drawer: CustomDrawer(),

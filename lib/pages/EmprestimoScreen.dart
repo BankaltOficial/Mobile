@@ -9,7 +9,9 @@ import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
-import 'package:flutter_application_1/service/UsuarioService.dart'; // Adicione esta importação
+import 'package:flutter_application_1/service/UsuarioService.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EmprestimoScreen extends StatefulWidget {
   const EmprestimoScreen({super.key});
@@ -30,6 +32,9 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
   double interestRate = 7.97;
   int installments = 3;
   String paymentDay = "10";
+
+  // Estado de carregamento
+  bool _isProcessing = false;
 
   // Valores calculados
   double get monthlyRate => interestRate / 100 / 12;
@@ -95,58 +100,185 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
     return dates;
   }
 
-  // Método para processar o empréstimo com persistência
+  // ✨ MÉTODO SIMPLIFICADO - Apenas credita o valor na conta
   Future<void> _processarEmprestimo() async {
+    if (_isProcessing) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
+
     try {
-      // Obter o valor do empréstimo do controller ou usar o valor padrão
+      // Validações básicas
       double valorEmprestimo =
           double.tryParse(_loanAmountController.text.replaceAll(',', '.')) ??
               loanAmount;
 
       if (valorEmprestimo <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Valor do empréstimo deve ser maior que zero.'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        _mostrarErro('Valor do empréstimo deve ser maior que zero.');
         return;
       }
 
-      // Atualizar o saldo do usuário
+      if (valorEmprestimo > 100000) {
+        _mostrarErro('Valor máximo de empréstimo: R\$ 100.000,00');
+        return;
+      }
+
+      print('🔄 Processando empréstimo...');
+      print('   Cliente ID: ${usuario.id}');
+      print('   Valor: R\$ $valorEmprestimo');
+      print('   Saldo atual: R\$ ${usuario.saldo}');
+
+      // Calcular novo saldo
       double novoSaldo = usuario.saldo + valorEmprestimo;
+      print('   Novo saldo: R\$ $novoSaldo');
 
-      // Persistir a mudança usando o UsuarioService
+      // Tentar atualizar no servidor (em background, não bloqueia se falhar)
+      _atualizarSaldoNaApi(usuario.id, novoSaldo).catchError((e) {
+        print('⚠️ Aviso: Não foi possível sincronizar com servidor: $e');
+        // Continua mesmo se falhar
+      });
+
+      // Atualizar localmente (SharedPreferences) - SEMPRE funciona
       await UsuarioService.salvarSaldoUsuario(usuario.id, novoSaldo);
+      print('✅ Saldo atualizado localmente!');
 
-      // Atualizar o objeto usuario local
+      // Atualizar objeto do usuário e sessão
       usuario.saldo = novoSaldo;
-
-      // Atualizar a sessão
       Sessao.atualizarUsuario(usuario);
 
-      Navigator.pop(context); // Fechar o dialog
+      print('✅ Empréstimo concluído com sucesso!');
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Empréstimo de R\$ ${_formatCurrency(valorEmprestimo)} aprovado e creditado em sua conta!'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      // Fechar dialog
+      if (mounted) {
+        Navigator.pop(context);
+
+        // Mostrar sucesso
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.white, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      'Empréstimo Aprovado!',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Text('Valor creditado: R\$ ${_formatCurrency(valorEmprestimo)}'),
+                Text('Novo saldo: R\$ ${_formatCurrency(novoSaldo)}'),
+                SizedBox(height: 4),
+                Text(
+                  '${installments}x de R\$ ${_formatCurrency(installmentValue)}',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 5),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        // Voltar para tela inicial após 1 segundo
+        await Future.delayed(Duration(seconds: 1));
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => InicialScreen()),
+          );
+        }
+      }
     } catch (e) {
-      Navigator.pop(context); // Fechar o dialog em caso de erro
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erro ao processar empréstimo: $e'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        ),
-      );
+      print('❌ Erro ao processar empréstimo: $e');
+      if (mounted) {
+        Navigator.pop(context);
+        _mostrarErro('Erro ao processar empréstimo: ${e.toString()}');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
     }
+  }
+
+  // Método para atualizar saldo na API (executa em background)
+  Future<void> _atualizarSaldoNaApi(int clienteId, double novoSaldo) async {
+    try {
+      const String baseUrl = 'http://10.0.2.2:8080/apiCliente';
+      
+      print('📡 Tentando sincronizar com servidor...');
+      
+      // Buscar dados completos do usuário
+      final usuarioCompleto = await UsuarioService.buscarPorCpfApi(this.usuario.cpf)
+          .timeout(Duration(seconds: 5));
+      
+      if (usuarioCompleto == null) {
+        print('⚠️ Usuário não encontrado na API');
+        return;
+      }
+
+      // Atualizar o saldo
+      usuarioCompleto.saldo = novoSaldo;
+      final dadosJson = usuarioCompleto.toJson();
+
+      // Tentar PATCH (método correto do seu backend)
+      print('📡 PATCH $baseUrl/atualizar');
+      final response = await http.patch(
+        Uri.parse('$baseUrl/atualizar'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(dadosJson),
+      ).timeout(Duration(seconds: 5));
+
+      if (response.statusCode == 200 || 
+          response.statusCode == 204 || 
+          response.statusCode == 201) {
+        print('✅ Saldo sincronizado com sucesso no servidor!');
+      } else {
+        print('⚠️ Servidor retornou: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('⚠️ Não foi possível sincronizar com servidor: $e');
+      print('   (Saldo foi atualizado localmente)');
+      // Não lança exceção - permite que o empréstimo continue
+    }
+  }
+
+  void _mostrarErro(String mensagem) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.error_outline, color: Colors.white),
+            SizedBox(width: 8),
+            Expanded(child: Text(mensagem)),
+          ],
+        ),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -298,7 +430,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                 child: Column(
                   children: [
                     Text(
-                      'Total',
+                      'Total a pagar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -336,7 +468,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
               // Dia de pagamento editável
               Text(
-                'Datas para parcelas',
+                'Dia de vencimento',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -357,7 +489,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Todo mês dia $paymentDay',
+                        'Todo dia $paymentDay de cada mês',
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.mainGray,
@@ -403,12 +535,26 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
                         String date = entry.value;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            '${index + 1}ª parcela: $date - R\$ ${_formatCurrency(installmentValue)}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.mainGray,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${index + 1}ª parcela: $date',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.mainGray,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                'R\$ ${_formatCurrency(installmentValue)}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.main,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }).toList(),
@@ -419,71 +565,147 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
 
               SizedBox(height: 40),
 
+              // Botão de confirmação
               Container(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Confirmar Empréstimo'),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Valor: R\$ ${_formatCurrency(loanAmount)}'),
-                              Text(
-                                  'Taxa de juros: ${_formatCurrency(interestRate)}% a.a.'),
-                              Text(
-                                  'Parcelas: ${installments}x de R\$ ${_formatCurrency(installmentValue)}'),
-                              Text(
-                                  'Total: R\$ ${_formatCurrency(totalAmount)}'),
-                              Text('Vencimento: todo dia $paymentDay'),
-                              SizedBox(height: 16),
-                              Text(
-                                'O valor será creditado imediatamente em sua conta.',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.main,
+                  onPressed: _isProcessing
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Row(
+                                  children: [
+                                    Icon(Icons.account_balance_wallet,
+                                        color: AppColors.main),
+                                    SizedBox(width: 8),
+                                    Text('Confirmar Empréstimo'),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Cancelar'),
-                            ),
-                            ElevatedButton(
-                              onPressed: _processarEmprestimo,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.main,
-                              ),
-                              child: Text('Confirmar',
-                                  style: TextStyle(color: Colors.white)),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildInfoRow('Valor a receber',
+                                        'R\$ ${_formatCurrency(loanAmount)}'),
+                                    _buildInfoRow('Taxa de juros',
+                                        '${_formatCurrency(interestRate)}% a.a.'),
+                                    _buildInfoRow('Parcelas',
+                                        '${installments}x de R\$ ${_formatCurrency(installmentValue)}'),
+                                    _buildInfoRow('Total a pagar',
+                                        'R\$ ${_formatCurrency(totalAmount)}'),
+                                    _buildInfoRow(
+                                        'Vencimento', 'Todo dia $paymentDay'),
+                                    Divider(height: 24),
+                                    Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: Colors.green,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.check_circle_outline,
+                                              color: Colors.green, size: 20),
+                                          SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              'O valor será creditado imediatamente em sua conta!',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.green[800],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: _isProcessing
+                                        ? null
+                                        : () => Navigator.pop(context),
+                                    child: Text('Cancelar'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed:
+                                        _isProcessing ? null : _processarEmprestimo,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.main,
+                                      disabledBackgroundColor:
+                                          Colors.grey[400],
+                                    ),
+                                    child: _isProcessing
+                                        ? SizedBox(
+                                            width: 16,
+                                            height: 16,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.white),
+                                            ),
+                                          )
+                                        : Text('Confirmar',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.main,
+                    disabledBackgroundColor: Colors.grey[400],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    'Confirmar',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: _isProcessing
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Processando...',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          'Solicitar Empréstimo',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
 
@@ -491,6 +713,32 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '$label:',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[700],
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.invertMode,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -510,11 +758,18 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
           value: installments,
           isExpanded: true,
           items: options.map((int value) {
-            // Usar o installmentValue já calculado corretamente
+            // Recalcular valor da parcela para cada opção
+            double monthlyRateCalc = interestRate / 100 / 12;
+            double parcelaCalc = monthlyRateCalc == 0
+                ? loanAmount / value
+                : loanAmount *
+                    (monthlyRateCalc * pow(1 + monthlyRateCalc, value)) /
+                    (pow(1 + monthlyRateCalc, value) - 1);
+            
             return DropdownMenuItem<int>(
               value: value,
               child: Text(
-                '${value}x de R\$ ${_formatCurrency(installmentValue)}',
+                '${value}x de R\$ ${_formatCurrency(parcelaCalc)}',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColors.mainGray,
@@ -549,6 +804,7 @@ class _EmprestimoScreenState extends State<EmprestimoScreen> {
               labelText: 'Valor (R\$)',
               prefixText: 'R\$ ',
               border: OutlineInputBorder(),
+              helperText: 'Máximo: R\$ 100.000,00',
             ),
           ),
           actions: [

@@ -145,87 +145,139 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              // Remove pontos e traço do CPF
-                              String cpf = cpfController.text
-                                  .replaceAll(RegExp(r'[^0-9]'), '');
-                              String senha = passwordController.text;
+                          // Substitua apenas a parte do onPressed do botão ENTRAR:
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  // Mostrar loading
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => Center(
+                                      child: CircularProgressIndicator(color: AppColors.main),
+                                    ),
+                                  );
 
-                              try {
-                                // Chama a API para buscar o usuário pelo CPF
-                                Usuario? usuario =
-                                    await UsuarioService.buscarPorCpfApi(cpf);
+                                  try {
+                                    // Remove pontos e traço do CPF
+                                    String cpf = cpfController.text.replaceAll(RegExp(r'[^0-9]'), '');
+                                    String senha = passwordController.text;
 
-                                // Verifica se o usuário existe e se a senha está correta
-                                if (usuario != null && usuario.senha == senha) {
-                                  Sessao.limparUsuario();
-                                  Sessao.salvarUsuario(usuario);
+                                    print('🔐 Tentando login com CPF: $cpf');
 
-                                  // Atualiza cores/tema
-                                  String main = usuario.corPrincipal;
-                                  Color mainColor = Color(int.parse(
-                                      'FF${main.replaceAll('#', '')}',
-                                      radix: 16));
-                                  String secondary = usuario.corSecundaria;
-                                  Color secondaryColor = Color(int.parse(
-                                      'FF${secondary.replaceAll('#', '')}',
-                                      radix: 16));
-                                  String tertiary = usuario.corTerciaria;
-                                  Color tertiaryColor = Color(int.parse(
-                                      'FF${tertiary.replaceAll('#', '')}',
-                                      radix: 16));
-                                  bool isDarkMode = usuario.temaEscuro;
+                                    // Buscar usuário na API
+                                    Usuario? usuario = await UsuarioService.buscarPorCpfApi(cpf);
 
-                                  final provider = Provider.of<ColorProvider>(
+                                    if (usuario == null) {
+                                      // Fechar loading
+                                      Navigator.pop(context);
+                                      
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('CPF não encontrado'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    print('✅ Usuário encontrado: ${usuario.nome} (ID: ${usuario.id})');
+
+                                    // Verificar senha
+                                    if (usuario.senha != senha) {
+                                      // Fechar loading
+                                      Navigator.pop(context);
+                                      
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Senha incorreta'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    print('✅ Senha correta');
+
+                                    // 🔥 IMPORTANTE: Salvar no UsuarioService (SharedPreferences)
+                                    await UsuarioService.salvarUsuarioLogado(usuario.id);
+                                    print('✅ ID salvo no SharedPreferences: ${usuario.id}');
+
+                                    // 🔥 IMPORTANTE: Adicionar à lista de usuários locais se não existir
+                                    List<Usuario> usuariosLocais = await UsuarioService.carregarUsuarios();
+                                    bool usuarioJaExiste = usuariosLocais.any((u) => u.id == usuario.id);
+                                    
+                                    if (!usuarioJaExiste) {
+                                      print('➕ Adicionando usuário à lista local');
+                                      usuariosLocais.add(usuario);
+                                      await UsuarioService.salvarUsuarios(usuariosLocais);
+                                    }
+
+                                    // Salvar na sessão
+                                    Sessao.limparUsuario();
+                                    Sessao.salvarUsuario(usuario);
+                                    print('✅ Usuário salvo na Sessão');
+
+                                    // Atualizar cores/tema
+                                    String main = usuario.corPrincipal;
+                                    Color mainColor = Color(int.parse('FF${main.replaceAll('#', '')}', radix: 16));
+                                    String secondary = usuario.corSecundaria;
+                                    Color secondaryColor = Color(int.parse('FF${secondary.replaceAll('#', '')}', radix: 16));
+                                    String tertiary = usuario.corTerciaria;
+                                    Color tertiaryColor = Color(int.parse('FF${tertiary.replaceAll('#', '')}', radix: 16));
+                                    bool isDarkMode = usuario.temaEscuro;
+
+                                    final provider = Provider.of<ColorProvider>(context, listen: false);
+                                    provider.setColors(mainColor, secondaryColor, tertiaryColor);
+                                    provider.setTheme(isDarkMode);
+
+                                    await ColorService.setTheme(isDarkMode);
+                                    await ColorService.saveColors(mainColor, secondaryColor, tertiaryColor);
+                                    ColorProvider().toggleDarkMode(isDarkMode);
+                                    await ColorService.saveTheme(isDarkMode);
+
+                                    setState(() {
+                                      AppColors.isDarkMode = isDarkMode;
+                                      AppColors.main = mainColor;
+                                      AppColors.secondary = secondaryColor;
+                                      AppColors.tertiary = tertiaryColor;
+                                    });
+
+                                    cpfController.clear();
+                                    passwordController.clear();
+
+                                    // Fechar loading
+                                    Navigator.pop(context);
+
+                                    print('🎉 Login concluído com sucesso!');
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Login realizado com sucesso!'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+
+                                    Navigator.pushReplacement(
                                       context,
-                                      listen: false);
-                                  provider.setColors(
-                                      mainColor, secondaryColor, tertiaryColor);
-                                  provider.setTheme(isDarkMode);
+                                      MaterialPageRoute(builder: (context) => InicialScreen()),
+                                    );
 
-                                  await ColorService.setTheme(isDarkMode);
-                                  await ColorService.saveColors(
-                                      mainColor, secondaryColor, tertiaryColor);
-                                  ColorProvider().toggleDarkMode(isDarkMode);
-                                  await ColorService.saveTheme(isDarkMode);
-
-                                  setState(() {
-                                    AppColors.isDarkMode = isDarkMode;
-                                    AppColors.main = mainColor;
-                                    AppColors.secondary = secondaryColor;
-                                    AppColors.tertiary = tertiaryColor;
-                                  });
-
-                                  cpfController.clear();
-                                  passwordController.clear();
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Login Feito com Sucesso')),
-                                  );
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => InicialScreen()),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'CPF ou senha incorretos, $usuario')),
-                                  );
+                                  } catch (e) {
+                                    // Fechar loading se ainda estiver aberto
+                                    Navigator.pop(context);
+                                    
+                                    print('❌ Erro ao autenticar: $e');
+                                    
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Erro ao autenticar: $e'),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 4),
+                                      ),
+                                    );
+                                  }
                                 }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Erro ao autenticar: $e')),
-                                );
-                              }
-                            }
-                          },
+                              },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.main,
                             foregroundColor: Colors.white,

@@ -7,6 +7,7 @@ import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart'; // Adicione esta importação
 import 'package:flutter/services.dart';
 
+
 import '../service/Colors.dart';
 
 class PixPagarScreen extends StatefulWidget {
@@ -292,46 +293,117 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                 if (chavePix.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(
-                                          'Por favor, insira uma chave PIX válida.'),
+                                      content: Text('Por favor, insira uma chave PIX válida.'),
                                     ),
                                   );
                                   return;
                                 }
 
                                 try {
+                                  print('🔍 ===== DEBUG PIX =====');
+                                  print('🔍 Chave digitada: $chavePix');
+                                  print('🔍 Tipo selecionado: $selectedType');
+                                  
+                                  // Carregar usuários
                                   await UsuarioService.carregarUsuarios();
-                                  if (selectedType == 'CPF' ||
-                                      (chavePix.length == 14 &&
-                                          chavePix.contains('.'))) {
-                                    usuarioDestinatario =
-                                        verificarUsuarioPorCpf(chavePix);
-                                  } else if (selectedType == 'Telefone' ||
-                                      (chavePix.length >= 10 &&
-                                          chavePix.contains('('))) {
-                                    usuarioDestinatario =
-                                        verificarUsuarioPorTelefone(chavePix);
-                                  } else if (selectedType == 'Email' ||
-                                      chavePix.contains('@')) {
-                                    usuarioDestinatario =
-                                        verificarUsuarioPorEmail(chavePix);
+                                  
+                                  // Debug: mostrar quantos usuários foram carregados
+                                  print('🔍 Total de usuários carregados: ${usuarios.length}');
+                                  for (var u in usuarios) {
+                                    print('  👤 ID: ${u.id}, Nome: ${u.nome}, CPF: ${u.cpf}, Email: ${u.email}');
+                                  }
+                                  
+                                  // Limpar formatação
+                                  String chaveLimpa = chavePix.replaceAll(RegExp(r'[^\w@.-]'), '');
+                                  print('🔍 Chave limpa: $chaveLimpa');
+                                  
+                                  Usuario? usuarioDestinatario;
+
+                                  // Buscar por CPF
+                                  if (selectedType == 'CPF') {
+                                    print('🔍 Tentando buscar por CPF...');
+                                    
+                                    // Tentar na API primeiro
+                                    print('🔍 Buscando na API...');
+                                    usuarioDestinatario = await UsuarioService.buscarPorCpfApi(chaveLimpa);
+                                    
+                                    if (usuarioDestinatario != null) {
+                                      print('✅ Encontrado na API: ${usuarioDestinatario.nome}');
+                                    } else {
+                                      print('⚠️ Não encontrado na API, tentando localmente...');
+                                      
+                                      // Buscar localmente
+                                      try {
+                                        // Tentar com formatação
+                                        usuarioDestinatario = verificarUsuarioPorCpf(chavePix);
+                                        print('✅ Encontrado localmente (com formatação): ${usuarioDestinatario.nome}');
+                                      } catch (e1) {
+                                        print('❌ Não encontrado com formatação: $e1');
+                                        
+                                        try {
+                                          // Tentar sem formatação
+                                          usuarioDestinatario = verificarUsuarioPorCpf(chaveLimpa);
+                                          print('✅ Encontrado localmente (sem formatação): ${usuarioDestinatario.nome}');
+                                        } catch (e2) {
+                                          print('❌ Não encontrado sem formatação: $e2');
+                                          
+                                          // Buscar manualmente na lista
+                                          try {
+                                            usuarioDestinatario = usuarios.firstWhere(
+                                              (u) => u.cpf.replaceAll(RegExp(r'[^0-9]'), '') == chaveLimpa
+                                            );
+                                            print('✅ Encontrado na busca manual: ${usuarioDestinatario.nome}');
+                                          } catch (e3) {
+                                            print('❌ Não encontrado na busca manual: $e3');
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                  
+                                  // Buscar por Email
+                                  else if (selectedType == 'Email' || chavePix.contains('@')) {
+                                    print('🔍 Tentando buscar por Email...');
+                                    try {
+                                      usuarioDestinatario = verificarUsuarioPorEmail(chavePix);
+                                      print('✅ Encontrado por email: ${usuarioDestinatario.nome}');
+                                    } catch (e) {
+                                      print('❌ Email não encontrado: $e');
+                                    }
+                                  }
+                                  
+                                  // Buscar por Telefone
+                                  else if (selectedType == 'Telefone') {
+                                    print('🔍 Tentando buscar por Telefone...');
+                                    try {
+                                      usuarioDestinatario = verificarUsuarioPorTelefone(chavePix);
+                                      print('✅ Encontrado por telefone: ${usuarioDestinatario.nome}');
+                                    } catch (e) {
+                                      print('❌ Telefone não encontrado: $e');
+                                    }
                                   }
 
+                                  print('🔍 ===== FIM DEBUG =====');
+
+                                  if (usuarioDestinatario == null) {
+                                    throw Exception('Usuário não encontrado com esta chave PIX');
+                                  }
+
+                                  print('✅✅✅ Usuário final encontrado: ${usuarioDestinatario.nome}');
+
+                                  // Dialog de confirmação
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      TextEditingController valorController =
-                                          TextEditingController();
+                                      TextEditingController valorController = TextEditingController();
 
                                       return AlertDialog(
                                         title: Text('Confirmar PIX'),
                                         content: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(
-                                                'Para: ${usuarioDestinatario.nome}'),
+                                            Text('Para: ${usuarioDestinatario!.nome}'),
                                             SizedBox(height: 16),
                                             TextField(
                                               controller: valorController,
@@ -339,79 +411,52 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                                 labelText: 'Valor (R\$)',
                                                 border: OutlineInputBorder(),
                                               ),
-                                              keyboardType: TextInputType
-                                                  .numberWithOptions(
-                                                      decimal: true),
+                                              keyboardType: TextInputType.numberWithOptions(decimal: true),
                                             ),
                                           ],
                                         ),
                                         actions: [
                                           TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
+                                            onPressed: () => Navigator.pop(context),
                                             child: Text('Cancelar'),
                                           ),
                                           ElevatedButton(
                                             onPressed: _isLoading
                                                 ? null
                                                 : () async {
-                                                    double? valorTransferencia =
-                                                        double.tryParse(
-                                                            valorController
-                                                                .text);
- 
-                                                    if (valorTransferencia ==
-                                                            null ||
-                                                        valorTransferencia <=
-                                                            0) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
+                                                    double? valorTransferencia = double.tryParse(valorController.text);
+
+                                                    if (valorTransferencia == null || valorTransferencia <= 0) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
-                                                              'Insira um valor válido.'),
-                                                          backgroundColor:
-                                                              Colors.red,
+                                                          content: Text('Insira um valor válido.'),
+                                                          backgroundColor: Colors.red,
                                                         ),
                                                       );
                                                       return;
                                                     }
 
-                                                    if (valorTransferencia >
-                                                        usuario.saldo) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
+                                                    if (valorTransferencia > usuario.saldo) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
-                                                              'Saldo insuficiente para PIX.'),
-                                                          backgroundColor:
-                                                              Colors.red,
+                                                          content: Text('Saldo insuficiente para PIX.'),
+                                                          backgroundColor: Colors.red,
                                                         ),
                                                       );
                                                       return;
                                                     }
 
-                                                    if (usuarioDestinatario
-                                                            .cpf ==
-                                                        usuario.cpf) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
+                                                    if (usuarioDestinatario!.cpf == usuario.cpf) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
-                                                              'Você não pode fazer um PIX para a mesma conta'),
-                                                          backgroundColor:
-                                                              Colors.red,
+                                                          content: Text('Você não pode fazer um PIX para a mesma conta'),
+                                                          backgroundColor: Colors.red,
                                                         ),
                                                       );
                                                       return;
                                                     }
 
-                                                    // Realizar PIX usando o UsuarioService
-                                                    await _realizarPix(
-                                                        valorTransferencia,
-                                                        usuarioDestinatario);
+                                                    await _realizarPix(valorTransferencia, usuarioDestinatario);
                                                   },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: AppColors.main,
@@ -420,31 +465,24 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                                 ? SizedBox(
                                                     width: 20,
                                                     height: 20,
-                                                    child:
-                                                        CircularProgressIndicator(
+                                                    child: CircularProgressIndicator(
                                                       strokeWidth: 2,
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation<
-                                                                  Color>(
-                                                              Colors.white),
+                                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                                     ),
                                                   )
-                                                : Text(
-                                                    'Confirmar',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
+                                                : Text('Confirmar', style: TextStyle(color: Colors.white)),
                                           ),
                                         ],
                                       );
                                     },
                                   );
                                 } catch (e) {
+                                  print('❌ ERRO GERAL: $e');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(
-                                          'Usuário não encontrado: ${e.toString()}'),
+                                      content: Text('Usuário não encontrado: ${e.toString()}'),
                                       backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 4),
                                     ),
                                   );
                                 }
@@ -463,8 +501,7 @@ class _PixPagarScreenState extends State<PixPagarScreen> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
                             : Text(

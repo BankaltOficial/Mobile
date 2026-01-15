@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/InicialScreen.dart';
+import 'package:flutter_application_1/service/TransferenciaExtrato.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
+import 'package:flutter_application_1/service/ExtratoService.dart';
 
 class ExtratoScreen extends StatefulWidget {
   const ExtratoScreen({Key? key}) : super(key: key);
@@ -45,81 +46,20 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
   }
 
   Future<void> _carregarTransacoes() async {
-    // Simulando transações baseadas no histórico do usuário
-    // Em uma aplicação real, isso viria de um banco de dados
-    transacoes = _gerarTransacoesSimuladas();
-    setState(() {});
-  }
+    if (usuarioLogado == null) return;
 
-  List<TransacaoExtrato> _gerarTransacoesSimuladas() {
-    final now = DateTime.now();
-    return [
-      TransacaoExtrato(
-        id: '1',
-        tipo: TipoTransacao.PIX_RECEBIDO,
-        valor: 150.00,
-        data: now.subtract(Duration(hours: 2)),
-        descricao: 'PIX recebido de João Silva',
-        chavePix: 'joao@email.com',
-        saldoAnterior: usuarioLogado!.saldo - 150.00,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-      TransacaoExtrato(
-        id: '2',
-        tipo: TipoTransacao.PIX_ENVIADO,
-        valor: 75.50,
-        data: now.subtract(Duration(days: 1)),
-        descricao: 'PIX para Maria Santos',
-        chavePix: 'maria@email.com',
-        saldoAnterior: usuarioLogado!.saldo + 75.50,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-      TransacaoExtrato(
-        id: '3',
-        tipo: TipoTransacao.TRANSFERENCIA_ENVIADA,
-        valor: 200.00,
-        data: now.subtract(Duration(days: 2)),
-        descricao: 'Transferência para Igor Suracci',
-        contaDestino: 'Conta: 1234-5',
-        saldoAnterior: usuarioLogado!.saldo + 200.00,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-      TransacaoExtrato(
-        id: '4',
-        tipo: TipoTransacao.DEPOSITO,
-        valor: 500.00,
-        data: now.subtract(Duration(days: 3)),
-        descricao: 'Depósito em conta',
-        saldoAnterior: usuarioLogado!.saldo - 500.00,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-      TransacaoExtrato(
-        id: '5',
-        tipo: TipoTransacao.PAGAMENTO_CARTAO,
-        valor: 89.90,
-        data: now.subtract(Duration(days: 4)),
-        descricao: 'Pagamento com cartão - Loja ABC',
-        numeroCartao: usuarioLogado!.numeroCartao,
-        saldoAnterior: usuarioLogado!.saldo + 89.90,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-      TransacaoExtrato(
-        id: '6',
-        tipo: TipoTransacao.TRANSFERENCIA_RECEBIDA,
-        valor: 300.00,
-        data: now.subtract(Duration(days: 5)),
-        descricao: 'Transferência recebida de Flakes',
-        contaOrigem: 'Conta: 9876-1',
-        saldoAnterior: usuarioLogado!.saldo - 300.00,
-        saldoPosterior: usuarioLogado!.saldo,
-      ),
-    ];
+    try {
+      transacoes = await ExtratoService.buscarTransacoes(usuarioLogado!.id);
+    } catch (e) {
+      print('Erro ao carregar transações: $e');
+      transacoes = [];
+    } finally {
+      setState(() {});
+    }
   }
 
   List<TransacaoExtrato> _filtrarTransacoes() {
-    if (filtroSelecionado == 'Todos') {
-      return transacoes;
-    }
+    if (filtroSelecionado == 'Todos') return transacoes;
 
     return transacoes.where((transacao) {
       switch (filtroSelecionado) {
@@ -145,41 +85,43 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
     return Scaffold(
       key: scaffoldKey,
       appBar: CustomAppBar(
-          title: 'Investimento',
-          scaffoldKey: scaffoldKey,
-          onBackPressed: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const InicialScreen()));
-          }),
+        title: 'Extrato',
+        scaffoldKey: scaffoldKey,
+        onBackPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       drawer: CustomDrawer(),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : usuarioLogado == null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error_outline, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text(
-                        'Erro ao carregar dados do usuário',
-                        style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                )
+              ? _buildErroUsuario()
               : RefreshIndicator(
                   onRefresh: _carregarDados,
                   child: Column(
                     children: [
                       _buildHeader(),
                       _buildFiltroChips(),
-                      Expanded(
-                        child: _buildListaTransacoes(),
-                      ),
+                      Expanded(child: _buildListaTransacoes()),
                     ],
                   ),
                 ),
+    );
+  }
+
+  Widget _buildErroUsuario() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, size: 64, color: Colors.grey),
+          SizedBox(height: 16),
+          Text(
+            'Erro ao carregar dados do usuário',
+            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -188,7 +130,8 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
       width: double.infinity,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Color(int.parse(usuarioLogado!.corPrincipal.replaceAll('#', '0xFF'))),
+        color: Color(
+            int.parse(usuarioLogado!.corPrincipal.replaceAll('#', '0xFF'))),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),
@@ -197,30 +140,17 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Saldo Atual',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-            ),
-          ),
+          Text('Saldo Atual',
+              style: TextStyle(color: Colors.white70, fontSize: 16)),
           SizedBox(height: 8),
           Text(
             'R\$ ${usuarioLogado!.saldo.toStringAsFixed(2).replaceAll('.', ',')}',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+                color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8),
-          Text(
-            'Olá, ${usuarioLogado!.nome}',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
-          ),
+          Text('Olá, ${usuarioLogado!.nome}',
+              style: TextStyle(color: Colors.white70, fontSize: 14)),
         ],
       ),
     );
@@ -286,22 +216,11 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
             Icon(Icons.receipt_long_outlined,
                 size: 64, color: Colors.grey[400]),
             SizedBox(height: 16),
-            Text(
-              'Nenhuma transação encontrada',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Nenhuma transação encontrada',
+                style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             SizedBox(height: 8),
-            Text(
-              'Suas transações aparecerão aqui',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
-            ),
+            Text('Suas transações aparecerão aqui',
+                style: TextStyle(fontSize: 14, color: Colors.grey[500])),
           ],
         ),
       );
@@ -334,33 +253,23 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      transacao.descricao,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[800],
-                      ),
-                    ),
+                    Text(transacao.descricao,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[800])),
                     SizedBox(height: 4),
-                    Text(
-                      _formatarData(transacao.data),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
+                    Text(_formatarData(transacao.data),
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.grey[600])),
                     if (transacao.chavePix != null ||
                         transacao.contaDestino != null)
                       Padding(
                         padding: EdgeInsets.only(top: 4),
                         child: Text(
-                          transacao.chavePix ?? transacao.contaDestino ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
+                            transacao.chavePix ?? transacao.contaDestino ?? '',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey[500])),
                       ),
                   ],
                 ),
@@ -379,11 +288,8 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.arrow_forward_ios,
+                      size: 16, color: Colors.grey[400]),
                 ],
               ),
             ],
@@ -431,11 +337,7 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
         color: cor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(24),
       ),
-      child: Icon(
-        icone,
-        color: cor,
-        size: 24,
-      ),
+      child: Icon(icone, color: cor, size: 24),
     );
   }
 
@@ -449,68 +351,12 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
     final now = DateTime.now();
     final difference = now.difference(data);
 
-    if (difference.inDays == 0) {
+    if (difference.inDays == 0)
       return 'Hoje ${DateFormat('HH:mm').format(data)}';
-    } else if (difference.inDays == 1) {
+    if (difference.inDays == 1)
       return 'Ontem ${DateFormat('HH:mm').format(data)}';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays} dias atrás';
-    } else {
-      return DateFormat('dd/MM/yyyy HH:mm').format(data);
-    }
-  }
-
-  void _mostrarFiltros() {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Filtrar por',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              _buildFiltroOption('Todos'),
-              _buildFiltroOption('PIX'),
-              _buildFiltroOption('Transferências'),
-              _buildFiltroOption('Depósitos'),
-              _buildFiltroOption('Pagamentos'),
-              SizedBox(height: 20),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildFiltroOption(String filtro) {
-    bool isSelected = filtroSelecionado == filtro;
-
-    return ListTile(
-      title: Text(filtro),
-      trailing: isSelected
-          ? Icon(Icons.check,
-              color: Color(int.parse(
-                  usuarioLogado!.corPrincipal.replaceAll('#', '0xFF'))))
-          : null,
-      onTap: () {
-        setState(() {
-          filtroSelecionado = filtro;
-        });
-        Navigator.pop(context);
-      },
-    );
+    if (difference.inDays < 7) return '${difference.inDays} dias atrás';
+    return DateFormat('dd/MM/yyyy HH:mm').format(data);
   }
 
   void _mostrarDetalhesTransacao(TransacaoExtrato transacao) {
@@ -522,7 +368,7 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetalheItem('Tipo', _obterDescricaoTipo(transacao.tipo)),
+            _buildDetalheItem('Tipo', transacao.tipo.name),
             _buildDetalheItem('Valor',
                 'R\$ ${transacao.valor.toStringAsFixed(2).replaceAll('.', ',')}'),
             _buildDetalheItem(
@@ -542,9 +388,7 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Fechar'),
-          ),
+              onPressed: () => Navigator.pop(context), child: Text('Fechar')),
         ],
       ),
     );
@@ -557,78 +401,14 @@ class _ExtratoScreenState extends State<ExtratoScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 100,
-            child: Text(
-              '$label:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[700],
-              ),
-            ),
-          ),
+              width: 100,
+              child: Text('$label:',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey[700]))),
           Expanded(
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.grey[800]),
-            ),
-          ),
+              child: Text(value, style: TextStyle(color: Colors.grey[800]))),
         ],
       ),
     );
   }
-
-  String _obterDescricaoTipo(TipoTransacao tipo) {
-    switch (tipo) {
-      case TipoTransacao.PIX_ENVIADO:
-        return 'PIX Enviado';
-      case TipoTransacao.PIX_RECEBIDO:
-        return 'PIX Recebido';
-      case TipoTransacao.TRANSFERENCIA_ENVIADA:
-        return 'Transferência Enviada';
-      case TipoTransacao.TRANSFERENCIA_RECEBIDA:
-        return 'Transferência Recebida';
-      case TipoTransacao.DEPOSITO:
-        return 'Depósito';
-      case TipoTransacao.PAGAMENTO_CARTAO:
-        return 'Pagamento com Cartão';
-    }
-  }
-}
-
-// Enums e classes auxiliares para o extrato
-enum TipoTransacao {
-  PIX_ENVIADO,
-  PIX_RECEBIDO,
-  TRANSFERENCIA_ENVIADA,
-  TRANSFERENCIA_RECEBIDA,
-  DEPOSITO,
-  PAGAMENTO_CARTAO,
-}
-
-class TransacaoExtrato {
-  final String id;
-  final TipoTransacao tipo;
-  final double valor;
-  final DateTime data;
-  final String descricao;
-  final String? chavePix;
-  final String? contaDestino;
-  final String? contaOrigem;
-  final String? numeroCartao;
-  final double saldoAnterior;
-  final double saldoPosterior;
-
-  TransacaoExtrato({
-    required this.id,
-    required this.tipo,
-    required this.valor,
-    required this.data,
-    required this.descricao,
-    this.chavePix,
-    this.contaDestino,
-    this.contaOrigem,
-    this.numeroCartao,
-    required this.saldoAnterior,
-    required this.saldoPosterior,
-  });
 }

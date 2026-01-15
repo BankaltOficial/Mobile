@@ -11,6 +11,8 @@ import 'package:flutter_application_1/service/ColorsProvider.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PersonalizedScreen extends StatefulWidget {
   const PersonalizedScreen({super.key});
@@ -24,12 +26,230 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
   Color secondaryColor = AppColors.secondary;
   Color tertiaryColor = AppColors.tertiary;
   bool isDarkMode = AppColors.isDarkMode;
+  bool isUpdating = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _carregarConfiguracoes();
+  }
+
+  // 🔹 Testa apenas a atualização do modo
+  Future<bool> _testarAtualizacaoApenasModo(String modo) async {
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) return false;
+
+    try {
+      final url = Uri.parse('http://localhost:8080/apiCliente/atualizar');
+      final body = {
+        "id": usuario.id,
+        "modo": modo,
+      };
+
+      print("=== TESTE: APENAS MODO ===");
+      print("Body teste: ${jsonEncode(body)}");
+
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      print("Status teste modo: ${response.statusCode}");
+      print("Response teste: ${response.body}");
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print("Erro no teste de modo: $e");
+      return false;
+    }
+  }
+
+  // 🔹 Carrega configurações do usuário do backend
+  Future<void> _carregarConfiguracoes() async {
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) return;
+
+    try {
+      final url = Uri.parse(
+          'http://localhost:8080/apiCliente/buscarporcpf/${usuario.cpf}');
+      final response = await http.get(url);
+
+      print("Carregando configurações - Status: ${response.statusCode}");
+
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final userData = jsonDecode(response.body);
+        print("Dados do usuário carregados: $userData");
+
+        setState(() {
+          // Cores
+          if (userData['corPrimaria'] != null) {
+            try {
+              String corHex = userData['corPrimaria'].replaceAll('#', '');
+              mainColor = Color(int.parse('FF$corHex', radix: 16));
+            } catch (e) {
+              print("Erro ao converter cor primária: $e");
+            }
+          }
+
+          if (userData['corSecundaria'] != null) {
+            try {
+              String corHex = userData['corSecundaria'].replaceAll('#', '');
+              secondaryColor = Color(int.parse('FF$corHex', radix: 16));
+            } catch (e) {
+              print("Erro ao converter cor secundária: $e");
+            }
+          }
+
+          if (userData['corTerciaria'] != null) {
+            try {
+              String corHex = userData['corTerciaria'].replaceAll('#', '');
+              tertiaryColor = Color(int.parse('FF$corHex', radix: 16));
+            } catch (e) {
+              print("Erro ao converter cor terciária: $e");
+            }
+          }
+
+          // Tema
+          if (userData['modo'] != null) {
+            bool modoEscuro = userData['modo'] == 'Dark';
+            isDarkMode = modoEscuro;
+            print(
+                "Modo carregado do backend: ${userData['modo']} -> $isDarkMode");
+          }
+        });
+      }
+    } catch (e) {
+      print("Erro ao carregar configurações: $e");
+    }
+  }
+
+  // 🔹 Atualiza no backend
+  Future<bool> atualizarCoresETemaCliente(String corPrimaria,
+      String corSecundaria, String corTerciaria, String modo) async {
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) {
+      print("Usuário não logado");
+      return false;
+    }
+
+    try {
+      final url = Uri.parse('http://localhost:8080/apiCliente/atualizar');
+      final body = {
+        "id": usuario.id,
+        "corPrimaria": corPrimaria,
+        "corSecundaria": corSecundaria,
+        "corTerciaria": corTerciaria,
+        "modo": modo,
+      };
+
+      print("=== REQUISIÇÃO DE ATUALIZAÇÃO ===");
+      print("Body completo: ${jsonEncode(body)}");
+
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      print("Status: ${response.statusCode}");
+      print("Resposta: ${response.body}");
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print("Erro na requisição: $e");
+      return false;
+    }
+  }
+
+  // 🔹 Processa atualização completa
+  Future<void> _processarAtualizacao() async {
+    if (isUpdating) return;
+
+    setState(() => isUpdating = true);
+
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) {
+      setState(() => isUpdating = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("Usuário não encontrado!"),
+            backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    String corPrimaria =
+        '#${mainColor.value.toRadixString(16).substring(2).toUpperCase()}';
+    String corSecundaria =
+        '#${secondaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
+    String corTerciaria =
+        '#${tertiaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
+    String modo = isDarkMode ? "Dark" : "Light";
+
+    print("=== PREPARANDO ATUALIZAÇÃO ===");
+    print("Modo a ser enviado: $modo");
+
+    // Testa atualização só de modo
+    await _testarAtualizacaoApenasModo(modo);
+
+    // Atualiza no backend
+    bool sucesso = await atualizarCoresETemaCliente(
+        corPrimaria, corSecundaria, corTerciaria, modo);
+
+    if (sucesso) {
+      final provider = Provider.of<ColorProvider>(context, listen: false);
+
+      // Atualiza objeto usuário local
+      usuario.corPrincipal = corPrimaria;
+      usuario.corSecundaria = corSecundaria;
+      usuario.corTerciaria = corTerciaria;
+      usuario.temaEscuro = isDarkMode;
+      Sessao.atualizarUsuario(usuario);
+
+      // Aplica globalmente
+      AppColors.main = mainColor;
+      AppColors.secondary = secondaryColor;
+      AppColors.tertiary = tertiaryColor;
+      AppColors.isDarkMode = isDarkMode;
+
+      provider.setColors(mainColor, secondaryColor, tertiaryColor);
+      provider.setTheme(isDarkMode);
+
+      await ColorService.saveColors(mainColor, secondaryColor, tertiaryColor);
+      await ColorService.saveTheme(isDarkMode);
+
+      setState(() => isUpdating = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Configurações salvas com sucesso!"),
+          backgroundColor: AppColors.defaultTertiary,
+        ),
+      );
+
+      await Future.delayed(Duration(milliseconds: 500));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const InicialScreen()),
+      );
+    } else {
+      setState(() => isUpdating = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Erro ao salvar cores e tema. Tente novamente."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  // 🔹 Picker de cores
   void pickColor(Color currentColor, ValueChanged<Color> onColorChanged) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Escolha uma cor'),
+        title: Text("Escolha uma cor"),
         content: SingleChildScrollView(
           child: ColorPicker(
             pickerColor: currentColor,
@@ -38,7 +258,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
         ),
         actions: [
           TextButton(
-            child: const Text('Fechar'),
+            child: Text("Fechar"),
             onPressed: () => Navigator.of(context).pop(),
           )
         ],
@@ -47,186 +267,126 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: CustomAppBar(
-            title: 'Personalizar',
-            scaffoldKey: _scaffoldKey,
-            onBackPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicialScreen()));
-            }),
-        drawer: const CustomDrawer(),
-        backgroundColor: AppColors.themeColor,
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(40),
-            child: Column(
-              children: [
-                Text(
-                  "Escolha as cores do seu aplicativo",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.invertModeGray),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(
+        title: "Personalizar",
+        scaffoldKey: _scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const InicialScreen()),
+          );
+        },
+      ),
+      drawer: const CustomDrawer(),
+      backgroundColor: AppColors.themeColor,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            children: [
+              Text(
+                "Escolha as cores do seu aplicativo",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.invertModeGray,
                 ),
-                const SizedBox(height: 30),
-                buildColorSelector(
-                  title: "Principal",
-                  color: mainColor,
-                  onTap: () => pickColor(mainColor, (color) {
-                    setState(() => mainColor = color);
-                  }),
-                ),
+              ),
+              const SizedBox(height: 30),
+
+              // Seletor de cores
+              buildColorSelector("Principal", mainColor, () {
+                if (!isUpdating)
+                  pickColor(mainColor, (c) => setState(() => mainColor = c));
+              }),
+              const SizedBox(height: 20),
+              buildColorSelector("Secundária", secondaryColor, () {
+                if (!isUpdating)
+                  pickColor(secondaryColor,
+                      (c) => setState(() => secondaryColor = c));
+              }),
+              const SizedBox(height: 20),
+              buildColorSelector("Terciária", tertiaryColor, () {
+                if (!isUpdating)
+                  pickColor(
+                      tertiaryColor, (c) => setState(() => tertiaryColor = c));
+              }),
+
+              const SizedBox(height: 30),
+
+              if (isUpdating) ...[
+                CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(mainColor)),
+                const SizedBox(height: 10),
+                Text("Salvando configurações...",
+                    style: TextStyle(color: AppColors.invertModeGray)),
                 const SizedBox(height: 20),
-                buildColorSelector(
-                  title: "Secundária",
-                  color: secondaryColor,
-                  onTap: () => pickColor(secondaryColor, (color) {
-                    setState(() => secondaryColor = color);
-                  }),
-                ),
-                const SizedBox(height: 20),
-                buildColorSelector(
-                  title: "Terciária",
-                  color: tertiaryColor,
-                  onTap: () => pickColor(tertiaryColor, (color) {
-                    setState(() => tertiaryColor = color);
-                  }),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        Usuario? usuario = Sessao.getUsuario();
-                        final provider =
-                            Provider.of<ColorProvider>(context, listen: false);
-                        if (usuario == null) {
-                          usuario = Usuario(
-                            'Usuário',
-                            'CPF não encontrado',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                          );
-                          return;
-                        }
-                        usuario.corPrincipal =
-                            // ignore: deprecated_member_use
-                            '#${mainColor.value.toRadixString(16).substring(2).toUpperCase()}';
-                        usuario.corSecundaria =
-                        // ignore: deprecated_member_use
-                            '#${secondaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
-                        usuario.corTerciaria =
-                        // ignore: deprecated_member_use
-                            '#${tertiaryColor.value.toRadixString(16).substring(2).toUpperCase()}';
-                        usuario.temaEscuro = isDarkMode;
-                        Sessao.atualizarUsuario(usuario);
-                        provider.setColors(
-                            mainColor, secondaryColor, tertiaryColor);
-                        provider.setTheme(isDarkMode);
-                        await ColorService.setTheme(isDarkMode);
-                        await ColorService.saveColors(
-                            mainColor, secondaryColor, tertiaryColor);
-                        ColorProvider().toggleDarkMode(isDarkMode);
-                        await ColorService.saveTheme(isDarkMode);
-                        setState(() {
-                          AppColors.isDarkMode = isDarkMode;
-                          AppColors.main = mainColor;
-                          AppColors.secondary = secondaryColor;
-                          AppColors.tertiary = tertiaryColor;
-                        });
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const InicialScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: mainColor,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 32),
-                      ),
-                      child: const Text("Continuar",
-                          style: TextStyle(
-                              fontSize: 15, color: AppColors.mainWhite)),
-                    ),
-                    const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const InicialScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.mainRed,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 32),
-                      ),
-                      child: const Text("Cancelar",
-                          style: TextStyle(
-                              fontSize: 15, color: AppColors.mainWhite)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "As cores escolhidas serão aplicadas em todo o aplicativo.",
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyle(fontSize: 16, color: AppColors.invertModeGray),
-                ),
-                const SizedBox(height: 20),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.palette,
-                      color: AppColors.invertModeGray, size: 28),
-                  const SizedBox(width: 10),
-                  Text(
-                    isDarkMode ? "Modo Escuro" : "Modo Claro",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: AppColors.invertModeGray,
-                      fontWeight: FontWeight.bold,
-                    ),
+              ],
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: isUpdating ? null : _processarAtualizacao,
+                    style: ElevatedButton.styleFrom(backgroundColor: mainColor),
+                    child: Text(isUpdating ? "Salvando..." : "Continuar",
+                        style: TextStyle(color: AppColors.mainWhite)),
                   ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: isUpdating
+                        ? null
+                        : () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const InicialScreen())),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.mainRed),
+                    child: Text("Cancelar",
+                        style: TextStyle(color: AppColors.mainWhite)),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.palette, color: AppColors.invertModeGray),
+                  const SizedBox(width: 10),
+                  Text(isDarkMode ? "Modo Escuro" : "Modo Claro",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: AppColors.invertModeGray)),
                   const SizedBox(width: 10),
                   Switch(
                     value: isDarkMode,
                     activeColor: AppColors.secondary,
                     inactiveThumbColor: AppColors.main,
-                    onChanged: (value) {
-                      ColorService.toggleDarkMode();
-                      setState(() {
-                        isDarkMode = value;
-                      });
-                      if (isDarkMode) {
-                      } else {}
-                    },
+                    onChanged: isUpdating
+                        ? null
+                        : (v) => setState(() {
+                              isDarkMode = v;
+                              print("Switch alterado para $isDarkMode");
+                            }),
                   ),
-                ]),
-                const SizedBox(height: 20),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
-  Widget buildColorSelector({
-    required String title,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
+  // 🔹 Construtor de seletor de cor
+  Widget buildColorSelector(String title, Color color, VoidCallback onTap) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -246,10 +406,8 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
                         color: AppColors.invertModeGray, fontSize: 18)),
                 const SizedBox(height: 10),
                 Text(
-                  // ignore: deprecated_member_use
                   '#${color.value.toRadixString(16).substring(2).toUpperCase()}',
-                  style: TextStyle(
-                      color: color, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: color, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -260,9 +418,7 @@ class _PersonalizedScreenState extends State<PersonalizedScreen> {
           height: 80,
           width: 80,
           decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-          ),
+              color: color, borderRadius: BorderRadius.circular(12)),
         ),
       ],
     );

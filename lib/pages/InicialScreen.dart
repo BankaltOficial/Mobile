@@ -14,9 +14,12 @@ import 'package:flutter_application_1/pages/TransferenciaScreen.dart';
 import 'package:flutter_application_1/pages/WelcomeScreen.dart';
 import 'package:flutter_application_1/pages/BoletoScreen.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/ColorsProvider.dart';
+import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/UsuarioService.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -31,6 +34,7 @@ class _InicialScreenState extends State<InicialScreen> {
       Usuario('Usuário', 'CPF não encontrado', '', '', '', '', '');
 
   Icon iconVisibility = Icon(Icons.visibility);
+  String nome = "";
   String txtSaldo = '';
   bool isLoading = true;
 
@@ -45,7 +49,7 @@ class _InicialScreenState extends State<InicialScreen> {
     try {
       // Inicializar o UsuarioService
       await UsuarioService.inicializar();
-      
+
       // Carregar dados atualizados do usuário
       await _carregarDadosUsuario();
     } catch (e) {
@@ -61,24 +65,24 @@ class _InicialScreenState extends State<InicialScreen> {
   Future<void> _carregarDadosUsuario() async {
     try {
       // Carregar lista atualizada de usuários
-      List<Usuario> usuariosAtualizados = await UsuarioService.carregarUsuarios();
-      
+      List<Usuario> usuariosAtualizados =
+          await UsuarioService.carregarUsuarios();
+
       // Encontrar o usuário atual na lista atualizada
       Usuario? usuarioAtualizado = usuariosAtualizados.firstWhere(
         (u) => u.id == usuario.id,
         orElse: () => usuario,
       );
-      
+
       setState(() {
         usuario = usuarioAtualizado;
         txtSaldo = usuario.saldo.toStringAsFixed(2).replaceAll('.', ',');
-        
+
         // Se o saldo estiver oculto, manter oculto
         if (iconVisibility.icon == Icons.visibility_off) {
           txtSaldo = '**********';
         }
       });
-      
     } catch (e) {
       print('Erro ao carregar dados do usuário: $e');
     }
@@ -89,11 +93,64 @@ class _InicialScreenState extends State<InicialScreen> {
     await _carregarDadosUsuario();
   }
 
+  // Método para confirmar logout
+  Future<void> _confirmarLogout() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // Usuário precisa escolher uma opção
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.themeColor,
+          title: Text(
+            'Confirmar Logout',
+            style: TextStyle(color: AppColors.invertMode),
+          ),
+          content: Text(
+            'Você realmente deseja sair da sua conta?',
+            style: TextStyle(color: AppColors.invertMode),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancelar',
+                style: TextStyle(color: AppColors.secondary),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o diálogo
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Sair',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () async {
+                AppColors.main = AppColors.mainPurple;
+                AppColors.secondary = AppColors.mainBlue;
+                AppColors.tertiary = AppColors.mainGreen;
+
+                final provider =
+                    Provider.of<ColorProvider>(context, listen: false);
+                provider.setColors(AppColors.mainPurple, AppColors.mainBlue,
+                    AppColors.mainGreen);
+                await ColorService.saveColors(AppColors.mainPurple,
+                    AppColors.mainBlue, AppColors.mainGreen);
+                provider.resetColors();
+                Sessao.limparUsuario();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    String nome = usuario.nome;
-    double saldo = usuario.saldo;
-
     if (isLoading) {
       return Scaffold(
         backgroundColor: AppColors.themeColor,
@@ -105,414 +162,402 @@ class _InicialScreenState extends State<InicialScreen> {
       );
     }
 
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: CustomAppBar(
-            title: 'Pagina Inicial',
-            scaffoldKey: _scaffoldKey,
-            onBackPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WelcomeScreen(),
-                ),
-              );
-            }),
-        drawer: CustomDrawer(),
-        backgroundColor: AppColors.themeColor,
-        body: RefreshIndicator(
-          onRefresh: _atualizarSaldo,
-          color: AppColors.main,
-          child: ListView(children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Olá, $nome', style: TextStyle(fontSize: 27, color: AppColors.invertMode)),
-                      SizedBox(width: 15),
-                      Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.grey[300],
-                                ),
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    '',
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: Colors.grey[300],
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 50,
-                                          color: Colors.grey[600],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        height: 125,
-                        child: Image.asset(
-                          'assets/images/LogoBANKALTsemfundo1.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 120,
-                        width: 250,
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: AppColors.mainLight,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Saldo',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold, 
-                                          color: AppColors.invertMode)),
-                                  IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          iconVisibility = iconVisibility.icon ==
-                                                  Icons.visibility
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility);
-                                          if (iconVisibility.icon ==
-                                              Icons.visibility_off) {
-                                            txtSaldo = '**********';
-                                          } else {
-                                            txtSaldo = saldo
-                                                .toStringAsFixed(2)
-                                                .replaceAll('.', ',');
-                                          }
-                                        });
-                                      },
-                                      icon: Icon(iconVisibility.icon,
-                                          color: AppColors.invertModeMain, size: 25)),
-                                ],
-                              ),
-                              Text('R\$ $txtSaldo',
-                                  style: TextStyle(fontSize: 24, color: AppColors.invertMode)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  TextButton(
-                      onPressed: () async {
-                        final result = await Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ExtratoScreen()));
-                        // Atualizar saldo quando retornar
-                        if (result == true) {
-                          _atualizarSaldo();
-                        }
-                      },
-                      child: Text("Ver extrato >",
-                          style: TextStyle(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.bold))),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+    return WillPopScope(
+        // Impede que o botão voltar do sistema funcione
+        onWillPop: () async {
+          await _confirmarLogout();
+          return false; // Sempre retorna false para controlar manualmente
+        },
+        child: Scaffold(
+            key: _scaffoldKey,
+            appBar: CustomAppBar(
+              title: 'Pagina Inicial',
+              scaffoldKey: _scaffoldKey,
+              // Chama o diálogo de confirmação ao clicar em voltar
+              onBackPressed: () {
+                _confirmarLogout();
+              },
+            ),
+            drawer: CustomDrawer(),
+            backgroundColor: AppColors.themeColor,
+            body: RefreshIndicator(
+              onRefresh: _atualizarSaldo,
+              color: AppColors.main,
+              child: ListView(children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const PixScreen()));
-                                      // Atualizar saldo quando retornar
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset("assets/icons/Pix.png",
-                                        width: 50, height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Pix",
+                          Text('Olá, ${usuario.nome}',
                               style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const CardsScreen()));
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset("assets/icons/Cartoes.png",
-                                        width: 50, height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Cartões",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const BoletoScreen()));
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset("assets/icons/Boleto.png",
-                                        width: 50, height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Boleto",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const InvestimentoScreen()));
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset(
-                                        "assets/icons/Investimento.png",
-                                        width: 50,
-                                        height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Investimentos",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const TransferenciaScreen()));
-                                      // Atualizar saldo quando retornar da transferência
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset(
-                                        "assets/icons/Transferencia.png",
-                                        width: 50,
-                                        height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Transferência",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  height: 75,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const EmprestimoScreen()));
-                                      if (result == true) {
-                                        _atualizarSaldo();
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.main,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Image.asset(
-                                        "assets/icons/Emprestimo.png",
-                                        width: 50,
-                                        height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Empréstimo",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              height: 75,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  final result = await Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EducationScreen()));
-                                  if (result == true) {
-                                    _atualizarSaldo();
-                                  }
+                                  fontSize: 27, color: AppColors.invertMode)),
+                          SizedBox(width: 15),
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                '',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[300],
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 50,
+                                      color: Colors.grey[600],
+                                    ),
+                                  );
                                 },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.main,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10))),
-                                child: Image.asset("assets/icons/Estudos.png",
-                                    width: 50, height: 50),
                               ),
                             ),
                           ),
-                          SizedBox(height: 5),
-                          Text("Educação",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
+                          SizedBox(
+                            height: 125,
+                            child: Image.asset(
+                              'assets/images/LogoBANKALTsemfundo1.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: 250,
+                            child: Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: AppColors.mainLight,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Saldo',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.invertMode)),
+                                      IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              iconVisibility = iconVisibility
+                                                          .icon ==
+                                                      Icons.visibility
+                                                  ? Icon(Icons.visibility_off)
+                                                  : Icon(Icons.visibility);
+                                              if (iconVisibility.icon ==
+                                                  Icons.visibility_off) {
+                                                txtSaldo = '**********';
+                                              } else {
+                                                txtSaldo = usuario.saldo
+                                                    .toStringAsFixed(2)
+                                                    .replaceAll('.', ',');
+                                              }
+                                            });
+                                          },
+                                          icon: Icon(iconVisibility.icon,
+                                              color: AppColors.invertModeMain,
+                                              size: 25)),
+                                    ],
+                                  ),
+                                  Text('R\$ $txtSaldo',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: AppColors.invertMode)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      TextButton(
+                          onPressed: () async {
+                            final result = await Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ExtratoScreen()));
+                            // Atualizar saldo quando retornar
+                            if (result == true) {
+                              _atualizarSaldo();
+                            }
+                          },
+                          child: Text("Ver extrato >",
+                              style: TextStyle(
+                                  color: AppColors.secondary,
+                                  fontWeight: FontWeight.bold))),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const PixScreen()));
+                                          // Atualizar saldo quando retornar
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Pix.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Pix",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const CardsScreen()));
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Cartoes.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Cartões",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const BoletoScreen()));
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Boleto.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Boleto",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const InvestimentoScreen()));
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Investimento.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Investimentos",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const TransferenciaScreen()));
+                                          // Atualizar saldo quando retornar da transferência
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Transferencia.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Transferência",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const EmprestimoScreen()));
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Emprestimo.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Empréstimo",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
                                   height: 75,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      final result = await Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const PersonalizedScreen()));
+                                      final result =
+                                          await Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const EducationScreen()));
                                       if (result == true) {
                                         _atualizarSaldo();
                                       }
@@ -523,24 +568,63 @@ class _InicialScreenState extends State<InicialScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10))),
                                     child: Image.asset(
-                                        "assets/icons/Personalizacao.png",
+                                        "assets/icons/Estudos.png",
                                         width: 50,
                                         height: 50),
-                                  ))),
-                          SizedBox(height: 5),
-                          Text("Personalização",
-                              style: TextStyle(
-                                  color: AppColors.invertModeGray,
-                                  fontSize: 16.5,
-                                  fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text("Educação",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 75,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          final result =
+                                              await Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const PersonalizedScreen()));
+                                          if (result == true) {
+                                            _atualizarSaldo();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.main,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        child: Image.asset(
+                                            "assets/icons/Personalizacao.png",
+                                            width: 50,
+                                            height: 50),
+                                      ))),
+                              SizedBox(height: 5),
+                              Text("Personalização",
+                                  style: TextStyle(
+                                      color: AppColors.invertModeGray,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ]),
-        ));
+                ),
+              ]),
+            )));
   }
 }

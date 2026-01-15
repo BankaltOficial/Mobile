@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/EducationScreen.dart';
+import 'package:flutter_application_1/service/Sessao.dart';
+import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_application_1/components/AppBar.dart';
 import 'package:flutter_application_1/components/Drawer.dart';
@@ -69,7 +71,7 @@ class PageEducationScreen extends StatefulWidget {
     this.brandName,
     this.highlightedQuestion,
     this.buttonText,
-    this.backgroundColor = AppColors.mainWhite,
+    this.backgroundColor = Colors.transparent,
     this.showAudioButton = true,
     this.showActionButton = true,
     this.onActionPressed,
@@ -507,6 +509,12 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     return const BoxDecoration();
   }
 
+  // Função para verificar se o tema é escuro
+  bool _isDarkTheme() {
+    Usuario? usuario = Sessao.getUsuario();
+    return usuario!.temaEscuro || false;
+  }
+
   // Construir seção do YouTube Player
   Widget _buildYouTubePlayerSection() {
     if (!isVideoInitialized || _youtubeController == null) {
@@ -514,7 +522,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
         height: 200,
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: _isDarkTheme() ? Colors.grey[800] : Colors.grey[300],
           borderRadius: BorderRadius.circular(16),
         ),
         child: const Center(
@@ -585,7 +593,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
               Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: _isDarkTheme() ? Colors.grey[800] : Colors.grey[100],
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16),
@@ -665,10 +673,14 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       margin: const EdgeInsets.symmetric(vertical: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: _isDarkTheme() 
+            ? Colors.white.withOpacity(0.05)
+            : Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: _isDarkTheme() 
+              ? Colors.white.withOpacity(0.1)
+              : Colors.white.withOpacity(0.2),
         ),
       ),
       child: Row(
@@ -889,17 +901,30 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     );
   }
 
-  // Método para construir o conteúdo principal com Markdown
+  // Método para construir o conteúdo principal com Markdown - CORRIGIDO
   Widget _buildMainContent() {
+    final isDark = _isDarkTheme();
+    
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        // Fundo adaptável ao tema
+        color: isDark 
+            ? AppColors.theme.withOpacity(0.8) // Usa a cor do tema escuro com transparência
+            : Colors.white.withOpacity(0.9),   // Mantém branco para tema claro
         borderRadius: BorderRadius.circular(16),
+        border: isDark 
+            ? Border.all(
+                color: AppColors.invertMode.withOpacity(0.1), 
+                width: 1
+              )
+            : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: isDark 
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -994,8 +1019,10 @@ class _PageEducationScreenState extends State<PageEducationScreen>
     );
   }
 
-  // Estilo padrão para Markdown
+  // Estilo padrão para Markdown - CORRIGIDO
   MarkdownStyleSheet _getDefaultMarkdownStyleSheet() {
+    final isDark = _isDarkTheme();
+    
     return MarkdownStyleSheet(
       h1: TextStyle(
         fontSize: 24,
@@ -1015,7 +1042,7 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       p: TextStyle(
         fontSize: widget.contentFontSize ?? 16,
         height: 1.6,
-        color: AppColors.invertMode,
+        color: AppColors.invertMode, // Usa a cor invertida automática do AppColors
       ),
       strong: TextStyle(
         fontWeight: FontWeight.bold,
@@ -1027,13 +1054,21 @@ class _PageEducationScreenState extends State<PageEducationScreen>
       ),
       code: TextStyle(
         fontFamily: 'monospace',
-        backgroundColor: Colors.grey[200],
-        color: const Color(0xFF2563EB),
+        backgroundColor: isDark 
+            ? Colors.grey[800]
+            : Colors.grey[200],
+        color: AppColors.main,
       ),
       codeblockDecoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: isDark 
+            ? Colors.grey[900]
+            : Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(
+          color: isDark 
+              ? Colors.grey[700]! 
+              : Colors.grey[300]!
+        ),
       ),
       blockquote: TextStyle(
         fontStyle: FontStyle.italic,
@@ -1051,8 +1086,13 @@ class _PageEducationScreenState extends State<PageEducationScreen>
         color: AppColors.main,
       ),
       a: TextStyle(
-        color: const Color(0xFF2563EB),
+        color: AppColors.main,
         decoration: TextDecoration.underline,
+      ),
+      // Adicionando estilos para listas
+      listIndent: 24,
+      checkbox: TextStyle(
+        color: AppColors.main,
       ),
     );
   }
@@ -1066,13 +1106,16 @@ class _PageEducationScreenState extends State<PageEducationScreen>
 
   // Função para falar apenas o conteúdo
   Future<void> _speakOnlyContent() async {
-    String cleanContent = _removeMarkdownFormatting(widget.content);
+    if (!isInitialized) return;
 
-    // Função para falar apenas o conteúdo
-    Future<void> _speakOnlyContent() async {
-      await flutterTts.speak(widget.content);
+    if (isSpeaking) {
+      await flutterTts.stop();
+      setState(() {
+        isSpeaking = false;
+      });
+    } else {
+      String cleanContent = _removeMarkdownFormatting(widget.content);
+      await flutterTts.speak(cleanContent);
     }
-
-    // Método para construir conteúdo adicional
   }
 }

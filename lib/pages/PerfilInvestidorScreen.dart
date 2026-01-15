@@ -262,7 +262,7 @@ class _PerfilInvestidorScreenState extends State<PerfilInvestidorScreen> {
                           children: [
                             TextSpan(
                               text: perfis[perfilIndex],
-                              style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.invertMode, fontSize: 18),
                             ),
                           ],
                         ),

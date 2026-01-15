@@ -86,32 +86,43 @@ class Usuario {
 
   // Factory constructor para criar Usuario a partir de JSON
   factory Usuario.fromJson(Map<String, dynamic> json) {
-    // Atualizar o _idCounter se necessário para evitar conflitos
     int id = json['id'] as int;
+
     if (id >= _idCounter) {
       _idCounter = id + 1;
     }
 
     return Usuario._fromJson(
       id: id,
-      nome: json['nome'] as String,
-      email: json['email'] as String,
-      cpf: json['cpf'] as String,
-      rg: json['rg'] as String,
-      dataNascimento: json['dataNascimento'] as String,
-      telefone: json['telefone'] as String,
-      senha: json['senha'] as String,
-      saldo: (json['saldo'] as num).toDouble(),
-      score: json['score'] as int,
-      ponto: json['ponto'] as int,
-      numeroCartao: json['numeroCartao'] as String,
-      cvv: json['cvv'] as String,
-      validadeCartao: json['validadeCartao'] as String,
-      chavePix: json['chavePix'] as String,
-      corPrincipal: json['corPrincipal'] as String? ?? '#353DAB',
-      corSecundaria: json['corSecundaria'] as String? ?? '#027BD4',
-      corTerciaria: json['corTerciaria'] as String? ?? '#04A95C',
-      temaEscuro: json['temaEscuro'] as bool? ?? false,
+      nome: json['nome'] ?? '',
+      email: json['email'] ?? '',
+      cpf: json['cpf'] ?? '',
+      rg: json['rg'] ?? '',
+      dataNascimento: json['datanascimento1'] ?? '',
+      telefone: json['telefone'] ?? '',
+      senha: json['senha'] ?? '',
+      saldo: (json['rendaInvestimento']?['saldo'] as num?)?.toDouble() ?? 0.0,
+      score: 0,
+      ponto: 0,
+      numeroCartao: json['cartaoModel'] != null &&
+              (json['cartaoModel'] as List).isNotEmpty
+          ? json['cartaoModel'][0]['numero'] ?? ''
+          : '',
+      cvv: json['cartaoModel'] != null &&
+              (json['cartaoModel'] as List).isNotEmpty
+          ? json['cartaoModel'][0]['cvv'] ?? ''
+          : '',
+      validadeCartao: json['cartaoModel'] != null &&
+              (json['cartaoModel'] as List).isNotEmpty
+          ? json['cartaoModel'][0]['datavalidade'] ?? ''
+          : '',
+      chavePix: json['pix'] != null && (json['pix'] as List).isNotEmpty
+          ? json['pix'][0]['chave'] ?? ''
+          : '',
+      corPrincipal: json['corPrimaria'] ?? '#353DAB',
+      corSecundaria: json['corSecundaria'] ?? '#027BD4',
+      corTerciaria: json['corTerciaria'] ?? '#04A95C',
+      temaEscuro: (json['modo'] as String?)?.toLowerCase() == 'dark',
     );
   }
 

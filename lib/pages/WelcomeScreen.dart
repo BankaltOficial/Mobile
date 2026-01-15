@@ -1,6 +1,8 @@
 // ignore: file_names
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, duplicate_ignore
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/InicialScreen.dart';
 import 'package:flutter_application_1/pages/TermsScreen.dart';
@@ -11,6 +13,8 @@ import 'package:flutter_application_1/service/ColorsService.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Colors.dart';
+import 'package:flutter_application_1/service/UsuarioService.dart';
+import 'package:http/http.dart' as http;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +31,18 @@ bool _senhaVisivel = false;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  //late Usuario? usuario;
 
   @override
   void initState() {
     super.initState();
+    // Limpa a sessão ao entrar na tela de login
+    _limparSessao();
+  }
+
+  // Método para limpar sessão ao entrar no WelcomeScreen
+  Future<void> _limparSessao() async {
+    await Sessao.logout();
+    ColorProvider().resetColors();
   }
 
   @override
@@ -46,6 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           title: Image.asset('assets/images/LogoTitulo.png',
               height: 200, width: 200),
           centerTitle: true,
+          automaticallyImplyLeading: false, // Remove o botão de voltar
         ),
         body: ListView(children: [
           Column(children: [
@@ -112,7 +124,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Preencha todos os campos antes de continuar";
-                            } // voltar novamente quando for validar a senha
+                            }
 
                             return null;
                           },
@@ -143,31 +155,37 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              String cpf = cpfController.text;
+                              // Remove pontos e traço do CPF
+                              String cpf = cpfController.text
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
                               String senha = passwordController.text;
+
                               try {
-                                Usuario usuario = verificarUsuarioPorCpf(cpf);
+                                // Chama a API para buscar o usuário pelo CPF
+                                Usuario? usuario =
+                                    await UsuarioService.buscarPorCpfApi(cpf);
 
-                                if (usuario.senha == senha) {
-                                  Sessao.limparUsuario();
-                                  Sessao.salvarUsuario(usuario);
+                                // Verifica se o usuário existe e se a senha está correta
+                                if (usuario != null && usuario.senha == senha) {
+                                  // Limpa sessão anterior e salva novo usuário
+                                  await Sessao.logout();
+                                  await Sessao.salvarUsuario(usuario);
 
+                                  // Atualiza cores/tema
                                   String main = usuario.corPrincipal;
                                   Color mainColor = Color(int.parse(
                                       'FF${main.replaceAll('#', '')}',
                                       radix: 16));
-
                                   String secondary = usuario.corSecundaria;
                                   Color secondaryColor = Color(int.parse(
                                       'FF${secondary.replaceAll('#', '')}',
                                       radix: 16));
-
                                   String tertiary = usuario.corTerciaria;
                                   Color tertiaryColor = Color(int.parse(
                                       'FF${tertiary.replaceAll('#', '')}',
                                       radix: 16));
-
                                   bool isDarkMode = usuario.temaEscuro;
+
                                   final provider = Provider.of<ColorProvider>(
                                       context,
                                       listen: false);
@@ -197,22 +215,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             Text('Login Feito com Sucesso')),
                                   );
 
-                                  Navigator.push(
+                                  // Usa pushAndRemoveUntil para remover todas as rotas anteriores
+                                  Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => InicialScreen()),
+                                    (route) => false, // Remove todas as rotas
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('CPF ou senha incorretos')),
+                                    SnackBar(
+                                        content: Text('CPF ou senha incorretos')),
                                   );
                                 }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      content: Text('CPF ou Senha incorretos')),
+                                      content: Text('Erro ao autenticar: $e')),
                                 );
                               }
                             }
@@ -263,8 +282,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       style: TextStyle(
                                           color: AppColors.invertModeGray),
                                     )),
-                              )
+                              ),
                             ]),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Preenche os campos automaticamente
+                            cpfController.text = "574.716.340-06";
+                            passwordController.text = "aninha123";
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("Preencher Automático (Teste)"),
+                        ),
                       ])),
             ),
             Container(

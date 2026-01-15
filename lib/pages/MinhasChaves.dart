@@ -5,6 +5,8 @@ import 'package:flutter_application_1/components/Drawer.dart';
 import 'package:flutter_application_1/service/Colors.dart';
 import 'package:flutter_application_1/service/Sessao.dart';
 import 'package:flutter_application_1/service/Usuario.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class MinhasChavesScreen extends StatefulWidget {
   @override
@@ -15,6 +17,189 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Usuario usuario = Sessao.getUsuario()!;
   String selectedKey = 'email';
+  bool isUpdating = false;
+
+  // Função para buscar o PIX do usuário
+  Future<Map<String, dynamic>?> buscarPixDoUsuario(int clienteId) async {
+    try {
+      final url = Uri.parse(
+          'http://localhost:8080/apiPix/buscarPorClienteId/$clienteId');
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      );
+
+      print("Buscar PIX - Status: ${response.statusCode}");
+      print("Buscar PIX - Response: ${response.body}");
+
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        return jsonDecode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print("Erro ao buscar PIX: $e");
+      return null;
+    }
+  }
+
+  // Função para atualizar a chave PIX via API
+  Future<bool> atualizarChavePix(String chave, String tipo) async {
+    Usuario? usuario = Sessao.getUsuario();
+    if (usuario == null) {
+      print("Usuário não logado");
+      return false;
+    }
+
+    try {
+      // Primeiro busca o PIX existente do usuário
+      Map<String, dynamic>? pixExistente = await buscarPixDoUsuario(usuario.id);
+
+      if (pixExistente != null && pixExistente['id'] != null) {
+        // Se já existe um PIX, atualiza usando o ID do PIX
+        final pixId = pixExistente['id'];
+        final url = Uri.parse('http://localhost:8080/apiPix/atualizar/$pixId');
+
+        final body = {
+          "chave": chave,
+          "tipo": tipo,
+          // Inclui o cliente se necessário
+          "cliente": {"id": usuario.id}
+        };
+
+        print("Atualizando PIX existente - ID: $pixId");
+        print("URL: $url");
+        print("Body: ${jsonEncode(body)}");
+
+        final response = await http.put(
+          url,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: jsonEncode(body),
+        );
+
+        print("Status atualização: ${response.statusCode}");
+        print("Response: ${response.body}");
+
+        if (response.statusCode == 200) {
+          print("PIX atualizado com sucesso!");
+          return true;
+        } else {
+          print("Erro ao atualizar PIX: ${response.statusCode}");
+          return false;
+        }
+      } else {
+        // Se não existe PIX, precisa criar um novo
+        // Você precisará implementar o endpoint de criação no backend
+        print("PIX não encontrado para o usuário. Necessário criar novo PIX.");
+
+        // Tenta criar um novo PIX (assumindo que existe um endpoint para isso)
+        final urlCriar = Uri.parse('http://localhost:8080/apiPix/criar');
+
+        final body = {
+          "clienteId": usuario.id,
+          "chave": chave,
+          "tipo": tipo,
+        };
+
+        print("Criando novo PIX");
+        print("URL: $urlCriar");
+        print("Body: ${jsonEncode(body)}");
+
+        final response = await http.post(
+          urlCriar,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: jsonEncode(body),
+        );
+
+        print("Status criação: ${response.statusCode}");
+        print("Response: ${response.body}");
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print("PIX criado com sucesso!");
+          return true;
+        } else {
+          print("Erro ao criar PIX: ${response.statusCode}");
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Erro na requisição PIX: $e");
+      return false;
+    }
+  }
+
+  // Função para processar a atualização da chave PIX
+  Future<void> _processarAtualizacao() async {
+    if (isUpdating) return;
+
+    setState(() {
+      isUpdating = true;
+    });
+
+    String novaChave;
+    String tipoChave;
+
+    // Determina a nova chave e o tipo baseado na seleção
+    switch (selectedKey) {
+      case 'email':
+        novaChave = usuario.email;
+        tipoChave = 'EMAIL';
+        break;
+      case 'telefone':
+        novaChave = usuario.telefone;
+        tipoChave = 'TELEFONE';
+        break;
+      case 'cpf':
+        novaChave = usuario.cpf;
+        tipoChave = 'CPF';
+        break;
+      default:
+        novaChave = usuario.email;
+        tipoChave = 'EMAIL';
+        break;
+    }
+
+    // Chama a API para atualizar a chave PIX
+    bool sucesso = await atualizarChavePix(novaChave, tipoChave);
+
+    setState(() {
+      isUpdating = false;
+    });
+
+    if (sucesso) {
+      // Atualiza localmente apenas se a API retornar sucesso
+      usuario.chavePix = novaChave;
+      Sessao.atualizarUsuario(usuario);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Chave PIX atualizada com sucesso!'),
+          backgroundColor: AppColors.defaultTertiary,
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      // Atualiza a interface para mostrar a nova chave
+      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao atualizar chave PIX. Tente novamente.'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,20 +295,23 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
                             Text(
                               'Sua chave atual é ',
                               style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors.main,
-                                fontWeight: FontWeight.bold
-                              ),
+                                  fontSize: 16,
+                                  color: AppColors.main,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                         SizedBox(height: 8),
                         Text(
-                          usuario.chavePix,
+                          usuario.chavePix.isNotEmpty
+                              ? usuario.chavePix
+                              : 'Nenhuma chave cadastrada',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black87,
+                            color: usuario.chavePix.isNotEmpty
+                                ? Colors.black87
+                                : Colors.grey[600],
                           ),
                         ),
                       ],
@@ -135,76 +323,55 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
               ),
             ),
           ),
+
+          // Loading indicator
+          if (isUpdating)
+            Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.main),
+              ),
+            ),
+
+          // Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  switch (selectedKey) {
-                    case 'email':
-                      usuario.chavePix = usuario.email;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Chave Pix atualizada com sucesso!'),
-                          backgroundColor: AppColors.defaultTertiary,
-                        ),
-                      );
-                      break;
-                    case 'telefone':
-                      usuario.chavePix = usuario.telefone;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Chave Pix atualizada com sucesso!'),
-                          backgroundColor: AppColors.defaultTertiary,
-                        ),
-                      );
-                      break;
-                    case 'cpf':
-                      usuario.chavePix = usuario.cpf;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Chave Pix atualizada com sucesso!'),
-                          backgroundColor: AppColors.defaultTertiary,
-                        ),
-                      );
-                      break;
-                    default:
-                      usuario.chavePix = usuario.email;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text('Não foi possível gerar a chave Pix'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      break;
-                  }
-                  print(usuario.chavePix);
-                  Sessao.atualizarUsuario(usuario);
-                },
+                onPressed: isUpdating ? null : _processarAtualizacao,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.main,
+                  backgroundColor:
+                      isUpdating ? Colors.grey[400] : AppColors.main,
                   padding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  elevation: isUpdating ? 0 : null,
                 ),
-                child: const Text("Continuar",
-                    style: TextStyle(fontSize: 15, color: AppColors.mainWhite)),
+                child: Text(
+                  isUpdating ? "Atualizando..." : "Continuar",
+                  style: TextStyle(fontSize: 15, color: AppColors.mainWhite),
+                ),
               ),
               const SizedBox(width: 16),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const PixScreen()),
-                  );
-                },
+                onPressed: isUpdating
+                    ? null
+                    : () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const PixScreen()),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.mainRed,
+                  backgroundColor:
+                      isUpdating ? Colors.grey[400] : AppColors.mainRed,
                   padding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  elevation: isUpdating ? 0 : null,
                 ),
-                child: const Text("Cancelar",
-                    style: TextStyle(fontSize: 15, color: AppColors.mainWhite)),
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(fontSize: 15, color: AppColors.mainWhite),
+                ),
               ),
             ],
           ),
@@ -219,11 +386,13 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
     bool isSelected = selectedKey == key;
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedKey = key;
-        });
-      },
+      onTap: isUpdating
+          ? null
+          : () {
+              setState(() {
+                selectedKey = key;
+              });
+            },
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -266,7 +435,7 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
             Icon(
               icon,
               size: 24,
-              color: AppColors.mainGray,
+              color: isUpdating ? Colors.grey[400] : AppColors.mainGray,
             ),
             SizedBox(width: 16),
             Expanded(
@@ -278,7 +447,7 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: isUpdating ? Colors.grey[600] : Colors.black87,
                     ),
                   ),
                   SizedBox(height: 2),
@@ -286,7 +455,7 @@ class _MinhasChavesScreenState extends State<MinhasChavesScreen> {
                     value,
                     style: TextStyle(
                       fontSize: 14,
-                      color: AppColors.mainGray,
+                      color: isUpdating ? Colors.grey[400] : AppColors.mainGray,
                     ),
                   ),
                 ],

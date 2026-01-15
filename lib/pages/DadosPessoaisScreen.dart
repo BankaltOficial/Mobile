@@ -9,7 +9,8 @@ import 'package:flutter_application_1/service/UsuarioService.dart'; // Usar seu 
 class DadosPessoaisScreen extends StatefulWidget {
   final Usuario usuario; // Recebe o usuário atual
 
-  const DadosPessoaisScreen({Key? key, required this.usuario}) : super(key: key);
+  const DadosPessoaisScreen({Key? key, required this.usuario})
+      : super(key: key);
 
   @override
   State<DadosPessoaisScreen> createState() => _DadosPessoaisScreenState();
@@ -35,7 +36,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
   void initState() {
     super.initState();
     _loadUserData();
-    
+
     // Listeners para detectar mudanças
     _nomeController.addListener(_onTextChanged);
     _dataController.addListener(_onTextChanged);
@@ -64,13 +65,13 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
         _dataController.text = widget.usuario.dataNascimento;
         _telefoneController.text = widget.usuario.telefone;
         _emailController.text = widget.usuario.email;
-        
+
         // Salvar valores originais
         _nomeOriginal = widget.usuario.nome;
         _dataOriginal = widget.usuario.dataNascimento;
         _emailOriginal = widget.usuario.email;
         _telefoneOriginal = widget.usuario.telefone;
-        
+
         isLoading = false;
       });
     });
@@ -78,11 +79,11 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
 
   void _onTextChanged() {
     // Verificar se houve mudanças comparando com os valores originais
-    bool temMudancas = _nomeController.text != _nomeOriginal || 
-                       _dataController.text != _dataOriginal;
-                       _emailController.text != _emailOriginal;
-                       _telefoneController.text != _telefoneOriginal;
-    
+    bool temMudancas = _nomeController.text != _nomeOriginal ||
+        _dataController.text != _dataOriginal;
+    _emailController.text != _emailOriginal;
+    _telefoneController.text != _telefoneOriginal;
+
     if (hasChanges != temMudancas) {
       setState(() {
         hasChanges = temMudancas;
@@ -105,7 +106,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
     widget.usuario.telefone = _telefoneController.text;
 
     // Salvar no SharedPreferences usando seu UsuarioService
-    await UsuarioService.atualizarUsuario(widget.usuario);
+    //await UsuarioService.atualizarUsuario(widget.usuario);
 
     // Atualizar valores originais
     _nomeOriginal = widget.usuario.nome;
@@ -139,25 +140,27 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
   Future<bool> _onWillPop() async {
     if (hasChanges) {
       return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Descartar alterações?'),
-          content: const Text('Você tem alterações não salvas. Deseja descartá-las?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancelar'),
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Descartar alterações?'),
+              content: const Text(
+                  'Você tem alterações não salvas. Deseja descartá-las?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text(
+                    'Descartar',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text(
-                'Descartar',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        ),
-      ) ?? false;
+          ) ??
+          false;
     }
     return true;
   }
@@ -241,7 +244,6 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                                 ),
                               ],
                             ),
-                            
                             const SizedBox(height: 8),
                             Text(
                               'Atualize suas informações pessoais',
@@ -250,18 +252,14 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                                 color: Colors.white70,
                               ),
                             ),
-                            
                             const SizedBox(height: 24),
-                            
                             _buildInputField(
                               label: 'Nome Completo',
                               controller: _nomeController,
                               enabled: !isLoading,
                               icon: Icons.person,
                             ),
-                            
                             const SizedBox(height: 20),
-                            
                             _buildInputField(
                               label: 'Data de Nascimento',
                               controller: _dataController,
@@ -270,9 +268,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                               onTap: () => _selectDate(context),
                               icon: Icons.cake_outlined,
                             ),
-
                             const SizedBox(height: 24),
-                            
                             _buildInputField(
                               label: 'Email',
                               controller: _nomeController,
@@ -280,9 +276,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                               keyboardType: TextInputType.emailAddress,
                               icon: Icons.email,
                             ),
-
                             const SizedBox(height: 24),
-                            
                             _buildInputField(
                               label: 'Telefone',
                               controller: _telefoneController,
@@ -294,9 +288,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                         ),
                       ),
                     ),
-                    
                     const SizedBox(height: 32),
-                    
                     if (hasChanges) ...[
                       SizedBox(
                         width: double.infinity,
@@ -317,7 +309,8 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
                                   width: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                   ),
                                 )
                               : Row(
@@ -489,7 +482,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
 
     if (selectedDate != null) {
       setState(() {
-        _dataController.text = 
+        _dataController.text =
             '${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year}';
       });
     }
@@ -499,7 +492,7 @@ class _DadosPessoaisScreenState extends State<DadosPessoaisScreen> {
 // Exemplo de como navegar para esta tela passando o usuário
 class NavigationExample extends StatelessWidget {
   final Usuario usuario;
-  
+
   const NavigationExample({Key? key, required this.usuario}) : super(key: key);
 
   @override

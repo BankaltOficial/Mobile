@@ -21,10 +21,34 @@ class PerfilScreen extends StatefulWidget {
 
 class _PerfilScreenState extends State<PerfilScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String userName = 'Igor Suracci';
-  String userHandle = '@suracci';
+
+  String userName = '';
+  String userHandle = '';
   bool isLoading = false;
   Usuario? usuarioAtual;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    Usuario? usuario = Sessao.getUsuario();
+
+    if (usuario != null) {
+      setState(() {
+        usuarioAtual = usuario;
+        userName = usuario.nome;
+        userHandle = '@${usuario.nome.toLowerCase().replaceAll(' ', '')}';
+      });
+    } else {
+      setState(() {
+        userName = 'Usuário não encontrado';
+        userHandle = '';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +56,18 @@ class _PerfilScreenState extends State<PerfilScreen> {
       key: _scaffoldKey,
       backgroundColor: AppColors.theme,
       appBar: CustomAppBar(
-            title: 'Perfil',
-            scaffoldKey: _scaffoldKey,
-            onBackPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-              builder: (context) => const InicialScreen()));
-            }),
-        drawer: const CustomDrawer(),
+        title: 'Perfil',
+        scaffoldKey: _scaffoldKey,
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InicialScreen(),
+            ),
+          );
+        },
+      ),
+      drawer: const CustomDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -53,12 +80,11 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   children: [
                     _buildConfigCard(
                       title: 'Dados Pessoais',
-                      subtitle: 'Edite dados pessoais, e-mail, telefone entre outros.',
+                      subtitle:
+                          'Edite dados pessoais, e-mail, telefone entre outros.',
                       onTap: () => _handleDadosPessoais(),
                     ),
-                    
                     const SizedBox(height: 16),
-                    
                     _buildConfigCard(
                       title: 'Dados de Investidor',
                       subtitle: 'Edite dados sobre investimento.',
@@ -66,10 +92,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     ),
                   ],
                 ),
-              ),     
-                    const SizedBox(height: 16),
-                 
-              
+              ),
+              const SizedBox(height: 16),
               _buildExitButton(),
             ],
           ),
@@ -78,23 +102,23 @@ class _PerfilScreenState extends State<PerfilScreen> {
     );
   }
 
- void _handleDadosPessoais() async {
-  if (usuarioAtual == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Erro: Nenhum usuário logado encontrado'),
-        backgroundColor: Colors.red,
+  void _handleDadosPessoais() async {
+    if (usuarioAtual == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro: Nenhum usuário logado encontrado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DadosPessoaisScreen(usuario: usuarioAtual!),
       ),
     );
-    return;
-  }
-
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DadosPessoaisScreen(usuario: usuarioAtual!),
-    ),
-  );
 
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
@@ -109,28 +133,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
     setState(() {
       isLoading = true;
     });
-    
+
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         isLoading = false;
       });
-      
+
       print('Navegando para Dados de Investidor');
-
-    });
-  }
-
-  void _handleAcessibilidade() {
-    setState(() {
-      isLoading = true;
-    });
-    
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        isLoading = false;
-      });
-      
-      print('Navegando para Acessibilidade');
     });
   }
 
@@ -147,23 +156,32 @@ class _PerfilScreenState extends State<PerfilScreen> {
               child: const Text('Cancelar'),
             ),
             TextButton(
-              onPressed: () async{
-                  AppColors.main = AppColors.mainPurple;
-                  AppColors.secondary = AppColors.mainBlue;
-                  AppColors.tertiary = AppColors.mainGreen;
-                  
-                  final provider = Provider.of<ColorProvider>(context, listen: false);
-                  provider.setColors(
-                        AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
-                    await ColorService.saveColors(
-                        AppColors.mainPurple, AppColors.mainBlue, AppColors.mainGreen);
-                  provider.resetColors();
-                  Sessao.limparUsuario();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const WelcomeScreen()));
-                },
+              onPressed: () async {
+                AppColors.main = AppColors.mainPurple;
+                AppColors.secondary = AppColors.mainBlue;
+                AppColors.tertiary = AppColors.mainGreen;
+
+                final provider =
+                    Provider.of<ColorProvider>(context, listen: false);
+                provider.setColors(
+                  AppColors.mainPurple,
+                  AppColors.mainBlue,
+                  AppColors.mainGreen,
+                );
+                await ColorService.saveColors(
+                  AppColors.mainPurple,
+                  AppColors.mainBlue,
+                  AppColors.mainGreen,
+                );
+                provider.resetColors();
+                Sessao.limparUsuario();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
+                  ),
+                );
+              },
               child: const Text('Sair'),
             ),
           ],
@@ -172,22 +190,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-void _loadUserData() async {
-  usuarioAtual = await UsuarioService.obterUsuarioLogado();
-  
-  if (usuarioAtual != null) {
-    setState(() {
-      userName = usuarioAtual!.nome;
-      userHandle = '@${usuarioAtual!.nome.toLowerCase().replaceAll(' ', '')}';
-    });
-  }
-}
   Widget _buildHeader() {
     return Row(
       children: [
@@ -204,9 +206,7 @@ void _loadUserData() async {
             color: AppColors.mainGray,
           ),
         ),
-        
         const SizedBox(width: 16),
-        
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -218,13 +218,14 @@ void _loadUserData() async {
                 color: AppColors.invertMode,
               ),
             ),
-            Text(
-              userHandle,
-              style: TextStyle(
-                fontSize: 17,
-                color: AppColors.invertModeGray,
+            if (userHandle.isNotEmpty)
+              Text(
+                userHandle,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: AppColors.invertModeGray,
+                ),
               ),
-            ),
           ],
         ),
       ],
@@ -291,12 +292,11 @@ void _loadUserData() async {
           setState(() {
             isLoading = true;
           });
-          
+
           Future.delayed(const Duration(milliseconds: 500), () {
             setState(() {
               isLoading = false;
             });
-            
             _handleExitApp();
           });
         },
@@ -309,22 +309,22 @@ void _loadUserData() async {
           ),
           elevation: 2,
         ),
-        child: isLoading 
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        child: isLoading
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : const Text(
+                'Sair do App',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            )
-          : const Text(
-              'Sair do App',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
       ),
     );
   }
